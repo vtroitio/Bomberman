@@ -1,0 +1,89 @@
+startuml
+
+abstract class Game{
+ -position: tupla
+ -size: int
+}
+
+abstract class Dynamic_Object{
+ -hitbox: tupla
+ -sprite: string
+ -lifes: int
+ -velocity: int
+ +setPosition()
+ +setSize()
+ +moveUp()
+ +moveDown()
+ +moveLeft()
+ +moveRigth()
+ +setLifes()
+}
+
+class Menu{
+ +start()
+}
+
+class Bomb{
+ -time: int
+ +setTime()
+}
+
+class Map{
+ +changeMap()
+}
+
+class Enemy{
+ +attack()
+ +defineMovement()
+}
+
+class Player{
+ 
+ +placeBomb()
+ +getPowerUp()
+ +setPowerUp()
+}
+
+abstract class PowerUp{
+ -type: string
+ +getType() 
+}
+
+class Fire{
+  
+} 
+
+class Speed{
+
+}
+
+class BombUp{
+
+}
+
+class Explosion{
+
+}
+
+abstract class Item{
+  -sprite: string
+  -position: tupla
+}
+
+Dynamic_Object <|-- Enemy
+Dynamic_Object <|-- Player
+Player -down Bomb
+Player o--o{ PowerUp
+PowerUp <|-- Speed
+PowerUp <|-- Fire 
+PowerUp <|-- BombUp
+Bomb o-- Explosion
+Game <|-- Menu
+Game <|-- Map
+Menu - Map
+Item <|-- Bomb
+Item <|-- PowerUp
+Game <|-- Item
+Game <|-- Dynamic_Object
+
+@enduml
