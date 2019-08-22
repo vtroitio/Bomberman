@@ -1,12 +1,14 @@
-startuml
+@startuml
 
 abstract class Game{
- -position: tupla
- -size: int
+  +placePlayer()
+  +placeEnemies()
+  +createObstacles()
+  +createBackground()
 }
 
 abstract class Dynamic_Object{
- -hitbox: tupla
+ -hitbox: tuple
  -sprite: string
  -lifes: int
  -velocity: int
@@ -19,8 +21,13 @@ abstract class Dynamic_Object{
  +setLifes()
 }
 
+abstract class HitBox{
+  size: tuple
+}
+
 class Menu{
  +start()
+ +quit()
 }
 
 class Bomb{
@@ -28,8 +35,7 @@ class Bomb{
  +setTime()
 }
 
-class Map{
- +changeMap()
+class Background{
 }
 
 class Enemy{
@@ -38,7 +44,6 @@ class Enemy{
 }
 
 class Player{
- 
  +placeBomb()
  +getPowerUp()
  +setPowerUp()
@@ -67,23 +72,25 @@ class Explosion{
 
 abstract class Item{
   -sprite: string
-  -position: tupla
+  -position: tuple
 }
 
 Dynamic_Object <|-- Enemy
 Dynamic_Object <|-- Player
-Player -down Bomb
-Player o--o{ PowerUp
+Player - Bomb
+Player -- PowerUp
 PowerUp <|-- Speed
 PowerUp <|-- Fire 
 PowerUp <|-- BombUp
-Bomb o-- Explosion
-Game <|-- Menu
-Game <|-- Map
-Menu - Map
+Bomb *-- Explosion
 Item <|-- Bomb
 Item <|-- PowerUp
-Game <|-- Item
-Game <|-- Dynamic_Object
-
+Background *-- Item
+Background *-- Dynamic_Object
+Game *-- Background
+Game *-- Dynamic_Object
+Menu -- Game
+HitBox -- Dynamic_Object
+HitBox -- Item
+  
 @enduml
