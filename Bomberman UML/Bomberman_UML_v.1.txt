@@ -3,55 +3,70 @@
 abstract class Game{
   +placePlayer()
   +placeEnemies()
-  +createObstacles()
   +createBackground()
+  +createObstacles()
 }
 
 abstract class Dynamic_Object{
- -hitbox: tuple
- -sprite: string
- -lifes: int
- -velocity: int
- +setPosition()
- +setSize()
- +moveUp()
- +moveDown()
- +moveLeft()
- +moveRigth()
- +setLifes()
+  -hitbox: tuple
+  -sprite: string
+  -lifes: int
+  -velocity: int
+  +die()
+  +setPosition()
+  +setSize()
+  +moveUp()
+  +moveDown()
+  +moveLeft()
+  +moveRigth()
+  +setLifes()
 }
 
-abstract class HitBox{
-  size: tuple
+abstract class Obstacles{
+  -position: tuple
+  -sprites: string 
+}
+
+class Box{
+
+}
+
+class Wall{
+  
+}
+
+class HitBox{
+    size: tuple
 }
 
 class Menu{
- +start()
- +quit()
+  +start()
+  +quit()
 }
 
 class Bomb{
- -time: int
- +setTime()
+  -time: int
+  +setTime()
 }
 
 class Background{
+  -sprite: string
 }
 
 class Enemy{
- +attack()
- +defineMovement()
+  +attack()
+  +defineMovement()
 }
 
 class Player{
- +placeBomb()
- +getPowerUp()
- +setPowerUp()
+  +placeBomb()
+  +getPowerUp()
+  +setPowerUp()
 }
 
 abstract class PowerUp{
- -type: string
- +getType() 
+  -type: string
+  +getType() 
 }
 
 class Fire{
@@ -67,7 +82,7 @@ class BombUp{
 }
 
 class Explosion{
-
+  +hit()
 }
 
 abstract class Item{
@@ -75,6 +90,8 @@ abstract class Item{
   -position: tuple
 }
 
+Obstacles <|--  Wall
+Obstacles <|-- Box
 Dynamic_Object <|-- Enemy
 Dynamic_Object <|-- Player
 Player - Bomb
@@ -89,8 +106,11 @@ Background *-- Item
 Background *-- Dynamic_Object
 Game *-- Background
 Game *-- Dynamic_Object
+Obstacles o--up Game
 Menu -- Game
 HitBox -- Dynamic_Object
 HitBox -- Item
-  
+HitBox -- Obstacles
+Enemy -- Explosion
+
 @enduml
