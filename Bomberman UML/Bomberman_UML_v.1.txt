@@ -36,6 +36,7 @@ abstract class Obstacles{
   -position: tuple
   -sprites: string 
   +destroyObstracle()
+  +createObstacle()
 }
 
 class Box{
@@ -47,7 +48,7 @@ class Wall{
 }
 
 class HitBox{
-    size: tuple
+  -size: tuple
 }
 
 class Menu{
@@ -63,18 +64,20 @@ class Bomb{
 }
 
 class Background{
-  -sprite: string
+
 }
 
 class Enemy{
+  +createEnemy()
+  +destroyEnemy()
   +attack()
   +defineMovement()
 }
 
 class Player{
   +placeBomb()
-  +getPowerUp()
-  +setPowerUp()
+  +destroyPlayer()
+  +createPlayer()
 }
 
 class Fire{
@@ -99,15 +102,19 @@ Dynamic_Object <|-- Enemy
 Dynamic_Object <|-- Player
 Player - Bomb
 Player -- PowerUp
+Player -- Explosion
 PowerUp <|-- Speed
 PowerUp <|-- Fire 
 PowerUp <|-- BombUp
 Bomb *-- Explosion
+Bomb o-- Fire 
+Bomb o-- Speed
+Bomb o-- BombUp
 Item <|-- Bomb
 Item <|-- PowerUp
-Background *-- Item
-Background *-- Dynamic_Object
-Game *-- Background
+Item <|-- Background
+Background -- Dynamic_Object
+Game *-- Item
 Game *-- Dynamic_Object
 Obstacles o--up Game
 Menu -- Game
