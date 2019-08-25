@@ -1,0 +1,18 @@
+@startuml
+
+:Jugador:
+rectangle JuegoBomberman{
+Jugador --> (Elegir dificultad)
+Jugador --> (Seleccionar nivel)
+Jugador --> (Iniciar juego)
+Jugador --> (Mover personaje)
+Jugador --> (Colocar bomba)
+Jugador --> (Reiniciar nivel)
+Jugador --> (Pasar al siguiente nivel)
+Jugador --> (Ver estadisticas)
+Jugador --> (Opciones)
+Jugador --> (Abandonar nivel)
+}
+
+
+@enduml

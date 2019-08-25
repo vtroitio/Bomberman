@@ -1,0 +1,23 @@
+@startuml
+
+start
+if (¿Iniciar juego?) then (si)
+:Jugar;
+    while (¿Murió?) is (no)
+        while (¿Eliminó a todos los enemigos?) is (no)
+        :Sigue jugando;
+        endwhile (si)
+        :Fase completada;
+        :Sigue jugando;
+          if (¿Completó todas las fases?) then (si)
+          :Ganó;
+          stop
+          endif
+    endwhile (si)
+    :Perdió;
+    stop
+else (no)
+end
+endif
+
+@enduml
