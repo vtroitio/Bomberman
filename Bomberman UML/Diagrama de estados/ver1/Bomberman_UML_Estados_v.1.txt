@@ -1,0 +1,27 @@
+@startuml
+
+state MenuPrincipal{
+}
+state SeleccionDeNivel{
+}
+state Juego{
+}
+state UltimoNivel{
+}
+
+[*] -right-> MenuPrincipal
+MenuPrincipal -right-> SeleccionDeNivel : Jugar
+SeleccionDeNivel -right-> MenuPrincipal : Volver
+SeleccionDeNivel -down-> Juego
+SeleccionDeNivel --down-> UltimoNivel
+Juego --> MenuPrincipal : Volver
+Juego --> FinDelNivel
+Juego --> SeleccionDeNivel : Volver
+Juego --> Juego : Morir
+FinDelNivel --> MenuPrincipal : Volver
+FinDelNivel --> SeleccionDeNivel : Volver 
+UltimoNivel ----> UltimoNivel : Morir
+UltimoNivel ----> MenuPrincipal : Volver
+UltimoNivel --> [*] : Victoria
+
+@enduml
