@@ -1,0 +1,22 @@
+@startuml
+
+actor Jugador
+participant Menu
+participant Game
+participant Background
+participant Wall
+participant Enemy
+participant Player
+
+Jugador -> "Menu" : click()
+activate Jugador
+activate Menu
+Menu -> "Game" : start()
+activate Game
+Game -> "Background" : createBackground(level, string)
+Game -> Jugador : game()
+activate Background
+Background -> Background : setBackground()
+
+
+@enduml

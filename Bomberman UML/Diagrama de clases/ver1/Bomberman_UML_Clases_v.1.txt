@@ -11,13 +11,16 @@ abstract class PowerUp{
 }
 
 abstract class Game{
+  -level: string
   +placePlayer()
   +placeEnemies()
   +createBackground()
   +createObstacles()
+  +
 }
 
 abstract class Dynamic_Object{
+  -position: tuple
   -hitbox: tuple
   -sprite: string
   -lifes: int
@@ -35,16 +38,15 @@ abstract class Dynamic_Object{
 abstract class Obstacles{
   -position: tuple
   -sprites: string 
-  +destroyObstracle()
-  +createObstacle()
+  +setPosition()
 }
 
 class Box{
-
+  +crateBox()
 }
 
 class Wall{
-  
+  +createWall()
 }
 
 class HitBox{
@@ -64,7 +66,8 @@ class Bomb{
 }
 
 class Background{
-
+  -sprite: string
+  +setBackground()
 }
 
 class Enemy{
@@ -112,10 +115,9 @@ Bomb o-- Speed
 Bomb o-- BombUp
 Item <|-- Bomb
 Item <|-- PowerUp
-Item <|-- Background
-Background -- Dynamic_Object
 Game *-- Item
 Game *-- Dynamic_Object
+Game --right Background
 Obstacles o--up Game
 Menu -- Game
 HitBox -- Dynamic_Object
