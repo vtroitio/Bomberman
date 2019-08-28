@@ -1,22 +1,42 @@
-@startuml
+@startuml 
+skinparam ActorBorderColor Blue
+skinparam ActorBackgroundColor Yellow
 
 actor Jugador
 participant Menu
 participant Game
 participant Background
 participant Wall
+participant Box
 participant Enemy
 participant Player
 
-Jugador -> "Menu" : click()
+Jugador -> Menu : click()
 activate Jugador
 activate Menu
-Menu -> "Game" : start()
+Menu -> Game : start()
+destroy Menu
 activate Game
-Game -> "Background" : createBackground(level, string)
-Game -> Jugador : game()
+Game -> Background : createBackground(level, string)
 activate Background
 Background -> Background : setBackground()
-
+return Hecho
+Game -> Wall : createWall(position, tuple)
+activate Wall
+Wall -> Wall : setPosition()
+return Hecho
+Game -> Box : createBox(position, tuple)
+activate Box
+Box -> Box : setPosition()
+return Hecho
+Game -> Enemy : createEnemy()
+activate Enemy 
+Enemy -> Enemy : setPosition()
+return Hecho
+Game -> Player : createPlayer()
+activate Player
+Player -> Player : setPosition()
+return Hecho
+Jugador <- Game : Game()
 
 @enduml
