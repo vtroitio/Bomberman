@@ -16,7 +16,6 @@ abstract class Game{
   +placeEnemies()
   +createBackground()
   +createObstacles()
-  +
 }
 
 abstract class Dynamic_Object{
@@ -54,8 +53,8 @@ class HitBox{
 }
 
 class Menu{
-  +start()
-  +quit()
+  +startGame()
+  +quitGame()
 }
 
 class Bomb{
