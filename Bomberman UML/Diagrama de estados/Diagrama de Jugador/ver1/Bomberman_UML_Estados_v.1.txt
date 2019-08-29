@@ -1,0 +1,16 @@
+@startuml
+
+state MenuPrincipal
+state SeleccionDeNivel
+state Juego
+
+[*] -right-> MenuPrincipal
+MenuPrincipal -right-> SeleccionDeNivel : Jugar
+SeleccionDeNivel -right-> MenuPrincipal : Volver
+SeleccionDeNivel -down-> Juego
+Juego --> MenuPrincipal : Volver
+Juego --> SeleccionDeNivel : Volver
+Juego --> Juego : Morir
+Juego -down-> [*]
+
+@enduml
