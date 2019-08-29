@@ -1,14 +1,20 @@
-@startuml
+﻿@startuml
 
 start
 if (¿Iniciar juego?) then (si)
 :Jugar;
     while (¿Murió?) is (no)
+        fork 
         while (¿Eliminó a todos los enemigos?) is (no)
         :Sigue jugando;
         endwhile (si)
+        fork again
+        :Destruyó todos los obtaculos;
+        fork again
+        :Buscó powerups;
+        end fork
+        :Encontró la salida;
         :Fase completada;
-        :Sigue jugando;
           if (¿Completó todas las fases?) then (si)
           :Ganó;
           stop

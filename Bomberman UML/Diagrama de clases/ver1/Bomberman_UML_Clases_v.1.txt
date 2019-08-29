@@ -100,8 +100,8 @@ class Explosion{
 
 Obstacles <|--  Wall
 Obstacles <|-- Box
-Dynamic_Object <|-- Enemy
-Dynamic_Object <|-- Player
+DynamicObject <|-- Enemy
+DynamicObject <|-- Player
 Player - Bomb
 Player -- PowerUp
 Player -- Explosion
@@ -109,17 +109,17 @@ PowerUp <|-- Speed
 PowerUp <|-- Fire 
 PowerUp <|-- BombUp
 Bomb *-- Explosion
-Bomb o-- Fire 
-Bomb o-- Speed
-Bomb o-- BombUp
+Bomb -- Fire 
+Bomb -- Speed
+Bomb -- BombUp
 Item <|-- Bomb
 Item <|-- PowerUp
-Game *-- Item
-Game *-- Dynamic_Object
+Game -- Item
+Game -- DynamicObject
 Game --right Background
-Obstacles o--up Game
+Obstacles --up Game
 Menu -- Game
-HitBox -- Dynamic_Object
+HitBox -- DynamicObject
 HitBox -- Item
 HitBox -- Obstacles
 Enemy -- Explosion
