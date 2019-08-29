@@ -19,7 +19,7 @@ abstract class Game{
 }
 
 abstract class DynamicObject{
-  -position: tuple
+  -position: list
   -hitbox: tuple
   -sprite: string
   -lifes: int
@@ -98,6 +98,15 @@ class Explosion{
   +hit()
 }
 
+class GameEngine{
+  +esc()
+  +goMenu()
+  +goOptions()
+  +exit()
+  +validatePosition()
+  +updatePosition()
+} 
+
 Obstacles <|--  Wall
 Obstacles <|-- Box
 DynamicObject <|-- Enemy
@@ -123,5 +132,7 @@ HitBox -- DynamicObject
 HitBox -- Item
 HitBox -- Obstacles
 Enemy -- Explosion
+Game --right GameEngine
+
 
 @enduml
