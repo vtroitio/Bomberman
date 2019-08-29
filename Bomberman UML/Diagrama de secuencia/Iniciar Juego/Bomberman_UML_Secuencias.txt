@@ -1,4 +1,4 @@
-@@startuml 
+@startuml 
 skinparam ActorBorderColor Blue
 skinparam ActorBackgroundColor Yellow
 
@@ -21,18 +21,14 @@ Game -> Background : createBackground(level, string)
 activate Background
 Background -> Background : setBackground()
 return Hecho
-loop
 Game -> Wall : createWall(position, tuple)
 activate Wall
 Wall -> Wall : setPosition()
 return Hecho
-end loop
-loop
 Game -> Box : createBox(position, tuple)
 activate Box
 Box -> Box : setPosition()
 return Hecho
-end loop 
 Game -> Enemy : createEnemy()
 activate Enemy 
 Enemy -> Enemy : setPosition()
