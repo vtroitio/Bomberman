@@ -1,0 +1,19 @@
+@startuml 
+skinparam ActorBorderColor Blue
+skinparam ActorBackgroundColor Yellow
+
+actor Jugador
+participant GameEngine
+participant Game
+participant Menu
+
+Jugador -> GameEngine : esc()
+activate GameEngine
+GameEngine -> Menu : openOptionMenu()
+activate Game
+activate Menu
+GameEngine <- Menu : closeGame()
+destroy Game
+GameEngine --> Menu : True
+
+@enduml
