@@ -18,12 +18,12 @@ abstract class Game{
   +createObstacles()
 }
 
-abstract class Dynamic_Object{
+abstract class DynamicObject{
   -position: tuple
   -hitbox: tuple
   -sprite: string
   -lifes: int
-  -velocity: int
+  -speed: int
   +die()
   +setPosition()
   +setSize()
