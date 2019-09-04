@@ -1,12 +1,10 @@
 @startuml 
 
 state Muerto
-state Vivo 
-state Caminando
+state VivoYCaminando
 
-[*] -right-> Vivo : Enemigo creado
-Vivo --> Caminando
-Caminando --> Muerto : Explosión
+[*] -right-> VivoYCaminando : Enemigo creado
+VivoYCaminando --> Muerto : Explosión
 Muerto -left-> [*]
 
 @enduml
