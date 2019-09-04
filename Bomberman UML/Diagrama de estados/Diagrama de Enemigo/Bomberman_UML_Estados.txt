@@ -1,16 +1,12 @@
-@startuml
+@startuml 
 
-state SeguirRuta
-state ChocaConObstaculo
-state ChocaConJugador
-state ChocaConEstallidoDeBomba
+state Muerto
+state Vivo 
+state Caminando
 
-[*] -right-> SeguirRuta
-SeguirRuta --> ChocaConObstaculo
-SeguirRuta --> ChocaConJugador
-SeguirRuta --> ChocaConEstallidoDeBomba
-ChocaConObstaculo -right-> SeguirRuta : Dar la vuelta
-ChocaConJugador --> [*] : Jugador muere
-ChocaConEstallidoDeBomba --> [*] : Enemigo muere
+[*] -right-> Vivo : Enemigo creado
+Vivo --> Caminando
+Caminando --> Muerto : Explosión
+Muerto -left-> [*]
 
 @enduml

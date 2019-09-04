@@ -1,19 +1,10 @@
 @startuml 
 
-state BombaExplota
-state EnemigoEliminado
-state NoPasaNada
-state JugadorMuere
-state RompeObstaculo
+state BombaColocada
+state BombaExplotada
 
-[*] --> BombaExplota : Bomba colocada 
-BombaExplota -down-> EnemigoEliminado : Explosión
-BombaExplota -down-> RompeObstaculo : Explosión
-BombaExplota -down-> JugadorMuere : Explosión
-BombaExplota -down-> NoPasaNada : Explosión
-JugadorMuere -down-> [*]
-NoPasaNada -down-> [*]
-RompeObstaculo -down-> [*]
-EnemigoEliminado -down-> [*]
+[*] --> BombaColocada : Bomba creada
+BombaColocada --> BombaExplotada
+BombaExplotada --> [*]
 
 @enduml
