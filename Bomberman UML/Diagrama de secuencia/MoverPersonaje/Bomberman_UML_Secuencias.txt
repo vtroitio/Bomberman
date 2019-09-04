@@ -1,0 +1,19 @@
+@startuml 
+skinparam ActorBorderColor Blue
+skinparam ActorBackgroundColor Yellow
+
+actor jugador
+participant player
+participant gameEngine
+
+activate jugador
+jugador --> player : right()
+activate player
+player --> gameEngine : validatePosition()
+activate gameEngine
+gameEngine --> gameEngine : updatePosition()
+gameEngine --> player : position
+deactivate player
+gameEngine --> jugador : updateScreen()
+deactivate gameEngine
+@enduml
