@@ -8,7 +8,7 @@ Jugador --> (Colocar bomba)
 Jugador --> (Reiniciar juego)
 Jugador --> (Pasar al siguiente nivel)
 Jugador --> (Ver estadisticas)
-Jugador --> (Opciones)
+Jugador --> (Ver Opciones)
 Jugador --> (Abandonar nivel)
 }
 
