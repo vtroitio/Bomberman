@@ -1,0 +1,19 @@
+@startuml 
+skinparam ActorBorderColor Blue
+skinparam ActorBackgroundColor Yellow
+
+actor Jugador
+participant GameEngine
+participant Player
+
+participant Game
+participant Bomb
+Jugador -> GameEngine : keyPressed()
+activate GameEngine
+
+GameEngine -> Bomb : createBomb()
+activate Bomb
+Bomb -> Player : placeBomb()
+activate Player
+
+@enduml
