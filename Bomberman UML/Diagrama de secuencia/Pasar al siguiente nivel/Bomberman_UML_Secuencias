@@ -1,0 +1,41 @@
+@startuml 
+skinparam ActorBorderColor Blue
+skinparam ActorBackgroundColor Yellow
+
+actor Jugador
+participant Player
+participant Enemy
+participant Obstacle
+participant Exit
+participant Background
+participant Game
+
+
+Player -> Exit : nextLevel()
+activate Exit
+Exit -> Background : setBackground()
+deactivate Exit
+activate Background
+Background -> Game : 
+deactivate Exit
+deactivate Background
+activate Game
+Game -> Background : createBackground()
+activate Background
+Game -> Player : placePlayer()
+deactivate Background
+activate Player
+Game -> Enemy : placeEnemies()
+deactivate Player
+activate Enemy
+Game -> Obstacle : createObstacles()
+deactivate Enemy
+activate Obstacle
+deactivate Game
+
+Game -> Jugador : Game()
+deactivate Obstacle
+
+
+
+@enduml
