@@ -1,0 +1,1 @@
+class HitBox(unittest.TestCase):
