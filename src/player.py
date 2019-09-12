@@ -3,7 +3,15 @@ import * from pygame
 white = (255, 255, 255)
 
 
-class player(sprite.Bomberman):
+class Player(sprite.Player):
+
+    def __init__(self, color, width, height):
+        self.image = pygame.Surface([width, height])
+        self.image.fill(white)
+        self.image.set_colorkey(white)
+        self.image = pygame.image.load("sprites/25x35.png").conver_alpha()
+        self.rect = self.image.get_rect()
+
     def placeBomb(self):
         pass
 
@@ -12,9 +20,3 @@ class player(sprite.Bomberman):
 
     def destroyPlayer(self):
         pass
-
-    def __init__(self, color, width, height)
-        self.image = pygame.Surface([width, height])
-        self.image.fill(white)
-        self.image.set_colorkey(white)
-        self.image = pygame.image.load("").conver_alpha()
