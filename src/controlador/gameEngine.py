@@ -16,14 +16,13 @@ clock = pygame.time.Clock()
 while carryOn:
     for event in pygame.event.get():
         screen.fill(WHITE)
-        pygame.draw.rect(screen, RED, [100, 100, 1000, 1000], 5)
-        pygame.draw.line(screen, GREEN, [0, 0], [100, 100], 2)
-        pygame.draw.ellipse(screen, BLACK, [20, 20, 250, 100], 2)
+        pygame.draw.rect(screen, BLACK, [50, 250, 100, 100], 0)
         pygame.display.flip()
         clock.tick(15)
         if event.type == pygame.QUIT:
             carryOn = False
 pygame.quit()
+
 
 class GameEngine():
 
