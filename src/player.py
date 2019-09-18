@@ -1,16 +1,13 @@
-import * from pygame
-
-white = (255, 255, 255)
+from dynamicObject import *
 
 
-class Player(sprite.Player):
+class Player(DynamicObject):
 
-    def __init__(self, color, width, height):
-        self.image = pygame.Surface([width, height])
-        self.image.fill(white)
-        self.image.set_colorkey(white)
-        self.image = pygame.image.load("sprites/25x35.png").conver_alpha()
-        self.rect = self.image.get_rect()
+    def __init__(self):
+        super().__init__(self, 4)
+        self.sprite = "sprites/25x35.png"
+        self.lifes = 3
+        self.speed = 5
 
     def placeBomb(self):
         pass
