@@ -1,3 +1,6 @@
+import dynamicObject
+
+
 class Game():
 
     def __init__(self):
@@ -14,3 +17,6 @@ class Game():
 
     def createObstacle():
         pass
+
+    def givePosition(self, direccion):
+        self.dynamicObject.move(direccion)

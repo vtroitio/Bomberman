@@ -1,33 +1,27 @@
 class DynamicObject():
 
-    def __init__(self, estoEsUnParametroMas):
-        self.position = []
+    def __init__(self):
+        self.position = [0, 0]
         self.hitbox = ()
         self.sprite = None
         self.lifes = 1
         self.speed = 10
-        self.unAtributoNuevo=estoEsUnParametroMas+1
 
-    def die():
+    def die(self):
         pass
 
-    def setPosition():
+    def setPosition(self, aPosition):
+        self.position = a_position
+
+    def setSize(self, a_size):
         pass
 
-    def setSize():
-        pass
+    def move(self, direccion):
+        for index in range(len(self.position)):
+            self.position[index] = self.position[index] + direccion[index]
 
-    def moveUp():
-        pass
+    def setLifes(self, lifeAmmount):
+        self.lifes = lifes_ammount
 
-    def moveDown():
-        pass
-
-    def moveRight():
-        pass
-
-    def moveLeft():
-        pass
-
-    def setLifes():
-        pass
+    def setSpeed(self, speedAmmount):
+        pass  # Lo dejamos así porque pinta

@@ -17,3 +17,6 @@ class Player(DynamicObject):
 
     def destroyPlayer(self):
         pass
+
+    def setSpeed(self, speedAmmount):
+        self.speed += speedAmmount

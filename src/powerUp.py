@@ -1,4 +1,5 @@
 import item
+import speed
 
 
 class PowerUp(item):
