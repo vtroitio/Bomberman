@@ -1,11 +1,11 @@
-from dynamicObject import *
+import dynamicObject
 
 
-class Player(DynamicObject):
+class Player(dynamicObject.DynamicObject):
 
     def __init__(self):
-        super().__init__(self, 4)
-        self.sprite = "sprites/25x35.png"
+        super().__init__(self)
+        self.sprite = None
         self.lifes = 3
         self.speed = 5
 

@@ -18,5 +18,5 @@ class Game():
     def createObstacle():
         pass
 
-    def givePosition(self, direccion):
-        self.dynamicObject.move(direccion)
+    def givePosition(self, position):
+        self.dynamicObject.move(position)

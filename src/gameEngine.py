@@ -33,6 +33,7 @@ class GameEngine():
 
     def loadImages(self):
         self.background.loadBackgroundImage("sprites/muro.png")
+        self.background.loadBombermanImage('sprites/25x35.png', (37, 37))
 
     def mainLoop(self):
         while True:
