@@ -4,5 +4,8 @@ class Obstacles():
         self.position = []
         self.sprites = None
 
-    def setPosition():
-        pass
+    def setPosition(position):
+        self.position = position
+
+    def setSprite(sprite):
+        self.sprite = sprite
