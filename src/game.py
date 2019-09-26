@@ -1,12 +1,14 @@
 import dynamicObject
-import obstacles
+import wall
+import box
 
 
 class Game():
 
     def __init__(self):
         self.level = 1
-        self.obstacles = obstacles.Obstacles()
+        self.wall = wall.Wall(self)
+        self.box = box.Box(self)
 
     def placePlayer():
         pass
@@ -17,11 +19,13 @@ class Game():
     def createBackground():
         pass
 
-    def createObstacle():
-        self.obstacles.
+    def createWall(position, sprite):
+        self.wall.setPosition(position)
+        self.wall.setSprite(sprite)
 
-    def setObstaclesprite(sprite):
-        pass
+    def createBox(position, sprite):
+        self.box.setPosition(position)
+        self.box.setSprite(sprite)
 
     def givePosition(self, direccion):
         self.dynamicObject.move(direccion)
