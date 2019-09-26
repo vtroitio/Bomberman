@@ -1,10 +1,12 @@
 import dynamicObject
+import obstacles
 
 
 class Game():
 
     def __init__(self):
         self.level = 1
+        self.obstacles = obstacles.Obstacles()
 
     def placePlayer():
         pass
@@ -16,6 +18,9 @@ class Game():
         pass
 
     def createObstacle():
+        self.obstacles.
+
+    def setObstaclesprite(sprite):
         pass
 
     def givePosition(self, direccion):

@@ -1,3 +1,6 @@
+import player
+
+
 class DynamicObject():
 
     def __init__(self):
@@ -6,15 +9,17 @@ class DynamicObject():
         self.sprite = None
         self.lifes = 1
         self.speed = 10
+        self.size = 0
+        self.player = player.Player()
 
     def die(self):
-        pass
+        self.lifes = 0
 
     def setPosition(self, aPosition):
         self.position = a_position
 
     def setSize(self, a_size):
-        pass
+        self.size = a_size
 
     def move(self, direccion):
         for index in range(len(self.position)):
@@ -24,4 +29,4 @@ class DynamicObject():
         self.lifes = lifes_ammount
 
     def setSpeed(self, speedAmmount):
-        pass  # Lo dejamos así porque pinta
+        self.player.setSpeed(speedAmmount)
