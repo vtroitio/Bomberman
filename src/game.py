@@ -27,5 +27,5 @@ class Game():
         self.box.setPosition(position)
         self.box.setSprite(sprite)
 
-    def givePosition(self, direccion):
-        self.dynamicObject.move(direccion)
+    def givePosition(self, position):
+        self.dynamicObject.move(position)
