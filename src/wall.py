@@ -1,6 +1,6 @@
 import obstacles
 
 
-class Wall(self, obstacles.Obstacles):
+class Wall(obstacles.Obstacles):
     def __init__(self):
-        super().__init__(self)
+        super().__init__()

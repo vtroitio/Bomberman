@@ -1,4 +1,4 @@
-from item import *
+from item import Item
 
 
 class Bomb(Item):
@@ -7,10 +7,10 @@ class Bomb(Item):
         super().__init__(self)
         self.time = None
 
-    def createBomb(position, sprite, time):
+    def createBomb(self, position, sprite):
         self.position = position
         self.sprite = sprite
-        self.time = time
+        self.time = self.time
 
-    def destroyBomb():
-        pass
+    def destroyBomb(self, sprite):
+        self.sprite = sprite

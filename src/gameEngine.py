@@ -1,7 +1,5 @@
 import pygame
 import game
-# import dynamicObject
-# import powerUp
 import background
 
 CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
@@ -12,7 +10,6 @@ class GameEngine():
         self.game = game.Game()
         self.dimensions = (555, 407)
         self.background = background.Background(self.dimensions)
-
         self.loadImages()
         self.mainLoop()
 
@@ -41,6 +38,8 @@ class GameEngine():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
                     self.game.givePosition(CONTROLES[str(event.key)])
+                    self.background.reloadBomberman()
+                    self.background.reloadBackground()
                 pygame.display.flip()
 
 if __name__ == "__main__":
