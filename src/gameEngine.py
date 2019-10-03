@@ -9,7 +9,7 @@ class GameEngine():
     def __init__(self):
         self.game = game.Game()
         self.dimensions = (555, 407)
-        self.background = background.Background(self.dimensions)
+        self.background = background.Background(self.dimensions, self.game)
         self.loadImages()
         self.mainLoop()
 
@@ -30,13 +30,14 @@ class GameEngine():
 
     def loadImages(self):
         self.background.loadBackgroundImage("sprites/muro.png")
-        self.background.loadBombermanImage('sprites/25x35.png', (37, 37))
+        self.background.loadBombermanImage('sprites/Bomberman.png', (37, 37))
 
     def mainLoop(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
+                    self.background.fillBlack()
                     self.game.givePosition(CONTROLES[str(event.key)])
                     self.background.reloadBomberman()
                     self.background.reloadBackground()

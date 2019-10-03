@@ -1,6 +1,6 @@
 class DynamicObject():
     def __init__(self):
-        self.position = [0, 0]
+        self.position = [37, 37]
         self.hitbox = ()
         self.sprite = None
         self.lifes = 3

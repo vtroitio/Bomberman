@@ -3,14 +3,16 @@ import game
 
 
 class Background():
-    def __init__(self, dimensions):
+    def __init__(self, dimensions, game):
         pygame.init()
         pygame.display.set_caption("Bomberman")
         self.background = None
         self.screen = pygame.display.set_mode(dimensions)
         self.dimensions = dimensions
         self.bomberman = None
-        self.game = game.Game()
+        self.game = game
+        
+        # self.game = game.Game()
 
     def loadBombermanImage(self, path, pos):
         self.bomberman = pygame.image.load(path)
@@ -25,3 +27,7 @@ class Background():
 
     def reloadBomberman(self):
         self.screen.blit(self.bomberman, self.game.getBombermanPosition())
+    
+    def fillBlack(self):
+        color = (0, 0, 0)
+        self.screen.fill(color)
