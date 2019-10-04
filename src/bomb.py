@@ -1,16 +1,11 @@
-from item import Item
-
-
-class Bomb(Item):
-
+class Bomb():
     def __init__(self):
         super().__init__(self)
-        self.time = None
+        self.time = 3
 
-    def createBomb(self, position, sprite):
+    def createBomb(self, position):
         self.position = position
-        self.sprite = sprite
-        self.time = self.time
+        
 
     def destroyBomb(self, sprite):
         self.sprite = sprite
