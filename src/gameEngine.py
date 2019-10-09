@@ -10,8 +10,8 @@ controls = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
 class GameEngine():
     def __init__(self):
         self.game = game.Game()
-        self.dimensions = (640, 480)
-        self.background = background.Background(self.dimensions)
+        self.dimensions = (555, 407)
+        self.background = background.Background(self.dimensions, self.game)
 
         self.loadImages()
         self.mainLoop()
@@ -34,14 +34,19 @@ class GameEngine():
     def loadImages(self):
         self.background.loadBackgroundImage("sprites/muro.png")
         self.background.loadBombermanImage("sprites/Bomberman.png", (37, 37))
-        
+
+    def update():
+        pass
 
     def mainLoop(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    self.game.givePosition(controls[str(event.key)])
+                    self.background.fillBlack()
+                    self.game.givePosition(CONTROLES[str(event.key)])
+                    self.background.reloadBomberman()
+                    self.background.reloadBackground()
                 pygame.display.flip()
 
 if __name__ == "__main__":

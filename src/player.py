@@ -5,9 +5,9 @@ from bomb import Bomb
 class Player(DynamicObject):
     def __init__(self):
         super().__init__()
-        self.sprite = None
+        self.sheet = None
         self.lifes = None
-        self.speed = None
+        self.speed = 5
 
     def placeBomb(self, position, sprite):
         self.bomb = Bomb.createBomb(position, sprite)
@@ -22,7 +22,8 @@ class Player(DynamicObject):
     def move(self, direccion):
         for index in range(len(self.position)):
             print(self.position, "antes")
-            self.position[index] = self.position[index] + direccion[index]
+            self.position[index] = (self.position[index] + direccion[index] * (self.speed))
+
             print(self.position, "despues ")
 
     def getBombermanPosition(self):

@@ -1,4 +1,3 @@
-import dynamicObject
 import wall
 import box
 from player import Player
@@ -12,11 +11,11 @@ class Game():
         self.level = 1
         self.wall = wall.Wall()
         self.box = box.Box()
-        self.player = Player()
-        self.dynamicObject = dynamicObject.DynamicObject()
+        self.player = Player() 
 
     def placePlayer(self, lifes, speed):
-        self.player.createPlayer(lifes, speed)
+        # self.player.createPlayer(lifes, speed)
+        pass
 
     def placeEnemies(self):
         pass
