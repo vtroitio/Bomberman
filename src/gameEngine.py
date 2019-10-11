@@ -8,7 +8,7 @@ CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
 class GameEngine():
     def __init__(self):
         self.game = game.Game()
-        self.dimensions = [962, 592]
+        self.dimensions = [925, 555]
         self.background = background.Background(self.dimensions, self.game)
         self.loadImages()
         self.background.reloadBackground(self.dimensions)
@@ -40,7 +40,6 @@ class GameEngine():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
                     self.background.fillBlack()
-
                     self.game.givePosition(CONTROLES[str(event.key)])
                     self.background.loadObstacle("sprites/pilar.png", (59, 59))
                     self.background.reloadBomberman()
@@ -50,3 +49,4 @@ class GameEngine():
 
 if __name__ == "__main__":
     controlador = GameEngine()
+#* (self.position[0] <= 888)

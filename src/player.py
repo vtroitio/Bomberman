@@ -7,7 +7,7 @@ class Player(DynamicObject):
         super().__init__()
         self.sprite = None
         self.lifes = None
-        self.speed = 5
+        self.speed = 10
 
     def placeBomb(self, position, sprite):
         self.bomb = Bomb.createBomb(position, sprite)

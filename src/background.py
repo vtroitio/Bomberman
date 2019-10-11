@@ -11,6 +11,7 @@ class Background():
         self.dimensions = dimensions
         self.bomberman = None
         self.game = game        # self.game = game.Game()
+        pygame.key.set_repeat(50)
 
 # Reload
     def reloadBackground(self, resolucion):
