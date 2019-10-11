@@ -14,14 +14,19 @@ class Background():
         pygame.key.set_repeat(50)
 
 # Reload
-    def reloadBackground(self, resolucion):
-        for i in range(0, int((resolucion[0] / 37)) + 1):    # Creo Las Filas
+    def reloadBackground(self, dimensions):
+        for i in range(0, int((dimensions[0] / 37)) + 1):    # Creo Las Filas
             self.screen.blit(self.obstacle, (i * 37, 0))
-            self.screen.blit(self.obstacle, (i * 37, resolucion[1] - 37))
+            self.screen.blit(self.obstacle, (i * 37, dimensions[1] - 37))
 
-        for i in range(0, int((resolucion[1] / 37)) + 1):   # Creo las columnas
+        for i in range(0, int((dimensions[1] / 37)) + 1):   # Creo las columnas
             self.screen.blit(self.obstacle, (0, i * 37))
-            self.screen.blit(self.obstacle, (resolucion[0] - 37, i * 37))
+            self.screen.blit(self.obstacle, (dimensions[0] - 37, i * 37))
+
+    def reloadObstacle(self, dimensions):
+        for i in range(1, int((dimensions[0] / 37)) + 1):
+            for z in range(1, int((dimensions[1]) / 37) + 1):
+                self.screen.blit(self.obstacle, (i * 74, z * 74))
 
     def reloadBomberman(self):
         self.screen.blit(self.bomberman, self.game.getBombermanPosition())

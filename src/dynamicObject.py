@@ -5,7 +5,12 @@ class DynamicObject():
         self.sprite = None
         self.lifes = 3
         self.speed = 10
-        self.size = 0
+        self.sheet = None
+        self.rect = None
+        self.currentFrame = 0
+        self.frames = 8
+        self.frameWidth = 1
+        self.frameHeith = 1
 
     def die(self):
         pass

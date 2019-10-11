@@ -5,7 +5,6 @@ from bomb import Bomb
 class Player(DynamicObject):
     def __init__(self):
         super().__init__()
-        self.sprite = None
         self.lifes = None
         self.speed = 10
 
@@ -13,7 +12,6 @@ class Player(DynamicObject):
         self.bomb = Bomb.createBomb(position, sprite)
 
     def createPlayer(self, lifes, speed):
-        self.sprite = "sprites/25x35.png"
         self.lifes = lifes
         self.speed = speed
 
