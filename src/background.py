@@ -41,6 +41,7 @@ class Background():
 
     def loadBombermanImage(self, path, pos):
         self.bomberman = pygame.image.load(path)
+        self.bomberman = pygame.transform.scale(self.bomberman, [30, 30])
         self.screen.blit(self.bomberman, pos)
 
 # Etc

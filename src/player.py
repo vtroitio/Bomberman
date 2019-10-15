@@ -6,7 +6,11 @@ class Player(DynamicObject):
     def __init__(self):
         super().__init__()
         self.lifes = None
-        self.speed = 10
+        self.speed = 3
+        self.sprite = "sprites/Bomberman.png"
+        self.rect = self.sprite.get_rect()
+        self.rect.centerx = WIDTH / 2
+        self.rect.centery = HEIGHT / 2
 
     def placeBomb(self, position, sprite):
         self.bomb = Bomb.createBomb(position, sprite)
