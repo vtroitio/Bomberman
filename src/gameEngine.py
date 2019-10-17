@@ -35,7 +35,7 @@ class GameEngine():
 
     def loadImages(self):
         self.background.loadBackgroundImage("sprites/pilar.png")
-        self.background.loadBombermanImage('sprites/Bomberman.png', (37, 37))
+        self.background.loadBombermanImage('sprites/BombermanAnimado.png')
         self.background.loadObstacle("sprites/pilar.png", (74, 74))
 
     def mainLoop(self):
