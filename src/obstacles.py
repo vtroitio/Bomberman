@@ -18,6 +18,6 @@ class Obstacles():
 
     def loadObstacles(self):
         self.listadeobstaculos.append(self.x, self.y)
-    
+
     def setListaDeObstaculos(self, ubicacion):
         self.listadeobstaculos.append(ubicacion)

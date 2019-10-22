@@ -13,8 +13,6 @@ class Game():
         self.box = box.Box()
         self.player = player.Player()
 
-        
-
     def placePlayer(self, lifes, speed):
         # self.player.createPlayer(lifes, speed)
         pass

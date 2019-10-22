@@ -31,13 +31,13 @@ class Background():
             self.obstacles.x = i * 37
             self.obstacles.y = 0
             self.obstacles.hitbox = (self.obstacles.x, self.obstacles.y, self.obstacles.width, self.obstacles.height)
-            self.obstacles.filasArribaRect = pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
+            pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
 
             # Dibujo el hitbox de las filas de abajo
             self.obstacles.x = i * 37
             self.obstacles.y = dimensions[1] - 37
             self.obstacles.hitbox = (self.obstacles.x, self.obstacles.y, self.obstacles.width, self.obstacles.height)
-            self.obstacles.filasAbajoRect = pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
+            pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
 
         for i in range(0, int((dimensions[1] / 37)) + 1):   # Crea las columnas
 
@@ -51,13 +51,13 @@ class Background():
             self.obstacles.x = 0
             self.obstacles.y = i * 37
             self.obstacles.hitbox = (self.obstacles.x, self.obstacles.y, self.obstacles.width, self.obstacles.height)
-            self.obstacles.columnasIzquierdaRect = pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
+            pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
 
             # Dibujo el hitbox de las columnas de la derecha
             self.obstacles.x = dimensions[0] - 37
             self.obstacles.y = i * 37
             self.obstacles.hitbox = (self.obstacles.x, self.obstacles.y, self.obstacles.width, self.obstacles.height)
-            self.obstacles.columnasDerechaRect = pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
+            pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
 
     def reloadObstacle(self, dimensions):  # Crea los obstaculos
         for x in range(1, int((dimensions[0] / 74)) + 1):
@@ -70,7 +70,7 @@ class Background():
                 self.obstacles.x = x * 74
                 self.obstacles.y = y * 74
                 self.obstacles.hitbox = (self.obstacles.x, self.obstacles.y, self.obstacles.width, self.obstacles.height)
-                obstacleRect = pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
+                pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
 
     def reloadBomberman(self):
         self.screen.blit(self.bomberman, self.game.getBombermanPosition())

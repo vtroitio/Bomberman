@@ -2,7 +2,6 @@ import pygame
 import game
 import background
 
-
 CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
 
 
