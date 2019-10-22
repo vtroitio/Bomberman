@@ -43,8 +43,17 @@ class Game():
 
         for i in range(0, int((dimensions[1] / 37)) + 1):
 
-            self.obstacles = obstacles.Obstacles(0, i * 37)  # Crea hitboxes de las columnas de arriba
+            self.obstacles = obstacles.Obstacles(0, i * 37)  # Crea hitboxes de las columnas de la izquierda
             self.obstacles.setListaDeObstaculos([0, i * 37])
+
+            self.obstacles = obstacles.Obstacles(dimensions[0] - 37, i * 37)  # Crea hitboxes de las columnas de la derecha
+            self.obstacles.setListaDeObstaculos([dimensions[0] - 37, i * 37])
+
+        for x in range(1, int((dimensions[0] / 74)) + 1):
+            for y in range(1, int((dimensions[1]) / 74) + 1):
+
+                self.obstacles = obstacles.Obstacles(x * 74, y * 74)  # Crea hitboxes de los obstaculos
+                self.obstacles.setListaDeObstaculos([x * 74, y * 74])
 
 # Movimiento
 
