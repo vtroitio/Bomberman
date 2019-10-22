@@ -1,9 +1,6 @@
 import pygame
 import game
-# import dynamicObject
-# import powerUp
 import background
-import math
 
 CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
 
@@ -13,7 +10,6 @@ class GameEngine():
         self.game = game.Game()
         self.dimensions = [925, 555]
         self.background = background.Background(self.dimensions, self.game)
-
         self.loadImages()
         self.background.reloadBackground(self.dimensions)
         self.background.reloadObstacle(self.dimensions)
@@ -44,9 +40,6 @@ class GameEngine():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    posicion = self.game.getBombermanPosition()
-                    choco = False
-                    nocrash = 0
                     self.background.fillBlack()
                     self.game.givePosition(CONTROLES[str(event.key)])
                     self.background.loadObstacle("sprites/pilar.png", (74, 74))
@@ -74,7 +67,7 @@ class GameEngine():
                             pass
                         else:
                             choco = True
-       
+
                     if choco is False:
                         self.background.reloadBomberman(posicion)
                     else:
@@ -82,9 +75,12 @@ class GameEngine():
                         print(self.game.getBombermanPositionAnterior)
                         self.background.reloadBomberman(self.game.getBombermanPositionAnterior)
                         # self.background.reloadBomberman()
-                        
+
                     self.background.reloadBackground(self.dimensions)
+                    self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
                     self.background.reloadObstacle(self.dimensions)
+                    self.background.reloadBackground(self.dimensions)
+                    self.background.reloadBomberman()
                 pygame.display.flip()
                 
                 if event.type == pygame.KEYUP:
@@ -100,4 +96,3 @@ class GameEngine():
 
 if __name__ == "__main__":
     controlador = GameEngine()
-#* (self.position[0] <= 888)
