@@ -1,6 +1,6 @@
 import wall
 import box
-from player import Player
+import player
 import obstacles
 import player
 
@@ -11,7 +11,7 @@ class Game():
         self.level = 1
         self.wall = wall.Wall()
         self.box = box.Box()
-        self.player = Player() 
+        self.player = player.Player()
 
     def placePlayer(self, lifes, speed):
         # self.player.createPlayer(lifes, speed)
@@ -32,17 +32,14 @@ class Game():
         self.box.setSprite(sprite)
 # Movimiento
 
-    def givePosition(self, position):
-        self.player.move(position)
+    def givePosition(self, position, ventana):
+        self.player.move(position, ventana)
 
     def getBombermanPosition(self):
         return self.player.getBombermanPosition()
 
     def getBombermanSpeed(self):
-        return self.player.getBombermanSpeed()    
+        return self.player.getBombermanSpeed()
 
     def setBombermanPosition(self, pos):
         self.player.setBombermanPosition(pos)
-    
-    def getBombermanPositionAnterior(self):
-        return self.player.getBombermanPositionAnterior
