@@ -8,9 +8,7 @@ class Player(DynamicObject):
         self.lifes = None
         self.speed = 3
         self.sprite = "sprites/Bomberman.png"
-        self.rect = self.sprite.get_rect()
-        self.rect.centerx = WIDTH / 2
-        self.rect.centery = HEIGHT / 2
+        self.positionanterior = []
 
     def placeBomb(self, position, sprite):
         self.bomb = Bomb.createBomb(position, sprite)
@@ -22,15 +20,23 @@ class Player(DynamicObject):
 
 # Movimiento
     def move(self, direccion):
+        self.positionanterior = self.position
         for index in range(len(self.position)):
             print(self.position, "antes")
             self.position[index] = (self.position[index] + direccion[index] * (self.speed))
-
             print(self.position, "despues ")
 
     def getBombermanPosition(self):
         print(self.position)
         return self.position
+    
+    def getBombermanPositionAnterior(self):
+        print(self.positionanterior)
+        return self.positionanterior
+    
+    def getBombermanSpeed(self):
+        print(self.speed)
+        return self.speed
 # Setters
 
     def setLifes(self, lifeAmmount):
@@ -44,3 +50,7 @@ class Player(DynamicObject):
 
     def setSpeed(self, speedAmmount):
         self.speed += speedAmmount
+
+    def setBombermanPosition(self, pos):
+        self.positionanterior = self.position
+        self.position = pos

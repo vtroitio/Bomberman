@@ -11,31 +11,34 @@ class Background():
         self.dimensions = dimensions
         self.bomberman = None
         self.game = game        # self.game = game.Game()
-        self.bomberman.set_clip(pygame.Rect(0, 0, 30, 30))
-        self.bombermanImage = self.bomberman.subsurface(self.bomberman.get_clip())
-        self.rect = self.image.get_rect()
-        self.rect.topleft = position
         self.frame = 0
         self.left_states = { 0: (0, 90, 30, 30), 1: (30, 90, 30, 30), 2: (60, 90, 30, 30) }
         self.right_states = { 0: (0, 60, 30, 30), 1: (30, 60, 30, 30), 2: (60, 60, 30, 30) }
         self.up_states = { 0: (0, 30, 30, 30), 1: (30, 30, 30, 30), 2: (60, 30, 30, 30) }
         self.down_states = { 0: (0, 0, 30, 30), 1: (30, 0, 30, 30), 2: (60, 0, 30, 30) }
         pygame.key.set_repeat(50)
+        self.matriz = []
+
 
 # Reload
     def reloadBackground(self, dimensions):
         for i in range(0, int((dimensions[0] / 37)) + 1):    # Creo Las Filas
             self.screen.blit(self.obstacle, (i * 37, 0))
             self.screen.blit(self.obstacle, (i * 37, dimensions[1] - 37))
+            self.matriz.append((i * 37, dimensions[1] - 37))
+            self.matriz.append((i * 37, 0))
 
         for i in range(0, int((dimensions[1] / 37)) + 1):   # Creo las columnas
             self.screen.blit(self.obstacle, (0, i * 37))
             self.screen.blit(self.obstacle, (dimensions[0] - 37, i * 37))
+            self.matriz.append((dimensions[0] - 37, i * 37))
+            self.matriz.append((0, i * 37))
 
     def reloadObstacle(self, dimensions):
-        for i in range(1, int((dimensions[0] / 37)) + 1):
-            for z in range(1, int((dimensions[1]) / 37) + 1):
-                self.screen.blit(self.obstacle, (i * 74, z * 74))
+        for x in range(1, int((dimensions[0] / 74)) + 1):
+            for y in range(1, int((dimensions[1]) / 74) + 1):
+                self.screen.blit(self.obstacle, (x * 74, y * 74))
+                self.matriz.append((x * 74, y * 74))
 
     def reloadBomberman(self, direction):
         # self.screen.blit(self.bomberman, self.game.getBombermanPosition())
@@ -63,6 +66,9 @@ class Background():
 
         self.bombermanImage = self.bomberman.subsurface(self.bomberman.get_clip())
 
+    # def reloadBomberman(self, pos):
+    #     self.screen.blit(self.bomberman, pos)
+
 # Loads
     def loadObstacle(self, path, pos):
         self.obstacle = pygame.image.load(path)
@@ -73,8 +79,11 @@ class Background():
 
     def loadBombermanImage(self, path, pos):
         self.bomberman = pygame.image.load(path)
-        self.bomberman = pygame.transform.scale(self.bomberman, [30, 30])
-        self.screen.blit(self.bomberman, pos)
+        self.bomberman.set_clip(pygame.Rect(0, 0, 30, 30))
+        self.bombermanImage = self.bomberman.subsurface(self.bomberman.get_clip())
+        self.rect = self.bombermanImage.get_rect()
+        self.rect.topleft = pos
+        self.screen.blit(self.bombermanImage, self.rect)
 
 # Etc
     def fillBlack(self):
@@ -89,7 +98,7 @@ class Background():
 
     def clip(self, clippedRect):
         if type(clippedRect) is dict:
-            self.bomberman.setClip(pygame.Rect(self.getFrame(clippedRect)))
+            self.bomberman.set_clip(pygame.Rect(self.getFrame(clippedRect)))
         else:
-            self.bomberman.setClip(pygame.Rect(clippedRect))
+            self.bomberman.set_clip(pygame.Rect(clippedRect))
         return clippedRect
