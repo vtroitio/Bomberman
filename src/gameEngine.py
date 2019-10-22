@@ -2,6 +2,7 @@ import pygame
 import game
 import background
 
+
 CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
 
 
@@ -42,6 +43,7 @@ class GameEngine():
                 if event.type == pygame.KEYDOWN:
                     self.background.fillBlack()
                     self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                    self.game.createObstacles()
                     self.background.reloadObstacle(self.dimensions)
                     self.background.reloadBackground(self.dimensions)
                     self.background.reloadBomberman()

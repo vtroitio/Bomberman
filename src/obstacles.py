@@ -1,6 +1,6 @@
 class Obstacles():
 
-    def __init__(self):
+    def __init__(self, x, y):
         self.position = []
         self.sprites = None
         self.x = 0
@@ -8,14 +8,16 @@ class Obstacles():
         self.width = 37
         self.height = 37
         self.hitbox = (self.x, self.y, self.width, self.height)
-        self.getrect = ()
-        self.columnasDerechaRect = None
-        self.columnasIzquierdaRect = None
-        self.filasAbajoRect = None
-        self.filasArribaRect = None
+        self.listadeobstaculos = []
 
-    def setPosition(position):
+    def setPosition(self, position):
         self.position = position
 
-    def setSprite(sprite):
+    def setSprite(self, sprite):
         self.sprite = sprite
+
+    def loadObstacles(self):
+        self.listadeobstaculos.append(self.x, self.y)
+    
+    def setListaDeObstaculos(self, ubicacion):
+        self.listadeobstaculos.append(ubicacion)

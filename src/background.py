@@ -14,7 +14,7 @@ class Background():
         self.bomberman = None
         self.game = game        # self.game = game.Game()
         self.matriz = []
-        self.obstacles = obstacles.Obstacles()
+        self.obstacles = obstacles.Obstacles(0, 0)
 
 
 # Reload
