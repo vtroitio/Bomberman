@@ -1,3 +1,13 @@
 cambiamos moveup move down etc por un solo move
 hay que cambiar diagrama de clases game engine tiene que conocer a player y background-vista
 	
+
+lalistaderects = []
+for cosaquepuedodibujar in listadecosasquepuedodibujarquetieneENEMIGO,OBSTACULOSYBOPMBERMABN:
+    lalistaderects.append(cosaquepuedodibujar.chedameelrectquetenesguardado())
+
+pygame.collidelistall(lalistaderects) ->te da nyumeros
+
+los numeros son los indices de la lista que se chocan.
+cosaquepuedodibujar[elIndicequeMedioloqueacabodeaplicar] se choca con algo
+

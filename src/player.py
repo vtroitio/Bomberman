@@ -2,6 +2,7 @@ from dynamicObject import DynamicObject
 from bomb import Bomb
 import pygame
 import background
+import copy as copy
 
 
 class Player(DynamicObject):
@@ -17,6 +18,8 @@ class Player(DynamicObject):
         self.width = 30
         self.height = 30
         self.hitbox = (self.x + 20, self.y, 30, 30)  # Dibujo un cuadrado
+        self.playerRect = None
+        self.positionrespaldo = None
 
     def placeBomb(self, position, sprite):  # Coloca una bomba
         self.bomb = Bomb.createBomb(position, sprite)
@@ -29,6 +32,7 @@ class Player(DynamicObject):
 # Movimiento
 
     def move(self, direccion, ventana):
+        self.positionrespaldo = copy.deepcopy(self.position)
         for index in range(len(self.position)):
             print(self.position, "antes")
             self.position[index] = (self.position[index] + direccion[index] * (self.speed))
@@ -36,7 +40,7 @@ class Player(DynamicObject):
             self.x = self.position[0]
             self.y = self.position[1]
             self.hitbox = (self.x, self.y, self.width, self.height)
-            pygame.draw.rect(ventana, (255, 0, 0), self.hitbox, 2)
+            self.playerRect = pygame.draw.rect(ventana, (255, 0, 0), self.hitbox, 2)
 # Getters
 
     def getBombermanPosition(self):
@@ -45,6 +49,12 @@ class Player(DynamicObject):
     def getBombermanSpeed(self):
         print(self.speed)
         return self.speed
+
+    def getPlayerRect(self):
+        return self.playerRect
+
+    def getPlayerHitbox(self):
+        return self.hitbox
 # Setters
 
     def setLifes(self, lifeAmmount):
@@ -59,5 +69,6 @@ class Player(DynamicObject):
     def setSpeed(self, speedAmmount):
         self.speed += speedAmmount
 
-    def setBombermanPosition(self, pos):
-        self.position = pos
+    def setBombermanPosition(self):
+        self.position = self.positionrespaldo
+
