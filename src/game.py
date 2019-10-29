@@ -50,8 +50,10 @@ class Game():
         for x in range(1, int((dimensions[0] / (WidthHeightObstacle * 2))) + 1):  # De 1 a 13
             for y in range(1, int((dimensions[1]) / (WidthHeightObstacle * 2)) + 1):  # De 1 a 8
                 self.LaListaDeObstaculos.append(obstacles.Obstacle(x * (WidthHeightObstacle * 2), y * (WidthHeightObstacle * 2)))
-        
-        
+
+    def createRects(self):
+        for obstaculo in self.LaListaDeObstaculos:
+            self.lalistaderects.append(obstaculo.getObstacleRect())
     #def createPlayer(self):
         #pass
         # self.LaListaDeObstaculos.append(self.player)
@@ -79,6 +81,4 @@ class Game():
         return self.player.getPlayerRect()
 
     def getListaDeRects(self):
-        for obstaculo in self.LaListaDeObstaculos:
-            self.lalistaderects.append(obstaculo.getObstacleRect())
         return self.lalistaderects

@@ -13,6 +13,7 @@ class GameEngine():
         self.loadImages()
         self.game.createObstacles(self.dimensions)
         self.background.reloadBackground(self.dimensions)
+        self.game.createRects()
         self.mainLoop()
 
     def esc():
@@ -43,12 +44,11 @@ class GameEngine():
                     self.background.fillBlack()
                     
                     self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
-                    # self.game.createPlayer()
                     self.background.reloadBackground(self.dimensions)
                     playerrect = self.game.getPlayerRect()
                     print(len(self.game.lalistaderects))
                     print(playerrect.collidelistall(self.game.getListaDeRects()))
-                    if len(playerrect.collidelistall(self.game.getListaDeRects()))>0:
+                    if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0:
                         self.game.setBombermanPosition()
                     self.background.reloadBomberman()
                 pygame.display.flip()
