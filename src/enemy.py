@@ -1,25 +1,49 @@
 from dynamicObject import DynamicObject
-from player import Player
+
 
 class Enemy(DynamicObject):
-    
-    def __init__(self):
-        super().__init__(self)
-        self.player = Player()
-
-    def createEnemy(self, position, sprite, lifes, speed, size):
+    def __init__(self, position):
+        super().__init__()
         self.position = position
-        self.sprite = sprite
-        self.lifes = lifes
-        self.speed = speed
-        self.size = size
-
-    def destroyEnemy(self):
+        self.lifes = None
+        self.speed = 10
         self.sprite = None
 
-
-    def attack(self): 
-       self.player.lifes = int(self.player.lifes) - 1
+        # Colisiones
+        self.x = self.position[0]
+        self.y = self.position[1]
+        self.width = 30
+        self.height = 30
+        self.hitbox = (self.x + 5, self.y + 8, self.width, self.height)  # Dibujo un cuadrado
+        self.enemyRect = None
 
     def defineMovement(self):
         pass
+
+    #Getters
+
+    def getEnemyPosition(self):
+        return self.position
+    
+    def getEnemyLifes(self):
+        return self.lifes
+    
+    def getEnemySpeed(self):
+        return self.speed
+    
+    def getEnemyHitbox(self):
+        return self.hitbox
+    
+    def getEnemyRect(self):
+        return self.sprite
+    
+    #Setters
+
+    def setEnemySprite(self, sprite):
+        self.sprite = sprite
+
+    def setEnemyRect(self, rect):
+        self.rect = rect
+    
+
+

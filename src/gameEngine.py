@@ -33,9 +33,11 @@ class GameEngine():
         pass
 
     def loadImages(self):
-        self.background.loadBackgroundImage("sprites/pilar.png")
         self.background.loadBombermanImage("sprites/BombermanAnimado/", (37, 37))
-        self.background.loadObstacle("sprites/pilar.png", (74, 74))
+        self.background.loadObstacle("sprites/pilar.png")
+        self.background.loadImagenMenu("sprites/fondoBombmanMenu.jpeg")
+        self.background.loadStartMenu("sprites/pressStart.png")
+        self.background.loadEnemigoBomberman("sprites/enemigoBomberman.png")
 
     def mainLoop(self):
         contadorMuyLoco = 0
@@ -51,9 +53,7 @@ class GameEngine():
                     self.game.createObstacles()
                     self.background.reloadObstacle(self.dimensions)
                     self.background.reloadBackground(self.dimensions)
-                    o = self.game.getBombermanDirection()
-                    print(o)
-                    self.background.reloadBomberman(o, contadorMuyLoco)
+                    self.background.reloadBomberman(self.game.getBombermanDirection(), contadorMuyLoco)
                 pygame.display.flip()
 
 if __name__ == "__main__":

@@ -3,7 +3,8 @@ import box
 import player
 import obstacles
 import player
-
+import enemy
+import copy
 
 class Game():
 
@@ -12,13 +13,18 @@ class Game():
         self.wall = wall.Wall()
         self.box = box.Box()
         self.player = player.Player()
+        self.LaListaDeObstaculos = []
+        self.lalistaderects = []
+        self.lalistadeenemigos = []
+        self.lalistaderectsenemigos = []
 
     def placePlayer(self, lifes, speed):
         # self.player.createPlayer(lifes, speed)
         pass
 
     def placeEnemies(self):
-        pass
+        self.lalistadeenemigos.append(enemy.Enemy([185, 37]))
+        self.lalistadeenemigos.append(enemy.Enemy([481, 37]))
 
     def createBackground(self):
         pass
@@ -31,29 +37,30 @@ class Game():
         self.box.setPosition(position)
         self.box.setSprite(sprite)
 
-    def createObstacles(self):
-        dimensions = [925, 555]
-        for i in range(0, int((dimensions[0] / 37)) + 1):
+    def createObstacles(self, dimensions):
+        WidthHeightObstacle = 37  # Tamaño del bloque utilizado
 
-            self.obstacles = obstacles.Obstacles(i, 0)  # Creo hitboxes de la fila de arriba
-            self.obstacles.setListaDeObstaculos([i, 0])
+        for i in range(0, int((dimensions[0] / WidthHeightObstacle)) + 1):  # De 0 a 26
 
-            self.obstacles = obstacles.Obstacles(i * 37, dimensions[1] - 37)  # Creo hitboxes de la fila de abajo
-            self.obstacles.setListaDeObstaculos([(i * 37, dimensions[1] - 37)])
+            self.LaListaDeObstaculos.append(obstacles.Obstacle(i * WidthHeightObstacle, 0))  # Creo los bloques de la fila de arriba
 
-        for i in range(0, int((dimensions[1] / 37)) + 1):
+            self.LaListaDeObstaculos.append(obstacles.Obstacle(i * WidthHeightObstacle, dimensions[1] - WidthHeightObstacle))  # Creo los bloques de la fila de abajo
 
-            self.obstacles = obstacles.Obstacles(0, i * 37)  # Crea hitboxes de las columnas de la izquierda
-            self.obstacles.setListaDeObstaculos([0, i * 37])
+        for i in range(0, int((dimensions[1] / WidthHeightObstacle)) + 1):  # De 0 a 16
 
-            self.obstacles = obstacles.Obstacles(dimensions[0] - 37, i * 37)  # Crea hitboxes de las columnas de la derecha
-            self.obstacles.setListaDeObstaculos([dimensions[0] - 37, i * 37])
+            self.LaListaDeObstaculos.append(obstacles.Obstacle(0, i * WidthHeightObstacle))  # Creo los bloques de las columnas de la izquierda
 
-        for x in range(1, int((dimensions[0] / 74)) + 1):
-            for y in range(1, int((dimensions[1]) / 74) + 1):
+            self.LaListaDeObstaculos.append(obstacles.Obstacle(dimensions[0] - WidthHeightObstacle, i * WidthHeightObstacle))  # Creo los bloques de las columnas de la derecha
 
-                self.obstacles = obstacles.Obstacles(x * 74, y * 74)  # Crea hitboxes de los obstaculos
-                self.obstacles.setListaDeObstaculos([x * 74, y * 74])
+        for x in range(1, int((dimensions[0] / (WidthHeightObstacle * 2))) + 1):  # De 1 a 13
+            for y in range(1, int((dimensions[1]) / (WidthHeightObstacle * 2)) + 1):  # De 1 a 8
+                self.LaListaDeObstaculos.append(obstacles.Obstacle(x * (WidthHeightObstacle * 2), y * (WidthHeightObstacle * 2)))
+
+    def createRects(self):
+        for obstaculo in self.LaListaDeObstaculos:
+            self.lalistaderects.append(obstaculo.getObstacleRect())
+        for enemy in self.lalistadeenemigos:
+            self.lalistaderectsenemigos.append(enemy.getEnemyHitbox())
 
 # Movimiento
 
@@ -66,8 +73,33 @@ class Game():
     def getBombermanSpeed(self):
         return self.player.getBombermanSpeed()
 
-    def setBombermanPosition(self, pos):
-        self.player.setBombermanPosition(pos)
-
     def getBombermanDirection(self):
         return self.player.getBombermanDirection
+        
+    def setBombermanPosition(self):
+        self.player.setBombermanPosition()
+
+    def moverEnemigo(self):
+        for enemy in self.lalistadeenemigos:
+            self.positionAnteriorEnemy = copy.deepcopy(enemy.getEnemyPosition())
+            self.nuevaposicion = [self.positionAnteriorEnemy[0], self.positionAnteriorEnemy[1] + 1 * enemy.getEnemySpeed()]
+            enemy.setPosition(self.nuevaposicion)
+
+# Colisiones
+    def getListaDeObstaculos(self):
+        return self.LaListaDeObstaculos
+
+    def getPlayerRect(self):
+        return self.player.getPlayerRect()
+
+    def getListaDeRects(self):
+        return self.lalistaderects
+    
+    def getPlayerHitbox(self):
+        return self.player.getPlayerHitbox()
+    
+    def setPlayerRect(self, rect):
+        self.player.setPlayerRect(rect)
+    
+    def getListaDeEnemigos(self):
+        return self.lalistadeenemigos
