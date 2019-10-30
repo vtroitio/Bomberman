@@ -45,5 +45,6 @@ class Enemy(DynamicObject):
     def setEnemyRect(self, rect):
         self.rect = rect
     
-
+    def setPosition(self, position):
+        self.position = position
 

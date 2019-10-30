@@ -81,6 +81,7 @@ class Game():
 
     def moverEnemigo(self):
         for enemy in self.lalistadeenemigos:
+            print('elenemigoahoraes',enemy)
             self.positionAnteriorEnemy = copy.deepcopy(enemy.getEnemyPosition())
             self.nuevaposicion = [self.positionAnteriorEnemy[0], self.positionAnteriorEnemy[1] + 1 * enemy.getEnemySpeed()]
             enemy.setPosition(self.nuevaposicion)
@@ -94,12 +95,12 @@ class Game():
 
     def getListaDeRects(self):
         return self.lalistaderects
-    
+
     def getPlayerHitbox(self):
         return self.player.getPlayerHitbox()
-    
+
     def setPlayerRect(self, rect):
         self.player.setPlayerRect(rect)
-    
+
     def getListaDeEnemigos(self):
         return self.lalistadeenemigos
