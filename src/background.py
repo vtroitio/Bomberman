@@ -16,7 +16,6 @@ class Background():
         self.matriz = []
         self.obstacles = obstacles.Obstacles(0, 0)
 
-
 # Reload
     def reloadBackground(self, dimensions):  # Crea las filas y columnas
         for i in range(0, int((dimensions[0] / 37)) + 1):
@@ -72,8 +71,8 @@ class Background():
                 self.obstacles.hitbox = (self.obstacles.x, self.obstacles.y, self.obstacles.width, self.obstacles.height)
                 pygame.draw.rect(self.screen, (255, 0, 0), self.obstacles.hitbox, 1)
 
-    def reloadBomberman(self):
-        self.screen.blit(self.bomberman, self.game.getBombermanPosition())
+    def reloadBomberman(self, direction, contador):
+        self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
 
 # Loads
     def loadObstacle(self, path, pos):
@@ -84,11 +83,15 @@ class Background():
         self.background = pygame.image.load(path)
 
     def loadBombermanImage(self, path, pos):
-        self.bomberman = pygame.image.load(path)
-        self.bomberman = pygame.transform.scale(self.bomberman, [30, 30])
-        self.screen.blit(self.bomberman, pos)
-
+        self.bomberman = {
+            "down": [pygame.image.load(path + "f1.png"), pygame.image.load(path + "f2.png"), pygame.image.load(path + "f1.png"), pygame.image.load(path + "f3.png")],
+            "up": [pygame.image.load(path + "b1.png"), pygame.image.load(path + "b2.png"), pygame.image.load(path + "b1.png"), pygame.image.load(path + "b3.png")],
+            "left": [pygame.image.load(path + "l1.png"), pygame.image.load(path + "l2.png"), pygame.image.load(path + "l1.png"), pygame.image.load(path + "l3.png")],
+            "right": [pygame.image.load(path + "r1.png"), pygame.image.load(path + "r2.png"), pygame.image.load(path + "r1.png"), pygame.image.load(path + "r3.png")]
+            }
+        self.screen.blit(self.bomberman["down"][0], pos)
 # Etc
+
     def fillBlack(self):
         color = (0, 0, 0)
         self.screen.fill(color)

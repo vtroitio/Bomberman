@@ -3,6 +3,7 @@ import game
 import background
 
 CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
+#             arriba          abajo          derecha        izquierda
 
 
 class GameEngine():
@@ -14,6 +15,7 @@ class GameEngine():
         self.background.reloadBackground(self.dimensions)
         self.background.reloadObstacle(self.dimensions)
         self.mainLoop()
+        self.clock = pygame.time.Clock()
 
     def esc():
         pass
@@ -32,11 +34,15 @@ class GameEngine():
 
     def loadImages(self):
         self.background.loadBackgroundImage("sprites/pilar.png")
-        self.background.loadBombermanImage('sprites/Bomberman.png', (37, 37))
+        self.background.loadBombermanImage("sprites/BombermanAnimado/", (37, 37))
         self.background.loadObstacle("sprites/pilar.png", (74, 74))
 
     def mainLoop(self):
+        contadorMuyLoco = 0
         while True:
+            contadorMuyLoco += 1
+            if contadorMuyLoco > 3:
+                contadorMuyLoco = 0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
@@ -45,7 +51,9 @@ class GameEngine():
                     self.game.createObstacles()
                     self.background.reloadObstacle(self.dimensions)
                     self.background.reloadBackground(self.dimensions)
-                    self.background.reloadBomberman()
+                    o = self.game.getBombermanDirection()
+                    print(o)
+                    self.background.reloadBomberman(o, contadorMuyLoco)
                 pygame.display.flip()
 
 if __name__ == "__main__":
