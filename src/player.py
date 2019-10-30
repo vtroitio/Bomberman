@@ -17,7 +17,7 @@ class Player(DynamicObject):
         self.y = self.position[1]
         self.width = 30
         self.height = 30
-        self.hitbox = (self.x + 20, self.y, 30, 30)  # Dibujo un cuadrado
+        self.hitbox = (self.x + 20, self.y, self.width, self.height)  # Dibujo un cuadrado
         self.playerRect = None
         self.positionrespaldo = None
 
@@ -33,14 +33,17 @@ class Player(DynamicObject):
 
     def move(self, direccion, ventana):
         self.positionrespaldo = copy.deepcopy(self.position)
+
         for index in range(len(self.position)):
-            print(self.position, "antes")
+
+            # Movimiento
             self.position[index] = (self.position[index] + direccion[index] * (self.speed))
-            print(self.position, "despues ")
+
+            # Hitbox y colisiones
             self.x = self.position[0]
             self.y = self.position[1]
             self.hitbox = (self.x, self.y, self.width, self.height)
-            self.playerRect = pygame.draw.rect(ventana, (255, 0, 0), self.hitbox, 2)
+
 # Getters
 
     def getBombermanPosition(self):
@@ -55,6 +58,7 @@ class Player(DynamicObject):
 
     def getPlayerHitbox(self):
         return self.hitbox
+    
 # Setters
 
     def setLifes(self, lifeAmmount):
@@ -72,3 +76,5 @@ class Player(DynamicObject):
     def setBombermanPosition(self):
         self.position = self.positionrespaldo
 
+    def setPlayerRect(self, rect):
+        self.playerRect = rect

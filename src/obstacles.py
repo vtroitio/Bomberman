@@ -9,6 +9,7 @@ class Obstacle():
         self.height = 37
         self.hitbox = (self.x, self.y, self.width, self.height)
         self.obstacleRect = None
+        self.rompible = None
 
 # Setters
 
@@ -20,6 +21,10 @@ class Obstacle():
 
     def setSprite(self, sprite):
         self.sprite = sprite
+
+    def setRompibleTrue(self): #Cuando instancie los objetos rompibles les seteo esto para despues poder usarlo con la explosion de la bomba
+        self.rompible = True
+
 # Getters
 
     def getHitbox(self):
