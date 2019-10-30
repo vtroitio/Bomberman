@@ -38,7 +38,6 @@ class GameEngine():
         self.background.loadObstacle("sprites/pilar.png")
         self.background.loadImagenMenu("sprites/fondoBombmanMenu.jpeg")
         self.background.loadStartMenu("sprites/pressStart.png")
-        self.background.loadmovimientoizquierda("sprites/L1.png", "sprites/L2.png", "sprites/L3.png", "sprites/L4.png")
         self.background.loadEnemigoBomberman("sprites/enemigoBomberman.png")
 
     def mainLoop(self):
