@@ -3,19 +3,23 @@ import game
 import background
 
 CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
-#             arriba          abajo          derecha        izquierda
 
 
 class GameEngine():
     def __init__(self):
-        self.game = game.Game()
         self.dimensions = [925, 555]
+        self.game = game.Game()
+
         self.background = background.Background(self.dimensions, self.game)
         self.loadImages()
+
+        # Creo obstaculos para despues en reload background dibujarlos y alli setear el rect de cada uno
+        self.game.createObstacles(self.dimensions)
+        self.game.placeEnemies()
         self.background.reloadBackground(self.dimensions)
-        self.background.reloadObstacle(self.dimensions)
+        self.game.createRects()
+
         self.mainLoop()
-        self.clock = pygame.time.Clock()
 
     def esc():
         pass
@@ -29,32 +33,57 @@ class GameEngine():
     def exit():
         pass
 
-    def validatePosition():
-        pass
-
     def loadImages(self):
-        self.background.loadBombermanImage("sprites/BombermanAnimado/", (37, 37))
+        self.background.loadBombermanImage('sprites/BombermanAnimado/', (37, 37))  # Lo pone al principio del mapa
         self.background.loadObstacle("sprites/pilar.png")
         self.background.loadImagenMenu("sprites/fondoBombmanMenu.jpeg")
         self.background.loadStartMenu("sprites/pressStart.png")
         self.background.loadEnemigoBomberman("sprites/enemigoBomberman.png")
 
     def mainLoop(self):
-        contadorMuyLoco = 0
+        menu = True
+        clock = pygame.time.Clock()
+        contador = 0
+        contador += 1
+        if contador < 3:
+            contador = 0
         while True:
-            contadorMuyLoco += 1
-            if contadorMuyLoco > 3:
-                contadorMuyLoco = 0
+            while menu:
+                print("Entro al loopeano")
+                self.background.reloadMenu()
+                clock.tick(30)
+                pygame.display.update()
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT: sys.exit()
+                    if event.type == pygame.KEYDOWN:
+                        print("Salgo del loopeano")
+                        menu = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
                     self.background.fillBlack()
+
                     self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
-                    self.game.createObstacles()
-                    self.background.reloadObstacle(self.dimensions)
+                    self.background.reloadBombermanRect()
+                    
                     self.background.reloadBackground(self.dimensions)
-                    self.background.reloadBomberman(self.game.getBombermanDirection(), contadorMuyLoco)
+
+                    playerrect = self.game.getPlayerRect()
+
+                    #print(len(self.game.lalistaderects))
+
+                    #print(playerrect.collidelistall(self.game.getListaDeRects()))
+
+                    if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0:
+                        self.game.setBombermanPosition()
+
+                    self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
+                    self.game.moverEnemigo()
+                    self.background.reloadEnemyRect()
+                    self.background.reloadEnemy()       
                 pygame.display.flip()
+                clock.tick(30)
 
 if __name__ == "__main__":
     controlador = GameEngine()
+

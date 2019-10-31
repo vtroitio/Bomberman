@@ -32,8 +32,8 @@ class Background():
             self.screen.blit(self.obstacle, obstaculo.getPosition())
             obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), obstaculo.getHitbox(), 1))
 
-    def reloadBomberman(self):
-        self.screen.blit(self.bomberman, self.game.getBombermanPosition())
+    def reloadBomberman(self, direction, contador):
+        self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
 
     def reloadBombermanRect(self):
         rect = pygame.draw.rect(self.screen, (0, 0, 0), self.game.getPlayerHitbox(), 2)
@@ -44,9 +44,6 @@ class Background():
         self.screen.blit(self.imagenmenu, (0, 0))
         self.screen.blit(self.startmenu, (370, 170))
 
-    def reloadBomberman(self, direction, contador):
-        self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
-    
     def reloadEnemy(self):
         for enemy in self.game.getListaDeEnemigos():
             print(enemy.getEnemyPosition())
@@ -64,11 +61,11 @@ class Background():
 
     def loadBombermanImage(self, path, pos):
         self.bomberman = {
-            "down": [pygame.image.load(path + "f1.png"), pygame.image.load(path + "f2.png"), pygame.image.load(path + "f1.png"), pygame.image.load(path + "f3.png")],
             "up": [pygame.image.load(path + "b1.png"), pygame.image.load(path + "b2.png"), pygame.image.load(path + "b1.png"), pygame.image.load(path + "b3.png")],
+            "down": [pygame.image.load(path + "f1.png"), pygame.image.load(path + "f2.png"), pygame.image.load(path + "f1.png"), pygame.image.load(path + "f3.png")],
             "left": [pygame.image.load(path + "l1.png"), pygame.image.load(path + "l2.png"), pygame.image.load(path + "l1.png"), pygame.image.load(path + "l3.png")],
             "right": [pygame.image.load(path + "r1.png"), pygame.image.load(path + "r2.png"), pygame.image.load(path + "r1.png"), pygame.image.load(path + "r3.png")]
-            }
+        }
         self.screen.blit(self.bomberman["down"][0], pos)
 
     def loadImagenMenu(self, path):
@@ -79,15 +76,15 @@ class Background():
         self.startmenu = pygame.image.load(path)
         self.startmenu = pygame.transform.scale(self.startmenu, [200, 200])
 
+    def loadmovimientoizquierda(self, path1, path2, path3, path4):
+        self.movimientoizquierda = [pygame.image.load(path1), pygame.image.load(path2), pygame.image.load(path3), pygame.image.load(path4)]
+
     def loadEnemigoBomberman(self, path):
         self.enemigobomberman = pygame.image.load(path)
         self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [40, 40])
-    
-    def loadBackgroundImage(self, path):
-        self.background = pygame.image.load(path)
 
 # Etc
-
     def fillBlack(self):
         color = (0, 0, 0)
         self.screen.fill(color)
+
