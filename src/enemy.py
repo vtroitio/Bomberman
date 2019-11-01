@@ -15,7 +15,7 @@ class Enemy(DynamicObject):
         self.width = 30
         self.height = 30
         self.hitbox = (self.x + 5, self.y + 8, self.width, self.height)  # Dibujo un cuadrado
-        self.enemyRect = None
+        self.rect = None
 
     def defineMovement(self):
         pass
@@ -27,16 +27,17 @@ class Enemy(DynamicObject):
     
     def getEnemyLifes(self):
         return self.lifes
-    
+
     def getEnemySpeed(self):
         return self.speed
-    
+
     def getEnemyHitbox(self):
+        self.hitbox = (self.position[0] + 5, self.position[1] + 8, self.width, self.height)
         return self.hitbox
-    
+
     def getEnemyRect(self):
-        return self.sprite
-    
+        return self.rect
+
     #Setters
 
     def setEnemySprite(self, sprite):

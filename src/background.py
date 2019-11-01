@@ -48,8 +48,7 @@ class Background():
         for enemy in self.game.getListaDeEnemigos():
             print(enemy.getEnemyPosition())
             self.screen.blit(self.enemigobomberman, enemy.getEnemyPosition())
-            enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1))
-
+            
     def reloadEnemyRect(self):
         for enemy in self.game.getListaDeEnemigos():
             cosa = pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1)

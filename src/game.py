@@ -17,6 +17,7 @@ class Game():
         self.lalistaderects = []
         self.lalistadeenemigos = []
         self.lalistaderectsenemigos = []
+        self.direccionenemigo = 1
 
     def placePlayer(self, lifes, speed):
         # self.player.createPlayer(lifes, speed)
@@ -59,8 +60,8 @@ class Game():
     def createRects(self):
         for obstaculo in self.LaListaDeObstaculos:
             self.lalistaderects.append(obstaculo.getObstacleRect())
-        for enemy in self.lalistadeenemigos:
-            self.lalistaderectsenemigos.append(enemy.getEnemyHitbox())
+        #for enemy in self.lalistadeenemigos:
+            #self.lalistaderectsenemigos.append(enemy.getEnemyRect())
 
 # Movimiento
 
@@ -76,12 +77,13 @@ class Game():
     def setBombermanPosition(self):
         self.player.setBombermanPosition()
 
-    def moverEnemigo(self):
+    def moverEnemigo(self, direccion):
         for enemy in self.lalistadeenemigos:
-            print('elenemigoahoraes',enemy)
             self.positionAnteriorEnemy = copy.deepcopy(enemy.getEnemyPosition())
-            self.nuevaposicion = [self.positionAnteriorEnemy[0], self.positionAnteriorEnemy[1] + 1 * enemy.getEnemySpeed()]
+            self.nuevaposicion = [self.positionAnteriorEnemy[0], (self.positionAnteriorEnemy[1] + (1 * enemy.getEnemySpeed() * direccion))]
             enemy.setPosition(self.nuevaposicion)
+            self.lalistaderectsenemigos.append(enemy.getEnemyRect())
+    
 
 # Colisiones
     def getListaDeObstaculos(self):
@@ -101,3 +103,12 @@ class Game():
 
     def getListaDeEnemigos(self):
         return self.lalistadeenemigos
+
+    def getEnemyRect(self):
+        return self.lalistaderectsenemigos
+    
+    def setdireccionenemigo(self, direccion):
+        self.direccionenemigo = direccion
+
+    def getdireccionenemigo(self):
+        return self.direccionenemigo

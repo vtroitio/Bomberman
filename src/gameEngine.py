@@ -16,6 +16,7 @@ class GameEngine():
         # Creo obstaculos para despues en reload background dibujarlos y alli setear el rect de cada uno
         self.game.createObstacles(self.dimensions)
         self.game.placeEnemies()
+        self.background.reloadEnemyRect()
         self.background.reloadBackground(self.dimensions)
         self.game.createRects()
 
@@ -74,9 +75,18 @@ class GameEngine():
                         self.game.setBombermanPosition()
 
                     self.background.reloadBomberman()
-                    self.game.moverEnemigo()
+                    enemyrect = self.game.getEnemyRect()
+
+                    self.game.moverEnemigo(self.game.getdireccionenemigo())
+                    print(enemyrect)
+                    for i in range(0, len(enemyrect)):
+                        if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0:
+                            self.game.setdireccionenemigo(self.game.getdireccionenemigo()*-1)
+                            self.game.moverEnemigo(self.game.getdireccionenemigo()) 
+                            print("ENTRO AL LOOP EPICO")
+                    print(len(enemyrect[i].collidelistall(self.game.getListaDeRects())))
+                    self.background.reloadEnemy()
                     self.background.reloadEnemyRect()
-                    self.background.reloadEnemy()       
                 pygame.display.flip()
                 clock.tick(30)
 
