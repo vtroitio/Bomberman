@@ -70,11 +70,14 @@ class Game():
     def getBombermanPosition(self):
         return self.player.getBombermanPosition()
 
+    def getBombermanPositionAnterior(self):
+        return self.player.getBobmermanPositionAnterior()
+
     def getBombermanSpeed(self):
         return self.player.getBombermanSpeed()
 
     def getBombermanDirection(self):
-        return self.player.getBombermanDirection
+        return self.player.getBombermanDirection()
         
     def setBombermanPosition(self):
         self.player.setBombermanPosition()

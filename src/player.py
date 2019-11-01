@@ -19,6 +19,7 @@ class Player(DynamicObject):
         self.hitbox = (self.x + 20, self.y, self.width, self.height)  # Dibujo un cuadrado
         self.playerRect = None
         self.positionrespaldo = None
+        self.direccion = "down"
 
     def placeBomb(self, position, sprite):  # Coloca una bomba
         self.bomb = Bomb.createBomb(position, sprite)
@@ -57,6 +58,9 @@ class Player(DynamicObject):
 
     def getBombermanPosition(self):
         return self.position
+
+    def getBobmermanPositionAnterior(self):
+        return self.positionrespaldo
 
     def getBombermanSpeed(self):
         print(self.speed)
