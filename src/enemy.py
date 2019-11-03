@@ -8,13 +8,15 @@ class Enemy(DynamicObject):
         self.lifes = None
         self.speed = 10
         self.sprite = None
+        self.posicionanterior = None
+        self.direccion = 1
 
         # Colisiones
         self.x = self.position[0]
         self.y = self.position[1]
-        self.width = 30
-        self.height = 30
-        self.hitbox = (self.x + 5, self.y + 8, self.width, self.height)  # Dibujo un cuadrado
+        self.width = 32
+        self.height = 40
+        self.hitbox = (self.x , self.y , self.width, self.height)  # Dibujo un cuadrado
         self.rect = None
 
     def defineMovement(self):
@@ -32,11 +34,17 @@ class Enemy(DynamicObject):
         return self.speed
 
     def getEnemyHitbox(self):
-        self.hitbox = (self.position[0] + 5, self.position[1] + 8, self.width, self.height)
+        self.hitbox = (self.position[0], self.position[1] - 2, self.width, self.height)
         return self.hitbox
 
     def getEnemyRect(self):
         return self.rect
+
+    def getEnemyPosicionAnterior(self):
+        return self.posicionanterior
+
+    def getEnemyDireccion(self):
+        return self.direccion
 
     #Setters
 
@@ -48,4 +56,10 @@ class Enemy(DynamicObject):
     
     def setPosition(self, position):
         self.position = position
+    
+    def setPosicionAnterior(self, posicion):
+        self.posicionanterior = posicion
+    
+    def setEnemyDireccion(self, direccion):
+        self.direccion = direccion
 

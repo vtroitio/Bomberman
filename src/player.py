@@ -10,7 +10,6 @@ class Player(DynamicObject):
         super().__init__()
         self.lifes = None
         self.speed = 3
-        self.sprite = "sprites/Bomberman.png"
         self.positionanterior = []
         # Colisiones
         self.x = self.position[0]
@@ -20,6 +19,7 @@ class Player(DynamicObject):
         self.hitbox = (self.x + 20, self.y, self.width, self.height)  # Dibujo un cuadrado
         self.playerRect = None
         self.positionrespaldo = None
+        self.direccion = "down"
 
     def placeBomb(self, position, sprite):  # Coloca una bomba
         self.bomb = Bomb.createBomb(position, sprite)
@@ -27,11 +27,12 @@ class Player(DynamicObject):
     def createPlayer(self, lifes, speed):
         self.lifes = lifes
         self.speed = speed
-
+        
 
 # Movimiento
 
     def move(self, direccion, ventana):
+        self.direccion = direccion
         self.positionrespaldo = copy.deepcopy(self.position)
 
         for index in range(len(self.position)):
@@ -43,15 +44,29 @@ class Player(DynamicObject):
             self.x = self.position[0]
             self.y = self.position[1]
             self.hitbox = (self.x, self.y, self.width, self.height)
+            pygame.draw.rect(ventana, (255, 0, 0), self.hitbox, 2)
+            if direccion == [0, -1]:
+                self.direccion = "up"
+            elif direccion == [0, 1]:
+                self.direccion = "down"
+            elif direccion == [1, 0]:
+                self.direccion = "right"
+            elif direccion == [-1, 0]:
+                self.direccion = "left"
 
 # Getters
 
     def getBombermanPosition(self):
         return self.position
 
+    def getBobmermanPositionAnterior(self):
+        return self.positionrespaldo
+
     def getBombermanSpeed(self):
-        print(self.speed)
         return self.speed
+
+    def getBombermanDirection(self):
+        return self.direccion
 
     def getPlayerRect(self):
         return self.playerRect
