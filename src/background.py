@@ -14,7 +14,7 @@ class Background():
         self.imagenmenu = None
         self.bomberman = None
         self.obstacle = None
-        self.startmenu = None
+        self.caja = None
         self.movimientoizquierda = None
         self.enemigobomberman = None
 
@@ -32,7 +32,7 @@ class Background():
         for obstaculo in self.game.getListaDeObstaculos():
 
             self.screen.blit(self.obstacle, obstaculo.getPosition())
-            obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), obstaculo.getHitbox(), 1))
+            obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), obstaculo.getHitbox(), 1))
 
     def reloadBomberman(self, direction, contador):
         self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
@@ -54,10 +54,16 @@ class Background():
 
     def reloadEnemyRect(self):
         for enemy in self.game.getListaDeEnemigos():
-            print("El hitbox del background = " + str(enemy.getEnemyHitbox()))
             cosa = pygame.draw.rect(self.screen, (0, 0, 0), enemy.getEnemyHitbox(), 1)
             enemy.setEnemyRect(cosa)
             self.game.setlalistaderectsenemigos(cosa)
+    
+    def reloadBoxes(self):
+        for cajas in self.game.getListaDeCajas():
+            self.screen.blit(self.caja, cajas.getPosition())
+            cajas.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), cajas.getHitbox(), 1))
+
+
 
 # Loads
 
@@ -77,16 +83,15 @@ class Background():
         self.imagenmenu = pygame.image.load(path)
         self.imagenmenu = pygame.transform.scale(self.imagenmenu, [925, 555])
 
-    # def loadStartMenu(self, path):
-    #     self.startmenu = pygame.image.load(path)
-    #     self.startmenu = pygame.transform.scale(self.startmenu, [200, 200])
+    def loadCaja(self, path):
+        self.caja = pygame.image.load(path)
 
     def loadmovimientoizquierda(self, path1, path2, path3, path4):
         self.movimientoizquierda = [pygame.image.load(path1), pygame.image.load(path2), pygame.image.load(path3), pygame.image.load(path4)]
 
     def loadEnemigoBomberman(self, path):
         self.enemigobomberman = pygame.image.load(path)
-        self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [32, 32])
+        self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [30, 30])
 
     def loadBackgroundImage(self, path):
         self.background = pygame.image.load(path)
