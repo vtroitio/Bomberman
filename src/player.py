@@ -27,7 +27,6 @@ class Player(DynamicObject):
     def createPlayer(self, lifes, speed):
         self.lifes = lifes
         self.speed = speed
-        
 
 # Movimiento
 
@@ -38,7 +37,8 @@ class Player(DynamicObject):
         for index in range(len(self.position)):
 
             # Movimiento
-            self.position[index] = (self.position[index] + direccion[index] * (self.speed))
+            self.position[index] = (self.position[index] + direccion[index] *
+                                    (self.speed))
 
             # Hitbox y colisiones
             self.x = self.position[0]

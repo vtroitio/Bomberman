@@ -59,8 +59,7 @@ class GameEngine():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
-                        contador += 1
+                    contador += 1
                     if contador > 3:
                         contador = 0
                     self.background.reloadBackgroundImage()
@@ -79,7 +78,9 @@ class GameEngine():
                     if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0:
                         self.game.setBombermanPosition()
 
-                    self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
+                    self.background.reloadBomberman(
+                        self.game.getBombermanDirection(), contador
+                        )
                     self.game.moverEnemigo()
                     self.background.reloadEnemyRect()
                     self.background.reloadEnemy()
@@ -87,7 +88,9 @@ class GameEngine():
                 clock.tick(30)
 
                 if event.type == pygame.KEYUP:
-                    self.background.reloadBomberman(self.game.getBombermanDirection(), 0)
+                    self.background.idleBobmerman(
+                        self.game.getBombermanDirection()
+                        )
 
 if __name__ == "__main__":
     controlador = GameEngine()
