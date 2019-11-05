@@ -22,8 +22,8 @@ class Obstacle():
     def setSprite(self, sprite):
         self.sprite = sprite
 
-    def setRompibleTrue(self): #Cuando instancie los objetos rompibles les seteo esto para despues poder usarlo con la explosion de la bomba
-        self.rompible = True
+    def setRompible(self, valor): #Cuando instancie los objetos rompibles les seteo esto para despues poder usarlo con la explosion de la bomba
+        self.rompible = valor
 
 # Getters
 
@@ -35,3 +35,6 @@ class Obstacle():
 
     def getObstacleRect(self):
         return self.obstacleRect
+    
+    def getObstacleRompible():
+        return self.rompible
