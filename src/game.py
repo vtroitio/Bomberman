@@ -28,6 +28,10 @@ class Game():
         self.lalistadecajas = []
         self.lalistaderectscajas = []
 
+        self.lalistadepowerUpsSpeed = []
+        self.lalistadepowerUpsVida = []
+        self.lalistadepowerUpsBomba = []
+
         self.listarandom = [0, 1, 2, 3, 4, 5]
 
     def createBackground(self):
@@ -70,7 +74,7 @@ class Game():
                 pass
         # Creo la septima columna
         for i in range(1,14):
-            if i == 1 or i == 3 or i == 4 or i == 5 or i ==10 or i ==11 or i ==13:
+            if i == 1 or i == 3 or i == 4 or i == 5 or i ==10 or i ==11 or i == 13:
                 self.lalistadecajas.append(obstacles.Obstacle(259, i * 37))
             else:
                 pass
@@ -181,28 +185,37 @@ class Game():
                                                   "horizontal", "horizontal1"))
         self.lalistadeenemigos.append(enemy.Enemy([187, 40],
                                                   "vertical", "vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([185, 335], "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 37], "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([407, 148], "vertical","vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 400], "vertical","vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([632, 400], "vertical","vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([669, 487], "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([780, 333], "vertical","vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([777, 260], "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([851, 400], "vertical","vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([185, 335],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([484, 37],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([407, 148],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([484, 400],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([632, 400],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([669, 487],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([780, 333],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([777, 260],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([851, 400],
+                                                  "vertical", "vertical1"))
 
 # Cuando se rompa una caja se va a llamar(dependiendo del numero que salga a
 # la creacion de alguno de estos powerups que luego seran bliteados por la
 # vista.
 
     def createPowerUpSpeedUp(self, posicion):
-        self.lalistadepowerUpsSpeed(speed.Speed(posicion))
+        self.lalistadepowerUpsSpeed.append(speed.Speed(posicion))
 
     def createPowerUpVida(self, posicion):
         self.lalistadepowerUpsVida.append(LifeUp.LifeUp(posicion))
 
     def createPowerUpBombUp(self, posicion):
-        self.lalistadepowerUpsBomba(bombUp.BombUp(posicion))
+        self.lalistadepowerUpsBomba.append(bombUp.BombUp(posicion))
 
 
 # Crea los obstaculos no rompibles, los pilares grises, estos creandose segun
@@ -317,8 +330,15 @@ class Game():
     def getListaDeEnemigos(self):
         return self.lalistadeenemigos
 
-    def getPlayerRect(self):
-        return self.player.getPlayerRect()
+    def getListaDeSpeedPowerUp(self):
+        return self.lalistadepowerUpsSpeed
+
+    def getListaDeLifePowerUp(self):
+        return self.lalistadepowerUpsVida
+
+    def getListaDeBombPowerUp(self):
+        return self.lalistadepowerUpsBomba
+
 
 # Setters de listas de objetos
 
@@ -339,6 +359,9 @@ class Game():
     def getLaListaDeRectsCajas(self):
         return self.lalistaderectscajas
 
+    def getPlayerRect(self):
+        return self.player.getPlayerRect()
+
 # Setters de listas de rects
 
     def setPlayerRect(self, rect):
@@ -349,6 +372,15 @@ class Game():
 
     def setLalistaDeRectsCajas(self, rect):
         self.lalistaderectscajas.append(rect)
+
+    def setRectSpeedUp(self, rect):
+        self.lalistaderectspowerUpsSpeed.append(rect)
+
+    def setRectBombUp(self, rect):
+        self.lalistaderectspowerUpsBomba.append(rect)
+
+    def setRectLifeUp(self, rect):
+        self.lalistaderectspowerUpsVida.append(rect)
 
 # Romper Cajas
 

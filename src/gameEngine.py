@@ -67,6 +67,8 @@ class GameEngine():
         self.background.loadBomba("sprites/Bomba.png")
         self.background.loadSpeedPowerUp("sprites/speedPowerUp.png")
         self.background.loadGameOverScreen("sprites/GameOver.jpg")
+        self.background.loadBombPowerUp("sprites/PowerUps/BombUp.png")
+        self.background.loadLifePowerUp("sprites/PowerUps/HealthUp.png")
 
     def crearCajasRompibles(self):
         Size = 37
@@ -78,17 +80,13 @@ class GameEngine():
                     if self.diccionarioposicionesobstaculos[str(z)][x] == i:
                         self.game.setLaListaDeCajas(Size * z, i * Size)
 
-
     def mainLoop(self):
         clock = pygame.time.Clock()
         contador = 0
         eventomovimientoenemigos = pygame.USEREVENT
-        gameOver = False
         while True:
             while self.menu:
                 self.intro()
-            if gameOver:
-                self.background.reloadGameOverScreen()
             if self.menu == False:
                     self.background.reloadBackgroundImage()
                     self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
@@ -103,12 +101,15 @@ class GameEngine():
                         for enemy in self.game.getListaDeEnemigos():
                             self.background.reloadEnemy(enemy.getAnimacion(), contador,i)
 
+                    self.background.reloadSpeedPowerUp()
+                    self.background.reloadLifePowerUp()
+                    self.background.reloadBombPowerUp()
+                    self.game.moverEnemigo()
                     self.background.reloadEnemyRect()
                     pygame.display.update()
-                    
-                    clock.tick(60)
 
-                    enemyrect = self.game.getEnemyRect() 
+                    clock.tick(60)
+                    enemyrect = self.game.getEnemyRect()
                     for i in range(0, len(enemyrect)):
                         if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
                             self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
@@ -155,14 +156,16 @@ class GameEngine():
                             print(cajaquequieroromper[0])
                             self.game.romperCaja(cajaquequieroromper[0])
                             numerorandom = self.game.getListaRandom()
-                            print(numerorandom)
+                            print("Este es el numero random " + str(numerorandom))
                             if numerorandom == 0:
                                 self.game.createPowerUpSpeedUp(self.game.getCajaRota())
                                 self.background.reloadSpeedPowerUp()
                             elif numerorandom == 1:
-                                pass
+                                self.game.createPowerUpBombUp(self.game.getCajaRota())
+                                self.background.reloadBombPowerUp()
                             elif numerorandom == 2:
-                                pass
+                                self.game.createPowerUpVida(self.game.getCajaRota())
+                                self.background.reloadLifePowerUp()
                             elif numerorandom > 0:
                                 pass
                             
