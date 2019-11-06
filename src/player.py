@@ -9,13 +9,13 @@ class Player(DynamicObject):
     def __init__(self):
         super().__init__()
         self.lifes = None
-        self.speed = 3
+        self.speed = 5
         self.positionanterior = []
         # Colisiones
         self.x = self.position[0]
         self.y = self.position[1]
-        self.width = 30
-        self.height = 30
+        self.width = 29
+        self.height = 29
         self.hitbox = (self.x + 20, self.y, self.width, self.height)  # Dibujo un cuadrado
         self.playerRect = None
         self.positionrespaldo = None
@@ -33,13 +33,13 @@ class Player(DynamicObject):
     def move(self, direccion, ventana):
         self.direccion = direccion
         self.positionrespaldo = copy.deepcopy(self.position)
+        print(self.positionrespaldo)
 
         for index in range(len(self.position)):
 
             # Movimiento
-            self.position[index] = (self.position[index] + direccion[index] *
-                                    (self.speed))
-
+            self.position[index] = (self.position[index] + direccion[index] * (self.speed))
+            print(self.position)
             # Hitbox y colisiones
             self.x = self.position[0]
             self.y = self.position[1]
@@ -63,7 +63,6 @@ class Player(DynamicObject):
         return self.positionrespaldo
 
     def getBombermanSpeed(self):
-        print(self.speed)
         return self.speed
 
     def getBombermanDirection(self):

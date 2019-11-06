@@ -15,6 +15,8 @@ class Background():
         self.bomberman = None
         self.obstacle = None
         self.startmenu = None
+        self.caja = None
+        self.movimientoizquierda = None
         self.enemigobomberman = None
 
         # Setear tamaño de la pantalla
@@ -31,8 +33,7 @@ class Background():
         for obstaculo in self.game.getListaDeObstaculos():
 
             self.screen.blit(self.obstacle, obstaculo.getPosition())
-            obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0),
-                                      obstaculo.getHitbox(), 1))
+            obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), obstaculo.getHitbox(), 1))
 
     def reloadBomberman(self, direction, contador):
         self.screen.blit(self.bomberman[direction][contador],
@@ -49,24 +50,32 @@ class Background():
     def reloadMenu(self):
         self.screen.fill(self.blue)
         self.screen.blit(self.imagenmenu, (0, 0))
-        # self.screen.blit(self.startmenu, (370, 170))
 
-    def reloadEnemy(self):
-        for enemy in self.game.getListaDeEnemigos():
-            print(enemy.getEnemyPosition())
-            self.screen.blit(self.enemigobomberman, enemy.getEnemyPosition())
-            enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0),
-                               enemy.getEnemyHitbox(), 1))
-
-    def reloadEnemyRect(self):
-        for enemy in self.game.getListaDeEnemigos():
-            cosa = pygame.draw.rect(self.screen, (255, 0, 0),
-                                    enemy.getEnemyHitbox(), 1)
-            enemy.setEnemyRect(cosa)
+    def reloadEnemy(self, direction, contador, numeroenemigo):
+        listadeenemigos = self.game.getListaDeEnemigos()
+        print(numeroenemigo)
+        enemy = listadeenemigos[numeroenemigo]
+        self.screen.blit(self.enemigobomberman[direction][contador], enemy.getEnemyPosition())
+        enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0),
+                           enemy.getEnemyHitbox(), 1))
 
     def idleBobmerman(self, direction):
         self.screen.blit(self.bomberman[direction][0],
                          self.game.getBombermanPosition())
+
+    def reloadEnemyRect(self):
+        for enemy in self.game.getListaDeEnemigos():
+            cosa = pygame.draw.rect(self.screen, (0, 0, 0), enemy.getEnemyHitbox(), 1)
+            enemy.setEnemyRect(cosa)
+            self.game.setlalistaderectsenemigos(cosa)
+
+    def reloadBoxes(self):
+        for cajas in self.game.getListaDeCajas():
+            self.screen.blit(self.caja, cajas.getPosition())
+            cajas.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), cajas.getHitbox(), 1))
+
+
+
 # Loads
 
     def loadObstacle(self, path):
@@ -97,13 +106,28 @@ class Background():
         self.imagenmenu = pygame.image.load(path)
         self.imagenmenu = pygame.transform.scale(self.imagenmenu, [925, 555])
 
-    # def loadStartMenu(self, path):
-    #     self.startmenu = pygame.image.load(path)
-    #     self.startmenu = pygame.transform.scale(self.startmenu, [200, 200])
+    def loadCaja(self, path):
+        self.caja = pygame.image.load(path)
 
     def loadEnemigoBomberman(self, path):
-        self.enemigobomberman = pygame.image.load(path)
-        self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [40, 40])
+        self.enemigobomberman = {
+            "vertical2": [pygame.image.load(path + "b1.png"),
+                          pygame.image.load(path + "b2.png"),
+                          pygame.image.load(path + "b1.png"),
+                          pygame.image.load(path + "b3.png")],
+            "vertical1": [pygame.image.load(path + "f1.png"),
+                          pygame.image.load(path + "f2.png"),
+                          pygame.image.load(path + "f1.png"),
+                          pygame.image.load(path + "f3.png")],
+            "horizontal2": [pygame.image.load(path + "l1.png"),
+                            pygame.image.load(path + "l2.png"),
+                            pygame.image.load(path + "l1.png"),
+                            pygame.image.load(path + "l3.png")],
+            "horizontal1": [pygame.image.load(path + "r1.png"),
+                            pygame.image.load(path + "r2.png"),
+                            pygame.image.load(path + "r1.png"),
+                            pygame.image.load(path + "r3.png")]
+        }
 
     def loadBackgroundImage(self, path):
         self.background = pygame.image.load(path)
