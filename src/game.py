@@ -148,7 +148,7 @@ class Game():
         self.player.setBombermanPosition()
 
     def setBombermanPosicionDeInicio(self):
-        self.player.setPosition([37, 37])
+        self.player.setPosition([40, 40])
 
     def setPositionAnterior(self, enemigodeseado):
         enemy = self.lalistadeenemigos[enemigodeseado]
