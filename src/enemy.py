@@ -2,7 +2,7 @@ from dynamicObject import DynamicObject
 
 
 class Enemy(DynamicObject):
-    def __init__(self, position, tipodemovimiento):
+    def __init__(self, position, tipodemovimiento, animacion):
         super().__init__()
         self.position = position
         self.lifes = None
@@ -11,7 +11,7 @@ class Enemy(DynamicObject):
         self.posicionanterior = None
         self.direccion = 1
         self.tipodemovimiento = tipodemovimiento
-        self.animacion = tipodemovimiento
+        self.animacion = animacion
 
         # Colisiones
         self.x = self.position[0]
@@ -26,9 +26,12 @@ class Enemy(DynamicObject):
 
     #Getters
 
+    def getAnimacion(self):
+        return self.animacion
+
     def getEnemyPosition(self):
         return self.position
-    
+
     def getEnemyLifes(self):
         return self.lifes
 
@@ -57,16 +60,18 @@ class Enemy(DynamicObject):
 
     def setEnemyRect(self, rect):
         self.rect = rect
-    
+
     def setPosition(self, position):
         self.position = position
-    
+
     def setPosicionAnterior(self, posicion):
         self.posicionanterior = posicion
-    
+
     def setEnemyDireccion(self, direccion):
         self.direccion = direccion
     
     def setEnemyAnimacion(self, numero):
         self.animacion = tipodemovimiento + str(numero)
 
+    def setAnimacion(self, animacion):
+        self.animacion = animacion

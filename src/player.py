@@ -27,7 +27,6 @@ class Player(DynamicObject):
     def createPlayer(self, lifes, speed):
         self.lifes = lifes
         self.speed = speed
-        
 
 # Movimiento
 

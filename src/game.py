@@ -28,7 +28,9 @@ class Game():
         self.lalistadecajas = []
         self.lalistaderectscajas = []
 
-        self.listarandom = [0, 1, 2, 3, 4, 5]
+        self.lalistadepowerUpsSpeed = []
+        self.lalistadepowerUpsVida = []
+        self.lalistadepowerUpsBomba = []
 
         self.lalistadepowerUpsSpeed = []
         self.lalistaderectspowerUpsSpeed = []
@@ -39,26 +41,40 @@ class Game():
         self.lalistadepowerUpsVida = []
         self.lalistaderectspowerUpsVida = []
 
+        self.listarandom = [0, 1, 2, 3, 4, 5]
+
 # Crea a los enemigos que ya tienen una posicion pre establecida en el mapa
 # al instanciarlos les pasa su posicion y como va a ser su movimiento pre
 # establecido.
 
     def placeEnemies(self):
-        self.lalistadeenemigos.append(enemy.Enemy([39, 259], "vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([111, 187], "horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([187, 40], "vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([185, 335], "horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 37], "horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([407, 148], "vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 400], "vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([632, 400], "vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([669, 487], "horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([780, 333], "vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([777, 260], "horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([851, 400], "vertical"))
+        self.lalistadeenemigos.append(enemy.Enemy([39, 259],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([111, 187],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([187, 40],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([185, 335],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([484, 37],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([407, 148],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([484, 400],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([632, 400],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([669, 487],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([780, 333],
+                                                  "vertical", "vertical1"))
+        self.lalistadeenemigos.append(enemy.Enemy([777, 260],
+                                                  "horizontal", "horizontal1"))
+        self.lalistadeenemigos.append(enemy.Enemy([851, 400],
+                                                  "vertical", "vertical1"))
 
 # Cuando se rompa una caja se va a llamar(dependiendo del numero que salga a
-# la creacion de alguno de estos powerups que luego seran bliteados por la 
+# la creacion de alguno de estos powerups que luego seran bliteados por la
 # vista.
 
     def createPowerUpSpeedUp(self, posicion):
@@ -107,14 +123,6 @@ class Game():
         for cajas in self.lalistadecajas:
             self.lalistaderectscajas.append(cajas.getObstacleRect())
 
-    def createEnemiesRects(self):
-        for enemy in self.lalistadeenemigos:
-            self.lalistaderectsenemigos.append(enemy.getEnemyRect())
-
-    def createBoxesRects(self):
-        for cajas in self.lalistadecajas:
-            self.lalistaderectscajas.append(cajas.getObstacleRect())
-
 # MOVIMIENTO
 
     def givePosition(self, position, ventana):
@@ -140,15 +148,9 @@ class Game():
     def getPlayerHitbox(self):
         return self.player.getPlayerHitbox()
 
-    def getBombermanVidas(self):
-        return self.player.lifes
-
 # Setters
     def setBombermanPosition(self):
         self.player.setBombermanPosition()
-
-    def setBombermanPosicionDeInicio(self):
-        self.player.setPosition([37, 37])
 
     def setPositionAnterior(self, enemigodeseado):
         enemy = self.lalistadeenemigos[enemigodeseado]
@@ -235,15 +237,6 @@ class Game():
     def getPlayerRect(self):
         return self.player.getPlayerRect()
 
-    def getSpeedUpRect(self):
-        return self.lalistaderectspowerUpsSpeed
-
-    def getLifeUpRect(self):
-        return self.lalistaderectspowerUpsVida
-
-    def getBombUpRect(self):
-        return self.lalistaderectspowerUpsBomba
-
 # Setters de listas de rects
 
     def setPlayerRect(self, rect):
@@ -264,37 +257,19 @@ class Game():
     def setRectLifeUp(self, rect):
         self.lalistaderectspowerUpsVida.append(rect)
 
-# Borrar Rects y Sprites
+# Romper Cajas
 
     def romperCaja(self, numerodecaja):
         caja = self.lalistadecajas[numerodecaja]
         self.posicioncajarota = caja.getPosition()
+        print(self.posicioncajarota)
         self.lalistadecajas.pop(numerodecaja)
         self.lalistaderectscajas.pop(numerodecaja)
-
-    def borarSpeedUp(self, indice):
-        self.lalistadepowerUpsSpeed.pop(indice)
-        self.lalistaderectspowerUpsSpeed.pop(indice)
-
-    def borarBombUp(self, indice):
-        self.lalistadepowerUpsBomba.pop(indice)
-        self.lalistaderectspowerUpsBomba.pop(indice)
-
-    def borarLifeUp(self, indice):
-        self.lalistadepowerUpsVida.pop(indice)
-        self.lalistaderectspowerUpsVida.pop(indice)
-
-    def borarDatosCajas(self):
-        self.lalistadecajas.clear()
-        self.lalistaderectscajas.clear()
-
-    def borrarDatosEnemigos(self):
-        self.lalistadeenemigos.clear()
-        self.lalistaderectsenemigos.clear()
 
 # Getters
 
     def getCajaRota(self):  # Devuelvo la posicion de la caja que se rompio que previamente guarde en rompercaja
+        print(self.posicioncajarota)
         return self.posicioncajarota
 
     def getListaRandom(self):  # Esto lo uso para randomizar la aparicion de determinados PowerUps

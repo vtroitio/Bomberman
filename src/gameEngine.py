@@ -52,7 +52,7 @@ class GameEngine():
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
-                if event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYUP:
                     clock.tick(30)
                     self.menu = False
                     pygame.display.update()
@@ -62,10 +62,11 @@ class GameEngine():
         self.background.loadObstacle("sprites/pilar.png")
         self.background.loadImagenMenu("sprites/MenuBomberman.png")
         self.background.loadBackgroundImage("sprites/pasto.png")
-        self.background.loadEnemigoBomberman("sprites/enemigoBomberman.png")
+        self.background.loadEnemigoBomberman("sprites/EnemigoBombermanAnimado/")
         self.background.loadCaja("sprites/caja.png")
         self.background.loadBomba("sprites/Bomba.png")
-        self.background.loadSpeedPowerUp("sprites/PowerUps/SpeedUp.png")
+        self.background.loadSpeedPowerUp("sprites/speedPowerUp.png")
+        self.background.loadGameOverScreen("sprites/GameOver.jpg")
         self.background.loadBombPowerUp("sprites/PowerUps/BombUp.png")
         self.background.loadLifePowerUp("sprites/PowerUps/HealthUp.png")
 
@@ -73,7 +74,9 @@ class GameEngine():
         Size = 37
         for z in range(1, 24):
             for i in range(1, 14):
-                for x in range(0, len(self.diccionarioposicionesobstaculos[str(z)])):
+                for x in range(
+                     0, len(self.diccionarioposicionesobstaculos[str(z)])
+                    ):
                     if self.diccionarioposicionesobstaculos[str(z)][x] == i:
                         self.game.setLaListaDeCajas(Size * z, i * Size)
 
@@ -90,13 +93,21 @@ class GameEngine():
                     self.background.reloadBombermanRect()
                     self.background.reloadBackground(self.dimensions)
                     self.background.reloadBoxes()
+
+                    self.game.moverEnemigo()
+
+
+                    for i in range(len(self.game.getListaDeEnemigos())):
+                        for enemy in self.game.getListaDeEnemigos():
+                            self.background.reloadEnemy(enemy.getAnimacion(), contador,i)
+
                     self.background.reloadSpeedPowerUp()
                     self.background.reloadLifePowerUp()
                     self.background.reloadBombPowerUp()
                     self.game.moverEnemigo()
-                    self.background.reloadEnemy()
                     self.background.reloadEnemyRect()
                     pygame.display.update()
+
                     clock.tick(60)
                     enemyrect = self.game.getEnemyRect()
 
@@ -128,10 +139,34 @@ class GameEngine():
                             self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                             self.game.setPositionAnterior(i)
                             pygame.display.update()
+                            listadeenemigos = self.game.getListaDeEnemigos()
+                            enemy = listadeenemigos[i]
+                            print(enemy)
+                            print(enemy.getAnimacion())
+                            if enemy.getAnimacion() == "vertical1":
+                                enemy.setAnimacion("vertical2")
+                            elif enemy.getAnimacion() == "horizontal1":
+                                enemy.setAnimacion("horizontal2")
+                            elif enemy.getAnimacion() == "horizontal2":
+                                enemy.setAnimacion("horizontal1")
+                            elif enemy.getAnimacion() == "vertical2":
+                                enemy.setAnimacion("vertical1")
+                            pygame.display.update()
+
+                   
+                                
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYDOWN:
+
+                    # if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
+                    #     contador += 1
+                    # if contador > 3:
+                    #     contador = 0
+                    
+                    #self.background.reloadBackgroundImage()
+
                     if event.key== 273 or event.key== 274 or event.key== 275 or event.key== 276:
                         if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
                             contador += 1
@@ -160,7 +195,51 @@ class GameEngine():
                    
                     if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
                         self.game.setBombermanPosition()
-                        pygame.display.update()
+
+                    # if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
+                    #     self.game.setBombermanPosition()                        
+                    
+                    #self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
+
+                    
+                     
+                    # self.game.moverEnemigo()
+                    # self.background.reloadEnemy()
+                    # self.background.reloadEnemyRect() 
+
+
+                    self.background.reloadBomberman(
+                        self.game.getBombermanDirection(), contador
+                        )
+                    self.game.moverEnemigo()
+                    self.background.reloadEnemyRect()
+
+                    # enemyrect = self.game.getEnemyRect() 
+
+                    # for i in range(0, len(enemyrect)):
+                    #     if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
+                    #         print(len(enemyrect[i].collidelistall(self.game.getListaDeRects())))
+                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    #         self.game.setPositionAnterior(i)
+                            # self.background.reloadEnemy()
+                            # self.background.reloadEnemyRect() 
+
+
+                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                        #     self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                        #     self.game.setPositionAnterior(i)
+                        #     self.background.reloadEnemy()
+                        #     self.background.reloadEnemyRect() 
+
+                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) <= 0 and len(enemyrect[i].collidelistall(self.game.getListaDeRects())) <= 0:
+                        #     self.game.moverEnemigo()
+                        #     self.background.reloadEnemy()
+                        #     self.background.reloadEnemyRect() 
+                    # for i in range(0, len(enemyrect)):
+                    #      if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    #         self.game.setPositionAnterior()
+                    pygame.display.update()
 
 
                     
@@ -188,8 +267,6 @@ class GameEngine():
                                 print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
 
                 pygame.display.flip()
-                if event.type == pygame.KEYUP:
-                    self.background.reloadBomberman(self.game.getBombermanDirection(), 0)
 
 if __name__ == "__main__":
     controlador = GameEngine()
