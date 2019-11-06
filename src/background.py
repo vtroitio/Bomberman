@@ -63,7 +63,11 @@ class Background():
             self.screen.blit(self.caja, cajas.getPosition())
             cajas.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), cajas.getHitbox(), 1))
 
+    def reloadBomba(self):
+        self.screen.blit(self.bomba, self.game.getBombermanPosition())
 
+    def reloadSpeedPowerUp(self):
+        self.screen.blit(self.speedPowerUp, self.game.getCajaRota())
 
 # Loads
 
@@ -95,3 +99,11 @@ class Background():
 
     def loadBackgroundImage(self, path):
         self.background = pygame.image.load(path)
+
+    def loadBomba(self, path):
+        self.bomba = pygame.image.load(path)
+
+    def loadSpeedPowerUp(self, path):
+        self.speedPowerUp = pygame.image.load(path)
+        self.speedPowerUp = pygame.transform.scale(self.speedPowerUp, [30, 30])
+
