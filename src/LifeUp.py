@@ -1,12 +1,11 @@
 import powerUp
 
 
-class Speed(powerUp.PowerUp):
+class LifeUp(powerUp.PowerUp):
     def __init__(self, posicion):
 
         super().__init__()
-        self.type = "speed"
-        self.duracion = 10
+        self.type = "life"
         self.posicion = posicion
 
     def setPosicion(self, posicion):

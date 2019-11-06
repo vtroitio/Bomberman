@@ -69,6 +69,9 @@ class Enemy(DynamicObject):
 
     def setEnemyDireccion(self, direccion):
         self.direccion = direccion
+    
+    def setEnemyAnimacion(self, numero):
+        self.animacion = tipodemovimiento + str(numero)
 
     def setAnimacion(self, animacion):
         self.animacion = animacion

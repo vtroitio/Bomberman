@@ -18,6 +18,7 @@ class Background():
         self.caja = None
         self.movimientoizquierda = None
         self.enemigobomberman = None
+        self.gameOverScreen = None
 
         # Setear tamaño de la pantalla
         self.screen = pygame.display.set_mode(dimensions)
@@ -74,7 +75,14 @@ class Background():
             self.screen.blit(self.caja, cajas.getPosition())
             cajas.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), cajas.getHitbox(), 1))
 
+    def reloadBomba(self):
+        self.screen.blit(self.bomba, self.game.getBombermanPosition())
 
+    def reloadSpeedPowerUp(self):
+        self.screen.blit(self.speedPowerUp, self.game.getCajaRota())
+
+    def reloadGameOverScreen(self):
+        self.screen.blit(self.gameOverScreen, (0, 0))
 
 # Loads
 
@@ -131,3 +139,13 @@ class Background():
 
     def loadBackgroundImage(self, path):
         self.background = pygame.image.load(path)
+
+    def loadBomba(self, path):
+        self.bomba = pygame.image.load(path)
+
+    def loadSpeedPowerUp(self, path):
+        self.speedPowerUp = pygame.image.load(path)
+        self.speedPowerUp = pygame.transform.scale(self.speedPowerUp, [30, 30])
+
+    def loadGameOverScreen(self, path):
+        self.gameOverScreen = pygame.image.load(path)
