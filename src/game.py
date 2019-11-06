@@ -5,6 +5,7 @@ import obstacles
 import player
 import enemy
 import copy
+import bomba
 
 class Game():
 
@@ -20,6 +21,7 @@ class Game():
         self.positionAnteriorEnemy = []
         self.lalistadecajas = []
         self.lalistaderectscajas = []
+        self.bombas = []
 
     def placePlayer(self, lifes, speed):
         pass
@@ -169,8 +171,24 @@ class Game():
             else:
                 pass
         
+    def poner_bomba(self, id):
+        id_bomba = id
+        pos = self.getBombermanPosition()
+        self.bombas.append(bomba.Bomb(pos, id_bomba))
 
+    def sacar_bomba(self, idbomba):
+        for i in range(len(self.bombas)):
+            for bomba in self.bombas:
+                objeto = bomba
+                print('cantidad de bombas en lista juego', len(self.bombas))
+                print('id de la bomba que va a desaparecer.', bomba.getId())
+                print('id recibido', idbomba)
+                if bomba.getId() == idbomba:
+                    self.bombas.remove(bomba)
+                    print('cantidad de bombas en lista juego', len(self.bombas))
 
+    def get_todas_las_bombas(self):
+        return self.bombas                
 
     def createObstacles(self, dimensions):
         WidthHeightObstacle = 37  # Tamaño del bloque utilizado
@@ -295,3 +313,7 @@ class Game():
     def romperCaja(self, numerodecaja):
         self.lalistadecajas.pop(numerodecaja)
         self.lalistaderectscajas.pop(numerodecaja)
+#bombas
+    def get_todas_las_bombas(self):
+        return self.bombas
+    

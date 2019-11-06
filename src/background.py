@@ -27,6 +27,9 @@ class Background():
         self.blue = (0, 0, 255)
         self.contadordepasos = 0
 # Reload
+    def recargar_imagenes_bombas(self):
+        for bomba in self.game.get_todas_las_bombas():
+            self.screen.blit(self.bomba, bomba.getposicion())
 
     def reloadBackground(self, dimensions):  # Crea las filas y columnas
         for obstaculo in self.game.getListaDeObstaculos():
@@ -95,3 +98,6 @@ class Background():
 
     def loadBackgroundImage(self, path):
         self.background = pygame.image.load(path)
+    
+    def cargar_imagen_bomba(self, sprite, pos):
+        self.bomba = pygame.image.load(sprite)

@@ -1,5 +1,4 @@
 from dynamicObject import DynamicObject
-from bomb import Bomb
 import pygame
 import background
 import copy as copy
@@ -20,9 +19,6 @@ class Player(DynamicObject):
         self.playerRect = None
         self.positionrespaldo = None
         self.direccion = "down"
-
-    def placeBomb(self, position, sprite):  # Coloca una bomba
-        self.bomb = Bomb.createBomb(position, sprite)
 
     def createPlayer(self, lifes, speed):
         self.lifes = lifes
