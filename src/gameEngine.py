@@ -100,24 +100,28 @@ class GameEngine():
                     clock.tick(60)
                     enemyrect = self.game.getEnemyRect()
 
-                    # playerrect = self.game.getPlayerRect()
-                    # if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
-                    #     self.game.setBombermanVidas(-1)
-                    #     print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN "+str(self.game.getBombermanVidas())+" VIDAS")
-                    #     self.background.reloadBackgroundImage()
-                    #     self.game.setBombermanPosicionDeInicio()
-                    #     self.background.reloadBombermanRect()
-                    #     self.game.borarDatosCajas()
-                    #     self.game.borrarDatosEnemigos()
-                    #     self.crearCajasRompibles()
-                    #     self.game.createBoxesRects()
-                    #     self.background.reloadBoxes()
-                    #     self.game.placeEnemies()
-                    #     self.game.createEnemiesRects()
-                    #     self.game.moverEnemigo()
-                    #     self.background.reloadEnemy()
-                    #     self.background.reloadEnemyRect()
-                    #     pygame.display.update()
+                    playerrect = self.game.getPlayerRect()
+                    if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
+                        self.game.setBombermanVidas(-1)
+                        print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN "+str(self.game.getBombermanVidas())+" VIDAS")
+                        self.background.reloadBackgroundImage()
+
+                        self.game.setBombermanPosicionDeInicio()
+                        self.background.reloadBombermanRect()
+                        self.game.setBombermanSpeed(5)
+
+                        self.game.borarDatosCajas()
+                        self.game.borrarDatosEnemigos()
+
+                        self.crearCajasRompibles()
+                        self.background.reloadBoxes()
+                        self.game.createBoxesRects()
+
+                        self.game.placeEnemies()
+                        self.background.reloadEnemy()
+                        self.background.reloadEnemyRect()
+                        self.game.createEnemiesRects()
+                        pygame.display.update()
 
                     for i in range(0, len(enemyrect)):
                         if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
@@ -174,12 +178,14 @@ class GameEngine():
                             if len(playerrect.collidelistall(listaspeedup)) > 0:
                                 self.game.borarLifeUp(i)
                                 self.game.setBombermanVidas(1)
+                                print("AMIGO SOS UN PICANTE TE GANASTE UNA VIDA, AHORA TENES " +str(self.game.getBombermanVidas()) + " VIDAS")
 
                     if listalifeup is not None and len(listalifeup) > 0:
                         for i in range(0, len(listalifeup)):
                             if len(playerrect.collidelistall(listalifeup)) > 0:
                                 self.game.borarSpeedUp(i)
                                 self.game.setBombermanSpeed(10)
+                                print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
 
                 pygame.display.flip()
                 if event.type == pygame.KEYUP:

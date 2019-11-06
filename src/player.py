@@ -80,7 +80,6 @@ class Player(DynamicObject):
 
     def setLifes(self, life):
         self.lifes = self.lifes + life
-        print("MASTER FIERA MAQUINA TE GANASTE UNA VIDA, AHORA TENES " + str(self.lifes)+" VIDAS")
 
     def setPosition(self, position):
         self.position = position

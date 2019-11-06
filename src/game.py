@@ -160,7 +160,6 @@ class Game():
 
     def setBombermanSpeed(self, velocidad):
         self.player.setSpeed(velocidad)
-        print("MOSTRO FIERA MAQUINON ENCONTRASTE UN AUMENTO DE VELOCIDAD")
 
     def setBombermanVidas(self, vida):
         self.player.setLifes(vida)
