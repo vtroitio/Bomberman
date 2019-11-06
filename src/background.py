@@ -31,47 +31,89 @@ class Background():
         for bomba in self.game.get_todas_las_bombas():
             self.screen.blit(self.bomba, bomba.getposicion())
 
+# RELOADS
+# Design
+
+    def reloadBackgroundImage(self):  # Pone la imagen del fondo
+        self.screen.blit(self.background, (0, 0))
+
+    def reloadMenu(self):
+        self.screen.blit(self.imagenmenu, (0, 0))
+
+# Personajes
+
+    def reloadBomberman(self, direction, contador):
+        self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
+
+    def reloadEnemy(self):
+        for enemy in self.game.getListaDeEnemigos():
+            self.screen.blit(self.enemigobomberman, enemy.getEnemyPosition())
+
+# Rects
+
+    def reloadBombermanRect(self):
+        rect = pygame.draw.rect(self.screen, (255, 0, 0), self.game.getPlayerHitbox(), 2)
+        self.game.setPlayerRect(rect)
+
+    def reloadEnemyRect(self):
+        for enemy in self.game.getListaDeEnemigos():
+            cosa = pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1)
+            enemy.setEnemyRect(cosa)
+            self.game.setlalistaderectsenemigos(cosa)
+# Obstaculos
+
     def reloadBackground(self, dimensions):  # Crea las filas y columnas
         for obstaculo in self.game.getListaDeObstaculos():
 
             self.screen.blit(self.obstacle, obstaculo.getPosition())
             obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), obstaculo.getHitbox(), 1))
 
-    def reloadBomberman(self, direction, contador):
-        self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
-
-    def reloadBackgroundImage(self):
-        self.screen.blit(self.background, (0, 0))
-
-    def reloadBombermanRect(self):
-        rect = pygame.draw.rect(self.screen, (0, 0, 0), self.game.getPlayerHitbox(), 2)
-        self.game.setPlayerRect(rect)
-
-    def reloadMenu(self):
-        self.screen.fill(self.blue)
-        self.screen.blit(self.imagenmenu, (0, 0))
-
-    def reloadEnemy(self):
-        for enemy in self.game.getListaDeEnemigos():
-            self.screen.blit(self.enemigobomberman, enemy.getEnemyPosition())
-
-    def reloadEnemyRect(self):
-        for enemy in self.game.getListaDeEnemigos():
-            cosa = pygame.draw.rect(self.screen, (0, 0, 0), enemy.getEnemyHitbox(), 1)
-            enemy.setEnemyRect(cosa)
-            self.game.setlalistaderectsenemigos(cosa)
-    
     def reloadBoxes(self):
         for cajas in self.game.getListaDeCajas():
             self.screen.blit(self.caja, cajas.getPosition())
-            cajas.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), cajas.getHitbox(), 1))
+            cajas.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), cajas.getHitbox(), 1))
+
+# Bomba y explosiones
+
+    def reloadBomba(self):
+        self.screen.blit(self.bomba, self.game.getBombermanPosition())
 
 
+# Power Ups
 
-# Loads
+    def reloadSpeedPowerUp(self):
+        for speed in self.game.getListaDeSpeedPowerUp():
+            self.screen.blit(self.speedPowerUp, speed.getPosition())
+            rect = pygame.draw.rect(self.screen, (255, 255, 0), speed.getHitbox(), 1)
+            speed.setRect(rect)
+            self.game.setRectSpeedUp(rect)
 
-    def loadObstacle(self, path):
-        self.obstacle = pygame.image.load(path)
+    def reloadBombPowerUp(self):
+        for bomb in self.game.getListaDeBombPowerUp():
+            self.screen.blit(self.bombPowerUp, bomb.getPosition())
+            rect = pygame.draw.rect(self.screen, (255, 255, 0), bomb.getHitbox(), 1)
+            bomb.setRect(rect)
+            self.game.setRectBombUp(rect)
+
+    def reloadLifePowerUp(self):
+        for life in self.game.getListaDeLifePowerUp():
+            self.screen.blit(self.lifePowerUp, life.getPosition())
+            rect = pygame.draw.rect(self.screen, (255, 255, 0), life.getHitbox(), 1)
+            life.setRect(rect)
+            self.game.setRectLifeUp(rect)
+
+# LOADS
+# Design
+
+    def loadImagenMenu(self, path):
+        self.imagenmenu = pygame.image.load(path)
+        self.imagenmenu = pygame.transform.scale(self.imagenmenu, [925, 555])
+
+    def loadBackgroundImage(self, path):
+        self.background = pygame.image.load(path)
+
+
+# Personajes
 
     def loadBombermanImage(self, path, pos):
         self.bomberman = {
@@ -82,22 +124,38 @@ class Background():
         }
         self.screen.blit(self.bomberman["down"][0], pos)
 
-    def loadImagenMenu(self, path):
-        self.imagenmenu = pygame.image.load(path)
-        self.imagenmenu = pygame.transform.scale(self.imagenmenu, [925, 555])
+    def loadEnemigoBomberman(self, path):
+        self.enemigobomberman = pygame.image.load(path)
+        self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [30, 30])
+
+# Obstaculos
 
     def loadCaja(self, path):
         self.caja = pygame.image.load(path)
 
-    def loadmovimientoizquierda(self, path1, path2, path3, path4):
-        self.movimientoizquierda = [pygame.image.load(path1), pygame.image.load(path2), pygame.image.load(path3), pygame.image.load(path4)]
+    def loadObstacle(self, path):
+        self.obstacle = pygame.image.load(path)
 
-    def loadEnemigoBomberman(self, path):
-        self.enemigobomberman = pygame.image.load(path)
-        self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [30, 30])
+# Bomba y explosiones
 
     def loadBackgroundImage(self, path):
         self.background = pygame.image.load(path)
     
     def cargar_imagen_bomba(self, sprite, pos):
         self.bomba = pygame.image.load(sprite)
+    def loadBomba(self, path):
+        self.bomba = pygame.image.load(path)
+
+# Power Ups
+
+    def loadSpeedPowerUp(self, path):
+        self.speedPowerUp = pygame.image.load(path)
+        self.speedPowerUp = pygame.transform.scale(self.speedPowerUp, [36, 36])
+
+    def loadLifePowerUp(self, path):
+        self.lifePowerUp = pygame.image.load(path)
+        self.lifePowerUp = pygame.transform.scale(self.lifePowerUp, [36, 36])
+
+    def loadBombPowerUp(self, path):
+        self.bombPowerUp = pygame.image.load(path)
+        self.bombPowerUp = pygame.transform.scale(self.bombPowerUp, [36, 36])
