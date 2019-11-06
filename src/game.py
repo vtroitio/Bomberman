@@ -226,6 +226,15 @@ class Game():
     def setLalistaDeRectsCajas(self, rect):
         self.lalistaderectscajas.append(rect)
 
+    def setRectSpeedUp(self, rect):
+        self.lalistaderectspowerUpsSpeed.append(rect)
+
+    def setRectBombUp(self, rect):
+        self.lalistaderectspowerUpsBomba.append(rect)
+
+    def setRectLifeUp(self, rect):
+        self.lalistaderectspowerUpsVida.append(rect)
+
 # Romper Cajas
 
     def romperCaja(self, numerodecaja):

@@ -78,14 +78,20 @@ class Background():
     def reloadSpeedPowerUp(self):
         for speed in self.game.getListaDeSpeedPowerUp():
             self.screen.blit(self.speedPowerUp, speed.getPosition())
+            rect = speed.setRect(pygame.draw.rect(self.screen, (255, 255, 0), speed.getHitbox(), 1))
+            self.game.setRectSpeedUp(rect)
 
     def reloadBombPowerUp(self):
         for bomb in self.game.getListaDeBombPowerUp():
             self.screen.blit(self.bombPowerUp, bomb.getPosition())
+            rect = bomb.setRect(pygame.draw.rect(self.screen, (255, 255, 0), bomb.getHitbox(), 1))
+            self.game.setRectBombUp(rect)
 
     def reloadLifePowerUp(self):
         for life in self.game.getListaDeLifePowerUp():
             self.screen.blit(self.lifePowerUp, life.getPosition())
+            rect = life.setRect(pygame.draw.rect(self.screen, (255, 255, 0), life.getHitbox(), 1))
+            self.game.setRectLifeUp(rect)
 
 # LOADS
 # Design
@@ -113,7 +119,6 @@ class Background():
         self.enemigobomberman = pygame.image.load(path)
         self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [30, 30])
 
-# Rects
 # Obstaculos
 
     def loadCaja(self, path):
@@ -131,10 +136,12 @@ class Background():
 
     def loadSpeedPowerUp(self, path):
         self.speedPowerUp = pygame.image.load(path)
-        self.speedPowerUp = pygame.transform.scale(self.speedPowerUp, [30, 30])
+        self.speedPowerUp = pygame.transform.scale(self.speedPowerUp, [36, 36])
 
     def loadLifePowerUp(self, path):
         self.lifePowerUp = pygame.image.load(path)
+        self.lifePowerUp = pygame.transform.scale(self.lifePowerUp, [36, 36])
 
     def loadBombPowerUp(self, path):
         self.bombPowerUp = pygame.image.load(path)
+        self.bombPowerUp = pygame.transform.scale(self.bombPowerUp, [36, 36])

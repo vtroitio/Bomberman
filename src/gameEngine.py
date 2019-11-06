@@ -65,7 +65,9 @@ class GameEngine():
         self.background.loadEnemigoBomberman("sprites/enemigoBomberman.png")
         self.background.loadCaja("sprites/caja.png")
         self.background.loadBomba("sprites/Bomba.png")
-        self.background.loadSpeedPowerUp("sprites/speedPowerUp.png")
+        self.background.loadSpeedPowerUp("sprites/PowerUps/SpeedUp.png")
+        self.background.loadBombPowerUp("sprites/PowerUps/BombUp.png")
+        self.background.loadLifePowerUp("sprites/PowerUps/HealthUp.png")
 
     def crearCajasRompibles(self):
         Size = 37
@@ -124,9 +126,11 @@ class GameEngine():
                                 self.game.createPowerUpSpeedUp(self.game.getCajaRota())
                                 self.background.reloadSpeedPowerUp()
                             elif numerorandom == 1:
-                                pass
+                                self.game.createPowerUpBombUp(self.game.getCajaRota())
+                                self.background.reloadBombPowerUp()
                             elif numerorandom == 2:
-                                pass
+                                self.game.createPowerUpVida(self.game.getCajaRota())
+                                self.background.reloadLifePowerUp()
                             elif numerorandom > 0:
                                 pass
                             
