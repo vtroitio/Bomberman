@@ -107,6 +107,14 @@ class Game():
         for cajas in self.lalistadecajas:
             self.lalistaderectscajas.append(cajas.getObstacleRect())
 
+    def createEnemiesRects(self):
+        for enemy in self.lalistadeenemigos:
+            self.lalistaderectsenemigos.append(enemy.getEnemyRect())
+
+    def createBoxesRects(self):
+        for cajas in self.lalistadecajas:
+            self.lalistaderectscajas.append(cajas.getObstacleRect())
+
 # MOVIMIENTO
 
     def givePosition(self, position, ventana):
@@ -132,9 +140,15 @@ class Game():
     def getPlayerHitbox(self):
         return self.player.getPlayerHitbox()
 
+    def getBombermanVidas(self):
+        return self.player.lifes
+
 # Setters
     def setBombermanPosition(self):
         self.player.setBombermanPosition()
+
+    def setBombermanPosicionDeInicio(self):
+        self.player.setPosition([37, 37])
 
     def setPositionAnterior(self, enemigodeseado):
         enemy = self.lalistadeenemigos[enemigodeseado]
@@ -143,6 +157,13 @@ class Game():
     def setdireccionenemigo(self, direccion, numerodeenemigo):
         enemigodeseado = self.lalistadeenemigos[numerodeenemigo]
         enemigodeseado.setEnemyDireccion(direccion)
+
+    def setBombermanSpeed(self, velocidad):
+        self.player.setSpeed(velocidad)
+        print("MOSTRO FIERA MAQUINON ENCONTRASTE UN AUMENTO DE VELOCIDAD")
+
+    def setBombermanVidas(self, vida):
+        self.player.setLifes(vida)
 
 # El movimiento del enemigo funciona de forma que al que lo
 # que hace es revisar el self.movimiento del enemigo para
@@ -215,6 +236,15 @@ class Game():
     def getPlayerRect(self):
         return self.player.getPlayerRect()
 
+    def getSpeedUpRect(self):
+        return self.lalistaderectspowerUpsSpeed
+
+    def getLifeUpRect(self):
+        return self.lalistaderectspowerUpsVida
+
+    def getBombUpRect(self):
+        return self.lalistaderectspowerUpsBomba
+
 # Setters de listas de rects
 
     def setPlayerRect(self, rect):
@@ -235,19 +265,37 @@ class Game():
     def setRectLifeUp(self, rect):
         self.lalistaderectspowerUpsVida.append(rect)
 
-# Romper Cajas
+# Borrar Rects y Sprites
 
     def romperCaja(self, numerodecaja):
         caja = self.lalistadecajas[numerodecaja]
         self.posicioncajarota = caja.getPosition()
-        print(self.posicioncajarota)
         self.lalistadecajas.pop(numerodecaja)
         self.lalistaderectscajas.pop(numerodecaja)
+
+    def borarSpeedUp(self, indice):
+        self.lalistadepowerUpsSpeed.pop(indice)
+        self.lalistaderectspowerUpsSpeed.pop(indice)
+
+    def borarBombUp(self, indice):
+        self.lalistadepowerUpsBomba.pop(indice)
+        self.lalistaderectspowerUpsBomba.pop(indice)
+
+    def borarLifeUp(self, indice):
+        self.lalistadepowerUpsVida.pop(indice)
+        self.lalistaderectspowerUpsVida.pop(indice)
+
+    def borarDatosCajas(self):
+        self.lalistadecajas.clear()
+        self.lalistaderectscajas.clear()
+
+    def borrarDatosEnemigos(self):
+        self.lalistadeenemigos.clear()
+        self.lalistaderectsenemigos.clear()
 
 # Getters
 
     def getCajaRota(self):  # Devuelvo la posicion de la caja que se rompio que previamente guarde en rompercaja
-        print(self.posicioncajarota)
         return self.posicioncajarota
 
     def getListaRandom(self):  # Esto lo uso para randomizar la aparicion de determinados PowerUps

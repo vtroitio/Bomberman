@@ -8,7 +8,7 @@ import copy as copy
 class Player(DynamicObject):
     def __init__(self):
         super().__init__()
-        self.lifes = None
+        self.lifes = 3
         self.speed = 5
         self.positionanterior = []
         # Colisiones
@@ -34,13 +34,11 @@ class Player(DynamicObject):
     def move(self, direccion, ventana):
         self.direccion = direccion
         self.positionrespaldo = copy.deepcopy(self.position)
-        print(self.positionrespaldo)
 
         for index in range(len(self.position)):
 
             # Movimiento
             self.position[index] = (self.position[index] + direccion[index] * (self.speed))
-            print(self.position)
             # Hitbox y colisiones
             self.x = self.position[0]
             self.y = self.position[1]
@@ -73,21 +71,25 @@ class Player(DynamicObject):
         return self.playerRect
 
     def getPlayerHitbox(self):
+        self.x = self.position[0]
+        self.y = self.position[1]
+        self.hitbox = (self.x, self.y, self.width, self.height)
         return self.hitbox
-    
+
 # Setters
 
-    def setLifes(self, lifeAmmount):
-        self.lifes = lifesAmmount
+    def setLifes(self, life):
+        self.lifes = self.lifes + life
+        print("MASTER FIERA MAQUINA TE GANASTE UNA VIDA, AHORA TENES " + str(self.lifes)+" VIDAS")
 
-    def setPosition(self, aPosition):
-        self.position = a_position
+    def setPosition(self, position):
+        self.position = position
 
     def setSize(self, a_size):
         self.size = a_size
 
     def setSpeed(self, speedAmmount):
-        self.speed += speedAmmount
+        self.speed = speedAmmount
 
     def setBombermanPosition(self):
         self.position = self.positionrespaldo
