@@ -66,12 +66,12 @@ class Background():
 # Rects
 
     def reloadBombermanRect(self):
-        rect = pygame.draw.rect(self.screen, (0, 0, 0), self.game.getPlayerHitbox(), 2)
+        rect = pygame.draw.rect(self.screen, (255, 0, 0), self.game.getPlayerHitbox(), 2)
         self.game.setPlayerRect(rect)
 
     def reloadEnemyRect(self):
         for enemy in self.game.getListaDeEnemigos():
-            cosa = pygame.draw.rect(self.screen, (0, 0, 0), enemy.getEnemyHitbox(), 1)
+            cosa = pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1)
             enemy.setEnemyRect(cosa)
             self.game.setlalistaderectsenemigos(cosa)
 # Obstaculos
@@ -85,7 +85,7 @@ class Background():
     def reloadBoxes(self):
         for cajas in self.game.getListaDeCajas():
             self.screen.blit(self.caja, cajas.getPosition())
-            cajas.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0), cajas.getHitbox(), 1))
+            cajas.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), cajas.getHitbox(), 1))
 
 # Bomba y explosiones
 
@@ -98,19 +98,22 @@ class Background():
     def reloadSpeedPowerUp(self):
         for speed in self.game.getListaDeSpeedPowerUp():
             self.screen.blit(self.speedPowerUp, speed.getPosition())
-            rect = speed.setRect(pygame.draw.rect(self.screen, (255, 255, 0), speed.getHitbox(), 1))
+            rect = pygame.draw.rect(self.screen, (255, 255, 0), speed.getHitbox(), 1)
+            speed.setRect(rect)
             self.game.setRectSpeedUp(rect)
 
     def reloadBombPowerUp(self):
         for bomb in self.game.getListaDeBombPowerUp():
             self.screen.blit(self.bombPowerUp, bomb.getPosition())
-            rect = bomb.setRect(pygame.draw.rect(self.screen, (255, 255, 0), bomb.getHitbox(), 1))
+            rect = pygame.draw.rect(self.screen, (255, 255, 0), bomb.getHitbox(), 1)
+            bomb.setRect(rect)
             self.game.setRectBombUp(rect)
 
     def reloadLifePowerUp(self):
         for life in self.game.getListaDeLifePowerUp():
             self.screen.blit(self.lifePowerUp, life.getPosition())
-            rect = life.setRect(pygame.draw.rect(self.screen, (255, 255, 0), life.getHitbox(), 1))
+            rect = pygame.draw.rect(self.screen, (255, 255, 0), life.getHitbox(), 1)
+            life.setRect(rect)
             self.game.setRectLifeUp(rect)
 
 # LOADS

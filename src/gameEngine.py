@@ -110,11 +110,30 @@ class GameEngine():
 
                     clock.tick(60)
                     enemyrect = self.game.getEnemyRect()
+
+                    # playerrect = self.game.getPlayerRect()
+                    # if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
+                    #     self.game.setBombermanVidas(-1)
+                    #     print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN "+str(self.game.getBombermanVidas())+" VIDAS")
+                    #     self.background.reloadBackgroundImage()
+                    #     self.game.setBombermanPosicionDeInicio()
+                    #     self.background.reloadBombermanRect()
+                    #     self.game.borarDatosCajas()
+                    #     self.game.borrarDatosEnemigos()
+                    #     self.crearCajasRompibles()
+                    #     self.game.createBoxesRects()
+                    #     self.background.reloadBoxes()
+                    #     self.game.placeEnemies()
+                    #     self.game.createEnemiesRects()
+                    #     self.game.moverEnemigo()
+                    #     self.background.reloadEnemy()
+                    #     self.background.reloadEnemyRect()
+                    #     pygame.display.update()
+
                     for i in range(0, len(enemyrect)):
                         if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
                             self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                             self.game.setPositionAnterior(i)
-                            self.background
                             pygame.display.update()
                             listadeenemigos = self.game.getListaDeEnemigos()
                             enemy = listadeenemigos[i]
@@ -153,10 +172,8 @@ class GameEngine():
                     if event.key== 32:
                         if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             cajaquequieroromper = playerrect.collidelistall(self.game.getLaListaDeRectsCajas())
-                            print(cajaquequieroromper[0])
                             self.game.romperCaja(cajaquequieroromper[0])
                             numerorandom = self.game.getListaRandom()
-                            print("Este es el numero random " + str(numerorandom))
                             if numerorandom == 0:
                                 self.game.createPowerUpSpeedUp(self.game.getCajaRota())
                                 self.background.reloadSpeedPowerUp()
@@ -171,7 +188,7 @@ class GameEngine():
                             
 
                     playerrect = self.game.getPlayerRect()
-
+                   
                     if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
                         self.game.setBombermanPosition()
 
@@ -218,6 +235,30 @@ class GameEngine():
                     #      if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
                     #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                     #         self.game.setPositionAnterior()
+                    pygame.display.update()
+
+
+                    
+                    listabombup = self.game.getBombUpRect()
+                    listaspeedup = self.game.getLifeUpRect()
+                    listalifeup = self.game.getSpeedUpRect()
+                    
+                    if listabombup is not None and len(listabombup) > 0:
+                        for i in range(0, len(listabombup)):
+                            if len(playerrect.collidelistall(listabombup)) > 0:
+                                self.game.borarBombUp(i)
+
+                    if listaspeedup is not None and len(listaspeedup) > 0:
+                        for i in range(0, len(listaspeedup)):
+                            if len(playerrect.collidelistall(listaspeedup)) > 0:
+                                self.game.borarLifeUp(i)
+                                self.game.setBombermanVidas(1)
+
+                    if listalifeup is not None and len(listalifeup) > 0:
+                        for i in range(0, len(listalifeup)):
+                            if len(playerrect.collidelistall(listalifeup)) > 0:
+                                self.game.borarSpeedUp(i)
+                                self.game.setBombermanSpeed(10)
 
                 pygame.display.flip()
 
