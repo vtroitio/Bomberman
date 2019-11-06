@@ -11,6 +11,7 @@ class Enemy(DynamicObject):
         self.posicionanterior = None
         self.direccion = 1
         self.tipodemovimiento = tipodemovimiento
+        self.animacion = tipodemovimiento
 
         # Colisiones
         self.x = self.position[0]
@@ -65,4 +66,7 @@ class Enemy(DynamicObject):
     
     def setEnemyDireccion(self, direccion):
         self.direccion = direccion
+    
+    def setEnemyAnimacion(self, numero):
+        self.animacion = tipodemovimiento + str(numero)
 
