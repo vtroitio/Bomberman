@@ -62,13 +62,13 @@ class Game():
 # vista.
 
     def createPowerUpSpeedUp(self, posicion):
-        self.lalistadepowerUpsSpeed(speed.Speed(posicion))
+        self.lalistadepowerUpsSpeed.append(speed.Speed(posicion))
 
     def createPowerUpVida(self, posicion):
         self.lalistadepowerUpsVida.append(LifeUp.LifeUp(posicion))
 
     def createPowerUpBombUp(self, posicion):
-        self.lalistadepowerUpsBomba(bombUp.BombUp(posicion))
+        self.lalistadepowerUpsBomba.append(bombUp.BombUp(posicion))
 
 
 # Crea los obstaculos no rompibles, los pilares grises, estos creandose segun
@@ -183,8 +183,15 @@ class Game():
     def getListaDeEnemigos(self):
         return self.lalistadeenemigos
 
-    def getPlayerRect(self):
-        return self.player.getPlayerRect()
+    def getListaDeSpeedPowerUp(self):
+        return self.lalistadepowerUpsSpeed
+
+    def getListaDeLifePowerUp(self):
+        return self.lalistadepowerUpsVida
+
+    def getListaDeBombPowerUp(self):
+        return self.lalistadepowerUpsBomba
+
 
 # Setters de listas de objetos
 
@@ -204,6 +211,9 @@ class Game():
 
     def getLaListaDeRectsCajas(self):
         return self.lalistaderectscajas
+
+    def getPlayerRect(self):
+        return self.player.getPlayerRect()
 
 # Setters de listas de rects
 

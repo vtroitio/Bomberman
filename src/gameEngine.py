@@ -75,7 +75,6 @@ class GameEngine():
                     if self.diccionarioposicionesobstaculos[str(z)][x] == i:
                         self.game.setLaListaDeCajas(Size * z, i * Size)
 
-
     def mainLoop(self):
         clock = pygame.time.Clock()
         contador = 0
@@ -89,12 +88,15 @@ class GameEngine():
                     self.background.reloadBombermanRect()
                     self.background.reloadBackground(self.dimensions)
                     self.background.reloadBoxes()
+                    self.background.reloadSpeedPowerUp()
+                    self.background.reloadLifePowerUp()
+                    self.background.reloadBombPowerUp()
                     self.game.moverEnemigo()
                     self.background.reloadEnemy()
-                    self.background.reloadEnemyRect() 
+                    self.background.reloadEnemyRect()
                     pygame.display.update()
                     clock.tick(60)
-                    enemyrect = self.game.getEnemyRect() 
+                    enemyrect = self.game.getEnemyRect()
                     for i in range(0, len(enemyrect)):
                         if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
                             self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
@@ -117,7 +119,7 @@ class GameEngine():
                             print(cajaquequieroromper[0])
                             self.game.romperCaja(cajaquequieroromper[0])
                             numerorandom = self.game.getListaRandom()
-                            print(numerorandom)
+                            print("Este es el numero random " + str(numerorandom))
                             if numerorandom == 0:
                                 self.game.createPowerUpSpeedUp(self.game.getCajaRota())
                                 self.background.reloadSpeedPowerUp()

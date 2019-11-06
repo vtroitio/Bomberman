@@ -3,7 +3,6 @@ import powerUp
 
 class Speed(powerUp.PowerUp):
     def __init__(self, posicion):
-
         super().__init__()
         self.type = "speed"
         self.duracion = 10
@@ -12,5 +11,5 @@ class Speed(powerUp.PowerUp):
     def setPosicion(self, posicion):
         self.posicion = posicion
 
-    def getPosicion(self):
+    def getPosition(self):
         return self.posicion

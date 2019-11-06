@@ -9,5 +9,5 @@ class BombUp(powerUp.PowerUp):
     def setPosicion(self, posicion):
         self.posicion = posicion
 
-    def getPosicion(self):
+    def getPosition(self):
         return self.posicion
