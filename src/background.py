@@ -52,7 +52,6 @@ class Background():
 
     def reloadEnemy(self, direction, contador, numeroenemigo):
         listadeenemigos = self.game.getListaDeEnemigos()
-        print(numeroenemigo)
         enemy = listadeenemigos[numeroenemigo]
         self.screen.blit(self.enemigobomberman[direction][contador], enemy.getEnemyPosition())
         enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0),

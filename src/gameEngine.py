@@ -142,8 +142,6 @@ class GameEngine():
                             pygame.display.update()
                             listadeenemigos = self.game.getListaDeEnemigos()
                             enemy = listadeenemigos[i]
-                            print(enemy)
-                            print(enemy.getAnimacion())
                             if enemy.getAnimacion() == "vertical1":
                                 enemy.setAnimacion("vertical2")
                             elif enemy.getAnimacion() == "horizontal1":
@@ -166,14 +164,17 @@ class GameEngine():
                     # if contador > 3:
                     #     contador = 0
                     
-                    #self.background.reloadBackgroundImage()
+                    # self.background.reloadBackgroundImage()
 
                     if event.key== 1073741906 or event.key== 1073741905 or event.key== 1073741903 or event.key== 1073741904:
                         if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
                             contador += 1
                         if contador > 3:
                             contador = 0
-                        self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                        if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
+                            self.game.setBombermanPosition()
+                        else:
+                            self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
                     if event.key== 32:
                         if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             cajaquequieroromper = playerrect.collidelistall(self.game.getLaListaDeRectsCajas())
@@ -194,8 +195,8 @@ class GameEngine():
 
                     playerrect = self.game.getPlayerRect()
                    
-                    if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
-                        self.game.setBombermanPosition()
+                    # if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
+                    #     self.game.setBombermanPosition()
 
                     # if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
                     #     self.game.setBombermanPosition()                        
@@ -209,11 +210,10 @@ class GameEngine():
                     # self.background.reloadEnemyRect() 
 
 
-                    self.background.reloadBomberman(
-                        self.game.getBombermanDirection(), contador
-                        )
-                    self.game.moverEnemigo()
-                    self.background.reloadEnemyRect()
+                    # self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
+                    
+                    # self.game.moverEnemigo()
+                    # self.background.reloadEnemyRect()
 
                     # enemyrect = self.game.getEnemyRect() 
 
@@ -240,7 +240,7 @@ class GameEngine():
                     #      if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
                     #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                     #         self.game.setPositionAnterior()
-                    pygame.display.update()
+                    # pygame.display.update()
 
 
                     
