@@ -236,6 +236,15 @@ class Game():
 
     def getPlayerRect(self):
         return self.player.getPlayerRect()
+    
+    def getSpeedUpRect(self):
+        return self.lalistaderectspowerUpsSpeed
+
+    def getLifeUpRect(self):
+        return self.lalistaderectspowerUpsVida
+
+    def getBombUpRect(self):
+        return self.lalistaderectspowerUpsBomba
 
 # Setters de listas de rects
 
