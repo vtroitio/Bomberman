@@ -1,8 +1,9 @@
 import pygame
 import game
 import background
+import sys
 
-CONTROLES = {'273': [0, -1], '274': [0, 1], '275': [1, 0], '276': [-1, 0]}
+CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], '1073741904': [-1, 0]}
 
 
 class GameEngine():
@@ -167,7 +168,7 @@ class GameEngine():
                     
                     #self.background.reloadBackgroundImage()
 
-                    if event.key== 273 or event.key== 274 or event.key== 275 or event.key== 276:
+                    if event.key== 1073741906 or event.key== 1073741905 or event.key== 1073741903 or event.key== 1073741904:
                         if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
                             contador += 1
                         if contador > 3:
