@@ -2,15 +2,33 @@ import pygame
 import game
 import background
 import sys
+import bomba
+import time
+import threading
+
+from pydispatch import dispatcher
+thread_sender = 'thread_sender'
+thread_señal = 'thread_señal'
+
 
 CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], '1073741904': [-1, 0]}
 
+
+class myThread(threading.Thread):
+    def __init__(self, idbomba):
+        super().__init__()
+        self.numerito = idbomba
+
+    def run(self):
+        time.sleep(3.0)
+        dispatcher.send(message = self.numerito, signal= thread_señal, sender = thread_sender)
 
 class GameEngine():
     def __init__(self):
         self.dimensions = [925, 555]
         self.game = game.Game()
         self.background = background.Background(self.dimensions, self.game)
+        self.cargar_imagen_bomba_controlador()
         self.loadImages()
         self.diccionarioposicionesobstaculos = {'1': [5, 9, 10, 11],
                                                 '2': [3, 5, 7, 9, 11],
@@ -44,6 +62,14 @@ class GameEngine():
         self.background.reloadBoxes()
         self.game.createRects()
         self.menu = True
+
+        self.lista_threads = []
+        self.BOMBAS_USANDO = []
+        self.BOMBAS_DISPONIBLES = [1, 2, 3]
+        self.cantidad_bombas = 0
+
+
+
         self.mainLoop()
 
     def intro(self):
@@ -58,6 +84,19 @@ class GameEngine():
                     self.menu = False
                     pygame.display.update()
 
+    def goMenu():
+        pass
+
+    def goOption():
+        pass
+
+    def exit():
+        pass
+
+    def cargar_imagen_bomba_controlador(self):
+        posicion_bomba = self.game.getBombermanPosition()
+        self.background.cargar_imagen_bomba('sprites/Bomba.png', posicion_bomba)
+   
     def loadImages(self):
         self.background.loadBombermanImage('sprites/BombermanAnimado/', (37, 37))  # Lo pone al principio del mapa
         self.background.loadObstacle("sprites/pilar.png")
@@ -71,6 +110,13 @@ class GameEngine():
         self.background.loadBombPowerUp("sprites/PowerUps/BombUp.png")
         self.background.loadLifePowerUp("sprites/PowerUps/HealthUp.png")
 
+    def Exploto(self, message):
+        id_bomba = message
+        print('id de la bomba: ', id_bomba)
+        self.BOMBAS_USANDO.remove(id_bomba)
+        self.BOMBAS_DISPONIBLES.append(id_bomba)
+        self.game.sacar_bomba(id_bomba)    
+        
     def crearCajasRompibles(self):
         Size = 37
         for z in range(1, 24):
@@ -89,18 +135,22 @@ class GameEngine():
             while self.menu:
                 self.intro()
             if self.menu == False:
+                    dispatcher.connect(self.Exploto, signal= thread_señal, sender = thread_sender) 
                     self.background.reloadBackgroundImage()
                     self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
                     self.background.reloadBombermanRect()
                     self.background.reloadBackground(self.dimensions)
                     self.background.reloadBoxes()
-
+                    self.background.recargar_imagenes_bombas()
                     self.game.moverEnemigo()
 
 
                     for i in range(len(self.game.getListaDeEnemigos())):
                         for enemy in self.game.getListaDeEnemigos():
                             self.background.reloadEnemy(enemy.getAnimacion(), contador,i)
+                    # for i in range(len(self.game.getListaDeEnemigos())):
+                    #     for enemy in self.game.getListaDeEnemigos():
+                    #         self.background.reloadEnemy(enemy.getAnimacion(), contador,i)
 
                     self.background.reloadSpeedPowerUp()
                     self.background.reloadLifePowerUp()
@@ -245,9 +295,58 @@ class GameEngine():
                     #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                     #         self.game.setPositionAnterior()
                     # pygame.display.update()
+                    if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
+                        self.game.setBombermanPosition()
+
+                    self.background.reloadBomberman(
+                        self.game.getBombermanDirection(), contador
+                        )
+                    self.game.moverEnemigo()
+                    self.background.reloadEnemyRect()
+                    pygame.display.update()
 
 
                     
+                     
+                    # self.game.moverEnemigo()
+                    # self.background.reloadEnemy()
+                    # self.background.reloadEnemyRect() 
+
+
+
+                    # enemyrect = self.game.getEnemyRect() 
+
+                    # for i in range(0, len(enemyrect)):
+                    #     if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
+                    #         print(len(enemyrect[i].collidelistall(self.game.getListaDeRects())))
+                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    #         self.game.setPositionAnterior(i)
+                            # self.background.reloadEnemy()
+                            # self.background.reloadEnemyRect() 
+
+
+                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                        #     self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                        #     self.game.setPositionAnterior(i)
+                        #     self.background.reloadEnemy()
+                        #     self.background.reloadEnemyRect() 
+
+                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) <= 0 and len(enemyrect[i].collidelistall(self.game.getListaDeRects())) <= 0:
+                        #     self.game.moverEnemigo()
+                        #     self.background.reloadEnemy()
+                        #     self.background.reloadEnemyRect() 
+                    # for i in range(0, len(enemyrect)):
+                    #      if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    #         self.game.setPositionAnterior() 
+
+
+
+                    
+                
+                # clock.tick(30)
+
+
                     listabombup = self.game.getBombUpRect()
                     listaspeedup = self.game.getLifeUpRect()
                     listalifeup = self.game.getSpeedUpRect()
@@ -271,6 +370,37 @@ class GameEngine():
                                 self.game.setBombermanSpeed(10)
                                 print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
 
+                if event.type == pygame.KEYUP:
+                    if str(event.key) == '32':                     
+                        if len(self.BOMBAS_USANDO) <= 2:
+                            print('len bombas usando', len(self.BOMBAS_USANDO))
+                            i = 1
+                            for i in range(1, 4):#[1,2,3]
+                               numero_bomba = self.BOMBAS_DISPONIBLES.count(i) #1
+                               print('numero bomba : ',numero_bomba)
+                               if numero_bomba != 0:
+                                    self.BOMBAS_DISPONIBLES.remove(i)
+                                    self.BOMBAS_USANDO.append(i)
+                                    self.game.poner_bomba(i)
+                                    self.lista_threads.append(myThread(i))
+                                    self.lista_threads[-1].start()
+                                    break
+                                    
+                        if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
+                             cajaquequieroromper = playerrect.collidelistall(self.game.getLaListaDeRectsCajas())
+                             self.game.romperCaja(cajaquequieroromper[0])
+                             numerorandom = self.game.getListaRandom()
+                             if numerorandom == 0:
+                                 self.game.createPowerUpSpeedUp(self.game.getCajaRota())
+                                 self.background.reloadSpeedPowerUp()
+                             elif numerorandom == 1:
+                                 self.game.createPowerUpBombUp(self.game.getCajaRota())
+                                 self.background.reloadBombPowerUp()
+                             elif numerorandom == 2:
+                                 self.game.createPowerUpVida(self.game.getCajaRota())
+                                 self.background.reloadLifePowerUp()
+                             elif numerorandom > 0:
+                                 pass
                 pygame.display.flip()
 
 if __name__ == "__main__":

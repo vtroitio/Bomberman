@@ -5,6 +5,7 @@ import obstacles
 import player
 import enemy
 import copy
+import bomba
 from random import shuffle
 import speed
 import LifeUp
@@ -28,8 +29,8 @@ class Game():
         self.lalistadecajas = []
         self.lalistaderectscajas = []
 
-        self.listarandom = [0, 1, 2, 3, 4, 5]
-
+        self.bombas = []
+        
         self.lalistadepowerUpsSpeed = []
         self.lalistadepowerUpsVida = []
         self.lalistadepowerUpsBomba = []
@@ -42,6 +43,173 @@ class Game():
 
         self.lalistadepowerUpsVida = []
         self.lalistaderectspowerUpsVida = []
+
+        self.listarandom = [0, 1, 2, 3, 4, 5]
+
+    def placeEnemies(self):
+        self.lalistadeenemigos.append(enemy.Enemy([39, 259],"vertical"))
+        self.lalistadeenemigos.append(enemy.Enemy([111, 187],"horizontal"))
+        self.lalistadeenemigos.append(enemy.Enemy([187, 40],"vertical"))
+        self.lalistadeenemigos.append(enemy.Enemy([185, 335],"horizontal"))
+        self.lalistadeenemigos.append(enemy.Enemy([484, 37],"horizontal"))
+        self.lalistadeenemigos.append(enemy.Enemy([407, 148],"vertical"))
+        self.lalistadeenemigos.append(enemy.Enemy([484, 400],"vertical"))
+        self.lalistadeenemigos.append(enemy.Enemy([632, 400],"vertical"))
+        self.lalistadeenemigos.append(enemy.Enemy([669, 487],"horizontal"))
+        self.lalistadeenemigos.append(enemy.Enemy([780, 333],"vertical"))
+        self.lalistadeenemigos.append(enemy.Enemy([777, 260],"horizontal"))
+        self.lalistadeenemigos.append(enemy.Enemy([851, 400],"vertical"))
+
+    def createBackground(self):
+        pass
+
+    def createWall(position, sprite):
+        self.wall.setPosition(position)
+        self.wall.setSprite(sprite)
+
+    def createBoxes(self):
+        # Creo la primera columna
+        for i in range(1,14):
+            if i == 5 or i ==9 or i ==10 or i ==11:
+                self.lalistadecajas.append(obstacles.Obstacle(37, i * 37))
+            else:
+                pass  
+        # Creo la segunda columna
+        for i in range(1,14):
+            if i == 3 or i ==5 or i ==7 or i ==9 or i ==11:
+                self.lalistadecajas.append(obstacles.Obstacle(74, i * 37))
+            else:
+                pass  
+        # Creo la tercera columna
+        for i in range(1,14):
+            if i == 1 or i ==4 or i ==6 or i ==7 or i ==10 or i ==11 or i==13:
+                self.lalistadecajas.append(obstacles.Obstacle(111, i * 37))
+            else:
+                pass  
+        # Creo la quinta columna
+        for i in range(1,14):
+            if i == 4 or i ==6 or i ==8 or i ==10 or i ==12:
+                self.lalistadecajas.append(obstacles.Obstacle(185, i * 37))
+            else:
+                pass  
+        # Creo la sexta columna
+        for i in range(1,14):
+            if i == 1 or i == 9:
+                self.lalistadecajas.append(obstacles.Obstacle(222, i * 37))
+            else:
+                pass
+        # Creo la septima columna
+        for i in range(1,14):
+            if i == 1 or i == 3 or i == 4 or i == 5 or i ==10 or i ==11 or i ==13:
+                self.lalistadecajas.append(obstacles.Obstacle(259, i * 37))
+            else:
+                pass
+        # Creo la novena columna
+        for i in range(1,14):
+            if i == 2 or i == 3 or i == 4 or i == 10:
+                self.lalistadecajas.append(obstacles.Obstacle(333, i * 37))
+            else:
+                pass
+        # Creo la decima columna
+        for i in range(1,14):
+            if i == 3:
+                self.lalistadecajas.append(obstacles.Obstacle(370, i * 37))
+            else:
+                pass
+        # Creo la onceava columna
+        for i in range(1,14):
+            if i == 2 or i == 5 or i == 10:
+                self.lalistadecajas.append(obstacles.Obstacle(407, i * 37))
+            else:
+                pass
+        # Doceava
+        for i in range(1,14):
+            if i == 3 or i == 5 or i == 7 or i == 9 or i == 11:
+                self.lalistadecajas.append(obstacles.Obstacle(444, i * 37))
+            else:
+                pass
+        # 13
+        for i in range(1,14):
+            if i == 2 or i == 13:
+                self.lalistadecajas.append(obstacles.Obstacle(481, i * 37))
+            else:
+                pass
+        # 14
+        for i in range(1,14):
+            if i== 1 or i == 3 or i == 5 or i == 7 or i == 9 or i == 11:
+                self.lalistadecajas.append(obstacles.Obstacle(518, i * 37))
+            else:
+                pass
+        # 15
+        for i in range(1,14):
+            if i== 1 or i == 2 or i == 4:
+                self.lalistadecajas.append(obstacles.Obstacle(555, i * 37))
+            else:
+                pass
+       # 16
+        for i in range(1,14):
+            if i== 1 or i == 7 or i == 9 or i == 11:
+                self.lalistadecajas.append(obstacles.Obstacle(592, i * 37))
+            else:
+                pass
+        # 17
+        for i in range(1,14):
+            if i== 1 or i == 2 or i == 4 or i == 6 or i == 7 or i == 13:
+                self.lalistadecajas.append(obstacles.Obstacle(629, i * 37))
+            else:
+                pass
+               # 18
+        for i in range(1,14):
+            if i== 1 or i == 9 or i == 11:
+                self.lalistadecajas.append(obstacles.Obstacle(666, i * 37))
+            else:
+                pass
+               # 18
+        for i in range(1,14):
+            if i== 1 or i == 2 or i == 3 or i == 6 or i == 8 or i == 9 or i == 10 or i == 12:
+                self.lalistadecajas.append(obstacles.Obstacle(703, i * 37))
+            else:
+                pass
+        for i in range(1,14):
+            if i== 1 or i == 3 or i == 9:
+                self.lalistadecajas.append(obstacles.Obstacle(740, i * 37))
+            else:
+                pass
+        for i in range(1,14):
+            if i== 1 or i == 2 or i == 3 or i == 6 or i == 8 or i == 12:
+                self.lalistadecajas.append(obstacles.Obstacle(777, i * 37))
+            else:
+                pass
+        for i in range(1,14):
+            if i== 1 or i == 3 or i == 9 or i == 11:
+                self.lalistadecajas.append(obstacles.Obstacle(814, i * 37))
+            else:
+                pass
+        for i in range(1,14):
+            if i== 1 or i == 2 or i == 3 or i == 7 or i == 7 or i == 13:
+                self.lalistadecajas.append(obstacles.Obstacle(851, i * 37))
+            else:
+                pass
+        
+    def poner_bomba(self, id):
+        id_bomba = id
+        pos = self.getBombermanPosition()
+        self.bombas.append(bomba.Bomb(pos, id_bomba))
+
+    def sacar_bomba(self, idbomba):
+        for i in range(len(self.bombas)):
+            for bomba in self.bombas:
+                objeto = bomba
+                print('cantidad de bombas en lista juego', len(self.bombas))
+                print('id de la bomba que va a desaparecer.', bomba.getId())
+                print('id recibido', idbomba)
+                if bomba.getId() == idbomba:
+                    self.bombas.remove(bomba)
+                    print('cantidad de bombas en lista juego', len(self.bombas))
+
+    def get_todas_las_bombas(self):
+        return self.bombas                
+
 
 # Crea a los enemigos que ya tienen una posicion pre establecida en el mapa
 # al instanciarlos les pasa su posicion y como va a ser su movimiento pre
@@ -164,7 +332,7 @@ class Game():
         self.player.setBombermanPosition()
 
     def setBombermanPosicionDeInicio(self):
-        self.player.setPosition([37, 37])
+        self.player.setPosition([40, 40])
 
     def setPositionAnterior(self, enemigodeseado):
         enemy = self.lalistadeenemigos[enemigodeseado]
@@ -287,6 +455,10 @@ class Game():
         self.posicioncajarota = caja.getPosition()
         self.lalistadecajas.pop(numerodecaja)
         self.lalistaderectscajas.pop(numerodecaja)
+#bombas
+    def get_todas_las_bombas(self):
+        return self.bombas
+    
 
     def borarSpeedUp(self, indice):
         self.lalistadepowerUpsSpeed.pop(indice)
