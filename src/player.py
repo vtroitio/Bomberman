@@ -1,7 +1,6 @@
 from dynamicObject import DynamicObject
 from bomb import Bomb
 import pygame
-import background
 import copy as copy
 
 

@@ -157,24 +157,28 @@ class GameEngine():
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
-                if event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN: # Cuando se presiona una tecla
 
-                    # if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
-                    #     contador += 1
-                    # if contador > 3:
-                    #     contador = 0
-                    
-                    # self.background.reloadBackgroundImage()
-
-                    if event.key== 1073741906 or event.key== 1073741905 or event.key== 1073741903 or event.key== 1073741904:
+                    if event.key== 1073741906 or event.key== 1073741905 or event.key== 1073741903 or event.key== 1073741904: # Si se presionaron las flechitas
+                        
+                        # Contador es usado para saber que sprite del bomberman mostrar
                         if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
                             contador += 1
+                        
+                        
                         if contador > 3:
                             contador = 0
+                        
+                        
+                        # Manejo de colisiones
                         if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
+                            # Si hay colision 
                             self.game.setBombermanPosition()
                         else:
+                            # No hay colision
                             self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                    
+                    
                     if event.key== 32:
                         if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             cajaquequieroromper = playerrect.collidelistall(self.game.getLaListaDeRectsCajas())
