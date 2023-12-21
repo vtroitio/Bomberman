@@ -19,6 +19,7 @@ class Background():
         self.movimientoizquierda = None
         self.enemigobomberman = None
         self.gameOverScreen = None
+        self.explosion = None
 
         # Setear tamaño de la pantalla
         self.screen = pygame.display.set_mode(dimensions)
@@ -97,6 +98,18 @@ class Background():
     def reloadBomba(self):
         self.screen.blit(self.bomba, self.game.getBombermanPosition())
 
+    def reloadExplosiones(self, explosiones):
+        
+        # Explosiones es una tupla que contiene (pos, id)
+        if len(explosiones) == 0:
+            pass
+        else:
+            for explosion in explosiones:
+                # Offset para centrar la explosion
+                pos = explosion[0]
+                self.screen.blit(self.explosion, pos)
+       
+        
 
 # Power Ups
 
@@ -197,8 +210,12 @@ class Background():
     
     def cargar_imagen_bomba(self, sprite, pos):
         self.bomba = pygame.image.load(sprite)
+    
     def loadBomba(self, path):
         self.bomba = pygame.image.load(path)
+
+    def loadExplosion(self, path):
+        self.explosion = pygame.image.load(path)
 
 # Power Ups
 

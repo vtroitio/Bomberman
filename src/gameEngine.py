@@ -4,24 +4,33 @@ import background
 import sys
 import bomba
 import time
-import threading
-
+from threading import Thread
 from pydispatch import dispatcher
-thread_sender = 'thread_sender'
-thread_señal = 'thread_señal'
+
+
 
 
 CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], '1073741904': [-1, 0]}
 
 
-class myThread(threading.Thread):
+class threadExplosion(Thread):
+    def __init__(self, explosion):
+        super().__init__()
+        self.explosion = explosion
+
+    def run(self):  
+        time.sleep(0.5)
+        dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
+
+
+class threadBomba(Thread):
     def __init__(self, idbomba):
         super().__init__()
         self.numerito = idbomba
 
     def run(self):
         time.sleep(3.0)
-        dispatcher.send(message = self.numerito, signal= thread_señal, sender = thread_sender)
+        dispatcher.send(message = self.numerito, signal= 'explotoBomba', sender = 'threadBomba')
 
 class GameEngine():
     def __init__(self):
@@ -109,13 +118,32 @@ class GameEngine():
         self.background.loadGameOverScreen("sprites/GameOver.jpg")
         self.background.loadBombPowerUp("sprites/PowerUps/BombUp.png")
         self.background.loadLifePowerUp("sprites/PowerUps/HealthUp.png")
+        self.background.loadExplosion("sprites/Explosion.png")
 
-    def Exploto(self, message):
+
+    def borrarExplosion(self, message):
+        self.game.borrarExplosion(message[1])
+
+
+    def exploto(self, message):
         id_bomba = message
         print('id de la bomba: ', id_bomba)
+        
+        # Logica 
         self.BOMBAS_USANDO.remove(id_bomba)
+        pos = self.game.getBombPos(id_bomba)
+        
         self.BOMBAS_DISPONIBLES.append(id_bomba)
         self.game.sacar_bomba(id_bomba)    
+
+        # Creo la explosion, el offset es para que quede centrado el png
+        pos[0] = pos[0] - 40
+        pos[1] = pos[1] - 40
+        self.game.addExplosion((pos, id_bomba))
+        
+        thread = threadExplosion((pos, id_bomba))
+        thread.start()
+ 
         
     def crearCajasRompibles(self):
         Size = 37
@@ -135,13 +163,29 @@ class GameEngine():
             while self.menu:
                 self.intro()
             if self.menu == False:
-                    dispatcher.connect(self.Exploto, signal= thread_señal, sender = thread_sender) 
+                    
+                    # Verifico si termino el sleep de alguno de mis threads y ejecuto la funcion que corresponda
+                    dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
+                    dispatcher.connect(self.borrarExplosion, signal = 'borrarExplosion', sender = 'threadExplosion')
+                    
                     self.background.reloadBackgroundImage()
                     self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
                     self.background.reloadBombermanRect()
+                    
+                    # Este orden es importante para que se muestre
+                    # el sprite de la explosion por debajo de los pilares grises
+                    # pero por encima de las cajas rompibles.
+                    
+                    self.background.reloadBoxes() 
+                    self.background.reloadExplosiones(self.game.getExplosiones())
                     self.background.reloadBackground(self.dimensions)
-                    self.background.reloadBoxes()
+                
+                    
+                    # Bombas y explosiones
                     self.background.recargar_imagenes_bombas()
+                    
+
+
                     self.game.moverEnemigo()
 
 
@@ -248,7 +292,8 @@ class GameEngine():
                             
 
                     playerrect = self.game.getPlayerRect()
-                   
+
+                    
                     # if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
                     #     self.game.setBombermanPosition()
 
@@ -382,7 +427,7 @@ class GameEngine():
                                     self.BOMBAS_DISPONIBLES.remove(i)
                                     self.BOMBAS_USANDO.append(i)
                                     self.game.poner_bomba(i)
-                                    self.lista_threads.append(myThread(i))
+                                    self.lista_threads.append(threadBomba(i))
                                     self.lista_threads[-1].start()
                                     break
                                     

@@ -44,6 +44,8 @@ class Game():
         self.lalistadepowerUpsVida = []
         self.lalistaderectspowerUpsVida = []
 
+        self.explosiones = []
+
         self.listarandom = [0, 1, 2, 3, 4, 5]
 
     def placeEnemies(self):
@@ -206,6 +208,13 @@ class Game():
                 if bomba.getId() == idbomba:
                     self.bombas.remove(bomba)
                     print('cantidad de bombas en lista juego', len(self.bombas))
+
+    def getBombPos(self, id):
+        for i in range (len(self.bombas)):
+            if self.bombas[i].getId() == id:
+                return self.bombas[i].getposicion()
+        
+        print("Id de la bomba no encontrado")
 
     def get_todas_las_bombas(self):
         return self.bombas                
@@ -455,11 +464,22 @@ class Game():
         self.posicioncajarota = caja.getPosition()
         self.lalistadecajas.pop(numerodecaja)
         self.lalistaderectscajas.pop(numerodecaja)
-#bombas
+# Bombas
+   
+    def addExplosion(self, explosion):
+        self.explosiones.append(explosion)
+    
+    def borrarExplosion(self, id):
+        for i in range(0, len(self.explosiones)):
+            if self.explosiones[i][1] == id:
+                self.explosiones.pop(i)
+
     def get_todas_las_bombas(self):
         return self.bombas
     
-
+    def getExplosiones(self):
+        return self.explosiones
+    
     def borarSpeedUp(self, indice):
         self.lalistadepowerUpsSpeed.pop(indice)
         self.lalistaderectspowerUpsSpeed.pop(indice)
@@ -488,3 +508,9 @@ class Game():
     def getListaRandom(self):  # Esto lo uso para randomizar la aparicion de determinados PowerUps
         shuffle(self.listarandom)
         return self.listarandom[0]
+    
+# Auxiliares
+
+    def obtenerPosicionCentrada(self, pos):
+        # 45, 45
+        pos[0] = pos[0]
