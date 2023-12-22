@@ -64,9 +64,13 @@ class Background():
         self.screen.blit(self.imagenmenu, (0, 0))
 
     def reloadEnemy(self, direction, contador, numeroenemigo):
+        
         listadeenemigos = self.game.getListaDeEnemigos()
+        
         enemy = listadeenemigos[numeroenemigo]
+        
         self.screen.blit(self.enemigobomberman[direction][contador], enemy.getEnemyPosition())
+        
         enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1))
 
 # Personajes
@@ -180,24 +184,15 @@ class Background():
         self.screen.blit(self.bomberman["down"][0], pos)
 
     def loadEnemigoBomberman(self, path):
-        self.enemigobomberman = pygame.image.load(path)
-        self.enemigobomberman = pygame.transform.scale(self.enemigobomberman, [30, 30])
-
-# Obstaculos
-
-    def loadCaja(self, path):
-        self.caja = pygame.image.load(path)
-
-    def loadEnemigoBomberman(self, path):
         self.enemigobomberman = {
             "vertical2": [pygame.image.load(path + "b1.png"),
-                          pygame.image.load(path + "b2.png"),
-                          pygame.image.load(path + "b1.png"),
-                          pygame.image.load(path + "b3.png")],
+                        pygame.image.load(path + "b2.png"),
+                        pygame.image.load(path + "b1.png"),
+                        pygame.image.load(path + "b3.png")],
             "vertical1": [pygame.image.load(path + "f1.png"),
-                          pygame.image.load(path + "f2.png"),
-                          pygame.image.load(path + "f1.png"),
-                          pygame.image.load(path + "f3.png")],
+                        pygame.image.load(path + "f2.png"),
+                        pygame.image.load(path + "f1.png"),
+                        pygame.image.load(path + "f3.png")],
             "horizontal2": [pygame.image.load(path + "l1.png"),
                             pygame.image.load(path + "l2.png"),
                             pygame.image.load(path + "l1.png"),
@@ -207,6 +202,14 @@ class Background():
                             pygame.image.load(path + "r1.png"),
                             pygame.image.load(path + "r3.png")]
         }
+
+
+# Obstaculos
+
+    def loadCaja(self, path):
+        self.caja = pygame.image.load(path)
+
+
     def loadObstacle(self, path):
         self.obstacle = pygame.image.load(path)
 

@@ -6,9 +6,10 @@ import bomba
 import time
 from threading import Thread
 from pydispatch import dispatcher
+import math
 
 
-
+# Son las flechitas, se usan para el movimiento del bomberman
 
 CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], '1073741904': [-1, 0]}
 
@@ -157,7 +158,9 @@ class GameEngine():
 
     def mainLoop(self):
         clock = pygame.time.Clock()
-        contador = 0
+        contadorAnimacionBomberman = 0
+        contadorAnimacionEnemigo = 0
+        
         eventomovimientoenemigos = pygame.USEREVENT
         while True:
             while self.menu:
@@ -172,7 +175,7 @@ class GameEngine():
                     self.background.reloadBackgroundImage()
                     
                     # Muestro el sprite del bomberman y su rect
-                    self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
+                    self.background.reloadBomberman(self.game.getBombermanDirection(), contadorAnimacionBomberman)
                     self.background.reloadBombermanRect()
                     
                     # Bombas explosiones y obstaculos
@@ -195,32 +198,59 @@ class GameEngine():
                     
                     # Movimiento y muestreo de los enemigos                    
                     
-                    
                     self.game.moverEnemigo()
                     
                     self.background.reloadEnemyRect()
                     
-                    for i in range(len(self.game.getListaDeEnemigos())):
-                        for enemy in self.game.getListaDeEnemigos():
-                            self.background.reloadEnemy(enemy.getAnimacion(), contador, i)
+                    velocidadAnimacionEnemigo = 0.2 # Cuanto menor sea mas lenta sera la animacion
+                    contadorAnimacionEnemigo = (contadorAnimacionEnemigo + velocidadAnimacionEnemigo) % 4 
+                    
+                    for i, enemy in enumerate(self.game.getListaDeEnemigos()):
+                        # Uso math.floor ya que por ej 3.2 necesito rendondearlo para abajo para obtener la animacion
+                        # numero 3
+                        
+                        self.background.reloadEnemy(enemy.getAnimacion(), math.floor(contadorAnimacionEnemigo), i)
+                        
+
+                        
                             
 
-
+                    # Colisiones de los enemigos con cajas
                     
+                    enemiesRects = self.game.getEnemyRect()
+
+                    for i in range(0, len(enemiesRects)):
+                        if enemiesRects[i].collidelistall(self.game.getListaDeRects()) or enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas()): 
+                         
+                            # Cambio la direccion a la que apunta, la direccion vale 1 o -1
+                            self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i)
+                            
+                            # Cambio su posicion para que no se choque
+                            self.game.setPositionAnterior(i)
+                            
+                            # Cambio su animacion
+                            self.game.setAnimacionEnemigo(i)
+                            
+
+                            
+                            
+
+                            
                     
-
-
+                    # Muestro los power-ups que esten disponibles
+    
                     self.background.reloadSpeedPowerUp()
                     self.background.reloadLifePowerUp()
                     self.background.reloadBombPowerUp()
         
 
-                    pygame.display.update()
+                    
 
-                    clock.tick(60)
-                    enemyrect = self.game.getEnemyRect()
+                   
+                    
 
                     playerrect = self.game.getPlayerRect()
+                    
                     if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
                         self.game.setBombermanVidas(-1)
                         print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN "+str(self.game.getBombermanVidas())+" VIDAS")
@@ -241,24 +271,9 @@ class GameEngine():
                         self.background.reloadEnemy()
                         self.background.reloadEnemyRect()
                         self.game.createEnemiesRects()
-                        pygame.display.update()
+                        
 
-                    for i in range(0, len(enemyrect)):
-                        if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
-                            self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
-                            self.game.setPositionAnterior(i)
-                            pygame.display.update()
-                            listadeenemigos = self.game.getListaDeEnemigos()
-                            enemy = listadeenemigos[i]
-                            if enemy.getAnimacion() == "vertical1":
-                                enemy.setAnimacion("vertical2")
-                            elif enemy.getAnimacion() == "horizontal1":
-                                enemy.setAnimacion("horizontal2")
-                            elif enemy.getAnimacion() == "horizontal2":
-                                enemy.setAnimacion("horizontal1")
-                            elif enemy.getAnimacion() == "vertical2":
-                                enemy.setAnimacion("vertical1")
-                            pygame.display.update()
+
 
                    
                                 
@@ -269,13 +284,13 @@ class GameEngine():
 
                     if event.key== 1073741906 or event.key== 1073741905 or event.key== 1073741903 or event.key== 1073741904: # Si se presionaron las flechitas
                         
-                        # Contador es usado para saber que sprite del bomberman mostrar
+                        # contadorAnimacionBomberman es usado para saber que sprite del bomberman mostrar
                         if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
-                            contador += 1
+                            contadorAnimacionBomberman += 1
                         
                         
-                        if contador > 3:
-                            contador = 0
+                        if contadorAnimacionBomberman > 3:
+                            contadorAnimacionBomberman = 0
                         
                         
                         # Manejo de colisiones
@@ -314,7 +329,7 @@ class GameEngine():
                     # if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
                     #     self.game.setBombermanPosition()                        
                     
-                    #self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
+                    #self.background.reloadBomberman(self.game.getBombermanDirection(), contadorAnimacionBomberman)
 
                     
                      
@@ -323,35 +338,35 @@ class GameEngine():
                     # self.background.reloadEnemyRect() 
 
 
-                    # self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
+                    # self.background.reloadBomberman(self.game.getBombermanDirection(), contadorAnimacionBomberman)
                     
                     # self.game.moverEnemigo()
                     # self.background.reloadEnemyRect()
 
-                    # enemyrect = self.game.getEnemyRect() 
+                    # enemiesRects = self.game.getEnemyRect() 
 
-                    # for i in range(0, len(enemyrect)):
-                    #     if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
-                    #         print(len(enemyrect[i].collidelistall(self.game.getListaDeRects())))
-                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    # for i in range(0, len(enemiesRects)):
+                    #     if len(enemiesRects[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
+                    #         print(len(enemiesRects[i].collidelistall(self.game.getListaDeRects())))
+                    #         self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                     #         self.game.setPositionAnterior(i)
                             # self.background.reloadEnemy()
                             # self.background.reloadEnemyRect() 
 
 
-                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
-                        #     self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                        # if len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                        #     self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                         #     self.game.setPositionAnterior(i)
                         #     self.background.reloadEnemy()
                         #     self.background.reloadEnemyRect() 
 
-                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) <= 0 and len(enemyrect[i].collidelistall(self.game.getListaDeRects())) <= 0:
+                        # if len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) <= 0 and len(enemiesRects[i].collidelistall(self.game.getListaDeRects())) <= 0:
                         #     self.game.moverEnemigo()
                         #     self.background.reloadEnemy()
                         #     self.background.reloadEnemyRect() 
-                    # for i in range(0, len(enemyrect)):
-                    #      if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
-                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    # for i in range(0, len(enemiesRects)):
+                    #      if len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                    #         self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                     #         self.game.setPositionAnterior()
                     # pygame.display.update()
                     if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
@@ -368,30 +383,30 @@ class GameEngine():
 
 
 
-                    # enemyrect = self.game.getEnemyRect() 
+                    # enemiesRects = self.game.getEnemyRect() 
 
-                    # for i in range(0, len(enemyrect)):
-                    #     if len(enemyrect[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
-                    #         print(len(enemyrect[i].collidelistall(self.game.getListaDeRects())))
-                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    # for i in range(0, len(enemiesRects)):
+                    #     if len(enemiesRects[i].collidelistall(self.game.getListaDeRects())) > 0 or len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0: # Colision enemigos con cajas no rompibles
+                    #         print(len(enemiesRects[i].collidelistall(self.game.getListaDeRects())))
+                    #         self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                     #         self.game.setPositionAnterior(i)
                             # self.background.reloadEnemy()
                             # self.background.reloadEnemyRect() 
 
 
-                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
-                        #     self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                        # if len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                        #     self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                         #     self.game.setPositionAnterior(i)
                         #     self.background.reloadEnemy()
                         #     self.background.reloadEnemyRect() 
 
-                        # if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) <= 0 and len(enemyrect[i].collidelistall(self.game.getListaDeRects())) <= 0:
+                        # if len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) <= 0 and len(enemiesRects[i].collidelistall(self.game.getListaDeRects())) <= 0:
                         #     self.game.moverEnemigo()
                         #     self.background.reloadEnemy()
                         #     self.background.reloadEnemyRect() 
-                    # for i in range(0, len(enemyrect)):
-                    #      if len(enemyrect[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
-                    #         self.game.setdireccionenemigo(self.game.getdireccionenemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
+                    # for i in range(0, len(enemiesRects)):
+                    #      if len(enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision enemigos con cajas rompibles
+                    #         self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i) # Hago que sume o reste para cambiar direccion
                     #         self.game.setPositionAnterior() 
 
 
@@ -454,6 +469,8 @@ class GameEngine():
                                  self.background.reloadLifePowerUp()
                              elif numerorandom > 0:
                                  pass
+            pygame.display.update()
+            clock.tick(30)
                 
 if __name__ == "__main__":
     controlador = GameEngine()

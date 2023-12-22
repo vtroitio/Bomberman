@@ -6,7 +6,7 @@ class Enemy(DynamicObject):
         super().__init__()
         self.position = position
         self.lifes = None
-        self.speed = 2.3
+        self.speed = 1.8
         self.sprite = None
         self.posicionanterior = None
         self.direccion = 1
@@ -71,7 +71,8 @@ class Enemy(DynamicObject):
         self.direccion = direccion
     
     def setEnemyAnimacion(self, numero):
-        self.animacion = tipodemovimiento + str(numero)
+        self.animacion = self.tipodemovimiento + str(numero)
 
     def setAnimacion(self, animacion):
         self.animacion = animacion
+

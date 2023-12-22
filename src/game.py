@@ -22,7 +22,7 @@ class Game():
         self.LaListaDeObstaculos = []
         self.lalistaderects = []
 
-        self.lalistadeenemigos = []
+        self.enemigos = []
         self.lalistaderectsenemigos = []
         self.positionAnteriorEnemy = []
 
@@ -49,18 +49,18 @@ class Game():
         self.listarandom = [0, 1, 2, 3, 4, 5]
 
     def placeEnemies(self):
-        self.lalistadeenemigos.append(enemy.Enemy([39, 259],"vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([111, 187],"horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([187, 40],"vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([185, 335],"horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 37],"horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([407, 148],"vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 400],"vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([632, 400],"vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([669, 487],"horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([780, 333],"vertical"))
-        self.lalistadeenemigos.append(enemy.Enemy([777, 260],"horizontal"))
-        self.lalistadeenemigos.append(enemy.Enemy([851, 400],"vertical"))
+        self.enemigos.append(enemy.Enemy([39, 259],"vertical"))
+        self.enemigos.append(enemy.Enemy([111, 187],"horizontal"))
+        self.enemigos.append(enemy.Enemy([187, 40],"vertical"))
+        self.enemigos.append(enemy.Enemy([185, 335],"horizontal"))
+        self.enemigos.append(enemy.Enemy([484, 37],"horizontal"))
+        self.enemigos.append(enemy.Enemy([407, 148],"vertical"))
+        self.enemigos.append(enemy.Enemy([484, 400],"vertical"))
+        self.enemigos.append(enemy.Enemy([632, 400],"vertical"))
+        self.enemigos.append(enemy.Enemy([669, 487],"horizontal"))
+        self.enemigos.append(enemy.Enemy([780, 333],"vertical"))
+        self.enemigos.append(enemy.Enemy([777, 260],"horizontal"))
+        self.enemigos.append(enemy.Enemy([851, 400],"vertical"))
 
     def createBackground(self):
         pass
@@ -228,29 +228,29 @@ class Game():
 # establecido.
 
     def placeEnemies(self):
-        self.lalistadeenemigos.append(enemy.Enemy([39, 259],
+        self.enemigos.append(enemy.Enemy([39, 259],
                                                   "vertical", "vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([111, 187],
+        self.enemigos.append(enemy.Enemy([111, 187],
                                                   "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([187, 40],
+        self.enemigos.append(enemy.Enemy([187, 40],
                                                   "vertical", "vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([185, 335],
+        self.enemigos.append(enemy.Enemy([185, 335],
                                                   "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 37],
+        self.enemigos.append(enemy.Enemy([484, 37],
                                                   "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([407, 148],
+        self.enemigos.append(enemy.Enemy([407, 148],
                                                   "vertical", "vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([484, 400],
+        self.enemigos.append(enemy.Enemy([484, 400],
                                                   "vertical", "vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([632, 400],
+        self.enemigos.append(enemy.Enemy([632, 400],
                                                   "vertical", "vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([669, 487],
+        self.enemigos.append(enemy.Enemy([669, 487],
                                                   "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([780, 333],
+        self.enemigos.append(enemy.Enemy([780, 333],
                                                   "vertical", "vertical1"))
-        self.lalistadeenemigos.append(enemy.Enemy([777, 260],
+        self.enemigos.append(enemy.Enemy([777, 260],
                                                   "horizontal", "horizontal1"))
-        self.lalistadeenemigos.append(enemy.Enemy([851, 400],
+        self.enemigos.append(enemy.Enemy([851, 400],
                                                   "vertical", "vertical1"))
 
 # Cuando se rompa una caja se va a llamar(dependiendo del numero que salga a
@@ -298,13 +298,13 @@ class Game():
     def createRects(self):
         for obstaculo in self.LaListaDeObstaculos:
             self.lalistaderects.append(obstaculo.getObstacleRect())
-        for enemy in self.lalistadeenemigos:
+        for enemy in self.enemigos:
             self.lalistaderectsenemigos.append(enemy.getEnemyRect())
         for cajas in self.lalistadecajas:
             self.lalistaderectscajas.append(cajas.getObstacleRect())
 
     def createEnemiesRects(self):
-        for enemy in self.lalistadeenemigos:
+        for enemy in self.enemigos:
             self.lalistaderectsenemigos.append(enemy.getEnemyRect())
 
     def createBoxesRects(self):
@@ -329,8 +329,8 @@ class Game():
     def getBombermanDirection(self):
         return self.player.getBombermanDirection()
 
-    def getdireccionenemigo(self, numerodeenemigo):
-        enemigodeseado = self.lalistadeenemigos[numerodeenemigo]
+    def getDireccionEnemigo(self, enemigo):
+        enemigodeseado = self.enemigos[enemigo]
         return enemigodeseado.getEnemyDireccion()
 
     def getPlayerHitbox(self):
@@ -347,11 +347,12 @@ class Game():
         self.player.setPosition([40, 40])
 
     def setPositionAnterior(self, enemigodeseado):
-        enemy = self.lalistadeenemigos[enemigodeseado]
+        enemy = self.enemigos[enemigodeseado]
         enemy.setPosition(enemy.getEnemyPosicionAnterior())
 
-    def setdireccionenemigo(self, direccion, numerodeenemigo):
-        enemigodeseado = self.lalistadeenemigos[numerodeenemigo]
+    def setDireccionEnemigo(self, direccion, enemigo):
+        enemigodeseado = self.enemigos[enemigo]
+        
         enemigodeseado.setEnemyDireccion(direccion)
 
     def setBombermanSpeed(self, velocidad):
@@ -368,7 +369,7 @@ class Game():
 # colisiono.
 
     def moverEnemigo(self):
-        for enemy in self.lalistadeenemigos:
+        for enemy in self.enemigos:
             tipodemovimiento = enemy.getEnemyTipoDeMovimiento()
             if tipodemovimiento == "vertical":
                 enemy.setPosicionAnterior(copy.deepcopy(enemy.getEnemyPosition())) 
@@ -387,6 +388,18 @@ class Game():
 
                 self.lalistaderectsenemigos.clear()
 
+    def setAnimacionEnemigo(self, i):
+        enemigo = self.enemigos[i]
+        
+        if enemigo.getAnimacion() == "vertical1":
+            enemigo.setAnimacion("vertical2")
+        elif enemigo.getAnimacion() == "horizontal1":
+            enemigo.setAnimacion("horizontal2")
+        elif enemigo.getAnimacion() == "horizontal2":
+            enemigo.setAnimacion("horizontal1")
+        elif enemigo.getAnimacion() == "vertical2":
+            enemigo.setAnimacion("vertical1")
+
 # COLISIONES
 # Getters de listas de objetos
 
@@ -397,7 +410,7 @@ class Game():
         return self.lalistadecajas
 
     def getListaDeEnemigos(self):
-        return self.lalistadeenemigos
+        return self.enemigos
 
     def getListaDeSpeedPowerUp(self):
         return self.lalistadepowerUpsSpeed
@@ -500,7 +513,7 @@ class Game():
         self.lalistaderectscajas.clear()
 
     def borrarDatosEnemigos(self):
-        self.lalistadeenemigos.clear()
+        self.enemigos.clear()
         self.lalistaderectsenemigos.clear()
 
 # Getters
