@@ -6,7 +6,7 @@ class Enemy(DynamicObject):
         super().__init__()
         self.position = position
         self.lifes = None
-        self.speed = 1
+        self.speed = 2.3
         self.sprite = None
         self.posicionanterior = None
         self.direccion = 1

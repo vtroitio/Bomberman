@@ -195,19 +195,22 @@ class Game():
         
     def poner_bomba(self, id):
         id_bomba = id
-        pos = self.getBombermanPosition()
+
+        print('La posicion del bomberman es: ' + str(self.getBombermanPosition()))
+        
+        pos =  self.obtenerPosicionCentrada(self.getBombermanPosition())
+        
+
+        
         self.bombas.append(bomba.Bomb(pos, id_bomba))
 
     def sacar_bomba(self, idbomba):
         for i in range(len(self.bombas)):
             for bomba in self.bombas:
-                objeto = bomba
-                print('cantidad de bombas en lista juego', len(self.bombas))
-                print('id de la bomba que va a desaparecer.', bomba.getId())
-                print('id recibido', idbomba)
+
+
                 if bomba.getId() == idbomba:
                     self.bombas.remove(bomba)
-                    print('cantidad de bombas en lista juego', len(self.bombas))
 
     def getBombPos(self, id):
         for i in range (len(self.bombas)):
@@ -512,5 +515,16 @@ class Game():
 # Auxiliares
 
     def obtenerPosicionCentrada(self, pos):
-        # 45, 45
-        pos[0] = pos[0]
+
+        celda = 37
+
+        celdaX = round(pos[0] / celda) 
+        celdaY = round(pos[1] / celda)
+
+        aux = [0,0]
+
+        aux[0] = celdaX * celda
+        aux[1] = celdaY * celda
+
+        print('La posicion centrada es: ' + str(aux))
+        return aux

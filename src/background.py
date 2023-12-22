@@ -30,9 +30,15 @@ class Background():
         self.blue = (0, 0, 255)
         self.contadordepasos = 0
 # Reload
-    def recargar_imagenes_bombas(self):
+    def reloadBombas(self):
         for bomba in self.game.get_todas_las_bombas():
-            self.screen.blit(self.bomba, bomba.getposicion())
+            
+            # Lo corro visualmente para que el png se vea centrado
+            x, y = bomba.getposicion()
+            xOffset, yOffset = x + 8, y + 8
+            posOffset = [xOffset, yOffset]
+            
+            self.screen.blit(self.bomba, posOffset)
 
     def reloadBackground(self, dimensions):  # Crea las filas y columnas
         for obstaculo in self.game.getListaDeObstaculos():
@@ -61,8 +67,7 @@ class Background():
         listadeenemigos = self.game.getListaDeEnemigos()
         enemy = listadeenemigos[numeroenemigo]
         self.screen.blit(self.enemigobomberman[direction][contador], enemy.getEnemyPosition())
-        enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0),
-                           enemy.getEnemyHitbox(), 1))
+        enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1))
 
 # Personajes
 
@@ -105,9 +110,11 @@ class Background():
             pass
         else:
             for explosion in explosiones:
-                # Offset para centrar la explosion
-                pos = explosion[0]
-                self.screen.blit(self.explosion, pos)
+                # Offset para que visualmente se vea bien la explosion
+                x, y = explosion[0]
+                xOffset, yOffset = x + 3, y + 2
+                posOffset = [xOffset, yOffset]
+                self.screen.blit(self.explosion, posOffset)
        
         
 

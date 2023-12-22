@@ -19,7 +19,7 @@ class threadExplosion(Thread):
         self.explosion = explosion
 
     def run(self):  
-        time.sleep(0.5)
+        time.sleep(0.7)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
 
 
@@ -127,7 +127,7 @@ class GameEngine():
 
     def exploto(self, message):
         id_bomba = message
-        print('id de la bomba: ', id_bomba)
+
         
         # Logica 
         self.BOMBAS_USANDO.remove(id_bomba)
@@ -168,39 +168,53 @@ class GameEngine():
                     dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
                     dispatcher.connect(self.borrarExplosion, signal = 'borrarExplosion', sender = 'threadExplosion')
                     
+                    # Muestro la imagen de fondo
                     self.background.reloadBackgroundImage()
+                    
+                    # Muestro el sprite del bomberman y su rect
                     self.background.reloadBomberman(self.game.getBombermanDirection(), contador)
                     self.background.reloadBombermanRect()
                     
+                    # Bombas explosiones y obstaculos
                     # Este orden es importante para que se muestre
                     # el sprite de la explosion por debajo de los pilares grises
                     # pero por encima de las cajas rompibles.
                     
+                    
+                    # 1 - Muestro las cajas rompibles
                     self.background.reloadBoxes() 
+                    
+                    # 2 - Muestro las explosiones que hayan
                     self.background.reloadExplosiones(self.game.getExplosiones())
+                    
+                    # 3 - Muestro las cajas no rompibles
                     self.background.reloadBackground(self.dimensions)
                 
+                    # 4 - Muestro las bombas activas       
+                    self.background.reloadBombas()
                     
-                    # Bombas y explosiones
-                    self.background.recargar_imagenes_bombas()
+                    # Movimiento y muestreo de los enemigos                    
                     
-
-
+                    
                     self.game.moverEnemigo()
-
-
+                    
+                    self.background.reloadEnemyRect()
+                    
                     for i in range(len(self.game.getListaDeEnemigos())):
                         for enemy in self.game.getListaDeEnemigos():
-                            self.background.reloadEnemy(enemy.getAnimacion(), contador,i)
-                    # for i in range(len(self.game.getListaDeEnemigos())):
-                    #     for enemy in self.game.getListaDeEnemigos():
-                    #         self.background.reloadEnemy(enemy.getAnimacion(), contador,i)
+                            self.background.reloadEnemy(enemy.getAnimacion(), contador, i)
+                            
+
+
+                    
+                    
+
 
                     self.background.reloadSpeedPowerUp()
                     self.background.reloadLifePowerUp()
                     self.background.reloadBombPowerUp()
-                    self.game.moverEnemigo()
-                    self.background.reloadEnemyRect()
+        
+
                     pygame.display.update()
 
                     clock.tick(60)
@@ -343,12 +357,7 @@ class GameEngine():
                     if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
                         self.game.setBombermanPosition()
 
-                    self.background.reloadBomberman(
-                        self.game.getBombermanDirection(), contador
-                        )
-                    self.game.moverEnemigo()
-                    self.background.reloadEnemyRect()
-                    pygame.display.update()
+                    
 
 
                     
@@ -418,11 +427,10 @@ class GameEngine():
                 if event.type == pygame.KEYUP:
                     if str(event.key) == '32':                     
                         if len(self.BOMBAS_USANDO) <= 2:
-                            print('len bombas usando', len(self.BOMBAS_USANDO))
+
                             i = 1
                             for i in range(1, 4):#[1,2,3]
                                numero_bomba = self.BOMBAS_DISPONIBLES.count(i) #1
-                               print('numero bomba : ',numero_bomba)
                                if numero_bomba != 0:
                                     self.BOMBAS_DISPONIBLES.remove(i)
                                     self.BOMBAS_USANDO.append(i)
@@ -446,7 +454,6 @@ class GameEngine():
                                  self.background.reloadLifePowerUp()
                              elif numerorandom > 0:
                                  pass
-                pygame.display.flip()
-
+                
 if __name__ == "__main__":
     controlador = GameEngine()
