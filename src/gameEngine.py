@@ -14,12 +14,15 @@ import math
 CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], '1073741904': [-1, 0]}
 
 
+
+# Uso los threads principalmente para poder ejecutar eventos luego de un tiempo gracias al sleep
+
 class threadExplosion(Thread):
     def __init__(self, explosion):
         super().__init__()
         self.explosion = explosion
 
-    def run(self):  
+    def run(self):
         time.sleep(0.7)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
 
@@ -32,6 +35,8 @@ class threadBomba(Thread):
     def run(self):
         time.sleep(3.0)
         dispatcher.send(message = self.numerito, signal= 'explotoBomba', sender = 'threadBomba')
+
+
 
 class GameEngine():
     def __init__(self):
@@ -123,7 +128,13 @@ class GameEngine():
 
 
     def borrarExplosion(self, message):
+        # A la hora de borrar la explosion tengo que verificar si el rect de la misma
+        # rompio un bloque, mato un enemigo, o nos hiteo a nosotros.
+
+        # message = [pos, idbomba, listaDeRectsExplosion]
+        
         self.game.borrarExplosion(message[1])
+
 
 
     def exploto(self, message):
@@ -137,11 +148,29 @@ class GameEngine():
         self.BOMBAS_DISPONIBLES.append(id_bomba)
         self.game.sacar_bomba(id_bomba)    
 
-        # Creo la explosion, el offset es para que quede centrado el png
-        pos[0] = pos[0] - 40
-        pos[1] = pos[1] - 40
-        self.game.addExplosion((pos, id_bomba))
         
+        # Creo el rect para las colisiones
+        ancho = 35
+        alto = 35
+
+        rects = []
+
+        # 3 verticales
+        for i in range(-1, 2):
+            rects.append((pos[0] + (37 * i), pos[1], ancho, alto))
+        
+        # 3 Horizontales
+        for i in range(-1, 2):
+            rects.append((pos[0] , pos[1] + (37* i), ancho, alto))
+        
+        # Creo la explosion, el offset es para que quede centrado el png
+        
+        offset = 40
+        pos[0] = pos[0] - offset
+        pos[1] = pos[1] - offset
+        
+        self.game.addExplosion((pos, id_bomba, rects))
+    
         thread = threadExplosion((pos, id_bomba))
         thread.start()
  
@@ -158,10 +187,13 @@ class GameEngine():
 
     def mainLoop(self):
         clock = pygame.time.Clock()
+        
         contadorAnimacionBomberman = 0
+        
         contadorAnimacionEnemigo = 0
         
         eventomovimientoenemigos = pygame.USEREVENT
+        
         while True:
             while self.menu:
                 self.intro()
@@ -202,10 +234,12 @@ class GameEngine():
                     
                     self.background.reloadEnemyRect()
                     
-                    velocidadAnimacionEnemigo = 0.2 # Cuanto menor sea mas lenta sera la animacion
+                    velocidadAnimacionEnemigo = 0.1 # Cuanto menor sea mas lenta y mas se notara la animacion
                     contadorAnimacionEnemigo = (contadorAnimacionEnemigo + velocidadAnimacionEnemigo) % 4 
                     
                     for i, enemy in enumerate(self.game.getListaDeEnemigos()):
+                        # Enumerate me permite obtener tanto el indice del objeto en la lista como el objeto
+                        
                         # Uso math.floor ya que por ej 3.2 necesito rendondearlo para abajo para obtener la animacion
                         # numero 3
                         
@@ -436,7 +470,7 @@ class GameEngine():
                         for i in range(0, len(listalifeup)):
                             if len(playerrect.collidelistall(listalifeup)) > 0:
                                 self.game.borarSpeedUp(i)
-                                self.game.setBombermanSpeed(10)
+                                self.game.setBombermanSpeed(8)
                                 print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
 
                 if event.type == pygame.KEYUP:

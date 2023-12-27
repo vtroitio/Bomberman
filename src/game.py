@@ -45,6 +45,7 @@ class Game():
         self.lalistaderectspowerUpsVida = []
 
         self.explosiones = []
+        self.rectsExplosiones = []
 
         self.listarandom = [0, 1, 2, 3, 4, 5]
 
@@ -483,8 +484,13 @@ class Game():
 # Bombas
    
     def addExplosion(self, explosion):
+        # Explosiones es pos, id bomba
+
+        
         self.explosiones.append(explosion)
-    
+
+
+
     def borrarExplosion(self, id):
         for i in range(0, len(self.explosiones)):
             if self.explosiones[i][1] == id:

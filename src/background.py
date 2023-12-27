@@ -89,6 +89,7 @@ class Background():
             cosa = pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1)
             enemy.setEnemyRect(cosa)
             self.game.setlalistaderectsenemigos(cosa)
+
 # Obstaculos
 
     def reloadBackground(self, dimensions):  # Crea las filas y columnas
@@ -109,17 +110,29 @@ class Background():
 
     def reloadExplosiones(self, explosiones):
         
+        
+        
         # Explosiones es una tupla que contiene (pos, id)
         if len(explosiones) == 0:
             pass
         else:
+            
+
+            for rect in explosiones[0][2]:
+                print(str(rect))
+                pygame.draw.rect(self.screen, (0, 0, 255), rect, 1)
+
+
             for explosion in explosiones:
                 # Offset para que visualmente se vea bien la explosion
                 x, y = explosion[0]
                 xOffset, yOffset = x + 3, y + 2
                 posOffset = [xOffset, yOffset]
                 self.screen.blit(self.explosion, posOffset)
-       
+
+
+                
+                       
         
 
 # Power Ups
