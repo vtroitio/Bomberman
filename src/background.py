@@ -119,7 +119,6 @@ class Background():
             
 
             for rect in explosiones[0][2]:
-                print(str(rect))
                 pygame.draw.rect(self.screen, (0, 0, 255), rect, 1)
 
 

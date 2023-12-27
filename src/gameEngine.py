@@ -132,7 +132,34 @@ class GameEngine():
         # rompio un bloque, mato un enemigo, o nos hiteo a nosotros.
 
         # message = [pos, idbomba, listaDeRectsExplosion]
-        
+
+        rectsExplosion = []
+
+        for rect in message[2]:
+            rectsExplosion.append(pygame.Rect(rect[0], rect[1], rect[2], rect[3]))
+
+        # Tengo que verificar las colisiones que tuvo la explosion
+        # Ya sea con el bomberman, enemigos o bloques rompibles
+
+        for rect in rectsExplosion:
+            
+            if rect.collidelistall(self.game.getLaListaDeRectsCajas()):
+            
+                caja = rect.collidelistall(self.game.getLaListaDeRectsCajas())
+                
+                self.game.romperCaja(caja[0])
+                numerorandom = self.game.getListaRandom()
+                
+                if numerorandom == 0:
+                    self.game.createPowerUpSpeedUp(self.game.getCajaRota())
+                elif numerorandom == 1:
+                    self.game.createPowerUpBombUp(self.game.getCajaRota())
+                elif numerorandom == 2:
+                    self.game.createPowerUpVida(self.game.getCajaRota())
+                elif numerorandom > 0:
+                    pass
+
+
         self.game.borrarExplosion(message[1])
 
 
@@ -171,7 +198,7 @@ class GameEngine():
         
         self.game.addExplosion((pos, id_bomba, rects))
     
-        thread = threadExplosion((pos, id_bomba))
+        thread = threadExplosion((pos, id_bomba, rects))
         thread.start()
  
         
