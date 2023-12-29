@@ -547,3 +547,8 @@ class Game():
 
         print('La posicion centrada es: ' + str(aux))
         return aux
+    
+    def borrarEnemigo(self, indice):
+        self.enemigos.pop(indice)
+        self.lalistaderectsenemigos.pop(indice)
+        # self.positionAnteriorEnemy.pop(indice)

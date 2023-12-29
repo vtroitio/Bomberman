@@ -23,7 +23,7 @@ class threadExplosion(Thread):
         self.explosion = explosion
 
     def run(self):
-        time.sleep(0.7)
+        time.sleep(0.5)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
 
 
@@ -133,31 +133,6 @@ class GameEngine():
 
         # message = [pos, idbomba, listaDeRectsExplosion]
 
-        rectsExplosion = []
-
-        for rect in message[2]:
-            rectsExplosion.append(pygame.Rect(rect[0], rect[1], rect[2], rect[3]))
-
-        # Tengo que verificar las colisiones que tuvo la explosion
-        # Ya sea con el bomberman, enemigos o bloques rompibles
-
-        for rect in rectsExplosion:
-            
-            if rect.collidelistall(self.game.getLaListaDeRectsCajas()):
-            
-                caja = rect.collidelistall(self.game.getLaListaDeRectsCajas())
-                
-                self.game.romperCaja(caja[0])
-                numerorandom = self.game.getListaRandom()
-                
-                if numerorandom == 0:
-                    self.game.createPowerUpSpeedUp(self.game.getCajaRota())
-                elif numerorandom == 1:
-                    self.game.createPowerUpBombUp(self.game.getCajaRota())
-                elif numerorandom == 2:
-                    self.game.createPowerUpVida(self.game.getCajaRota())
-                elif numerorandom > 0:
-                    pass
 
 
         self.game.borrarExplosion(message[1])
@@ -197,7 +172,54 @@ class GameEngine():
         pos[1] = pos[1] - offset
         
         self.game.addExplosion((pos, id_bomba, rects))
-    
+
+
+      
+        rectsExplosion = []
+
+        for rect in rects:
+            rectsExplosion.append(pygame.Rect(rect[0], rect[1], rect[2], rect[3]))
+
+        # Tengo que verificar las colisiones que tuvo la explosion
+        # Ya sea con el bomberman, enemigos o bloques rompibles
+        
+
+        # Cajas rompibles
+            
+        for rect in rectsExplosion:
+            
+            if rect.collidelistall(self.game.getLaListaDeRectsCajas()):
+            
+                caja = rect.collidelistall(self.game.getLaListaDeRectsCajas())
+                
+                self.game.romperCaja(caja[0])
+                numerorandom = self.game.getListaRandom()
+                
+                if numerorandom == 0:
+                    self.game.createPowerUpSpeedUp(self.game.getCajaRota())
+                elif numerorandom == 1:
+                    self.game.createPowerUpBombUp(self.game.getCajaRota())
+                elif numerorandom == 2:
+                    self.game.createPowerUpVida(self.game.getCajaRota())
+                elif numerorandom > 0:
+                    pass
+
+
+        # Enemigos
+                 
+        enemiesRects = self.game.getEnemyRect()
+        enemigosABorrar = []
+
+        for i in range(0, len(enemiesRects)):
+            if enemiesRects[i].collidelistall(rectsExplosion):
+                enemigosABorrar.append(i)
+                
+        
+        for i in range(0, len(enemigosABorrar)):
+            self.game.borrarEnemigo(enemigosABorrar[i])
+
+
+
         thread = threadExplosion((pos, id_bomba, rects))
         thread.start()
  
