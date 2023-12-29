@@ -152,12 +152,14 @@ class GameEngine():
         self.game.sacar_bomba(id_bomba)    
 
         
+        
         # Creo el rect para las colisiones
         ancho = 35
         alto = 35
 
         rects = []
-
+        
+        
         # 3 verticales
         for i in range(-1, 2):
             rects.append((pos[0] + (37 * i), pos[1], ancho, alto))
@@ -185,23 +187,25 @@ class GameEngine():
         # Ya sea con el bomberman, enemigos o bloques rompibles
         
 
-        # Cajas rompibles
+        # Reviso colision de explosion con cajas rompibles
             
         for rect in rectsExplosion:
             
             if rect.collidelistall(self.game.getLaListaDeRectsCajas()):
             
                 caja = rect.collidelistall(self.game.getLaListaDeRectsCajas())
-                
                 self.game.romperCaja(caja[0])
+                
                 numerorandom = self.game.getListaRandom()
                 
+                posCajaRota = self.game.getCajaRota()
+
                 if numerorandom == 0:
-                    self.game.createPowerUpSpeedUp(self.game.getCajaRota())
+                    self.game.createPowerUpSpeedUp(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))                             
                 elif numerorandom == 1:
-                    self.game.createPowerUpBombUp(self.game.getCajaRota())
+                    self.game.createPowerUpBombUp(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))
                 elif numerorandom == 2:
-                    self.game.createPowerUpVida(self.game.getCajaRota())
+                    self.game.createPowerUpVida(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))
                 elif numerorandom > 0:
                     pass
 
@@ -344,7 +348,7 @@ class GameEngine():
                         self.background.reloadBombermanRect()
                         self.game.setBombermanSpeed(5)
 
-                        self.game.borarDatosCajas()
+                        self.game.borrarDatosCajas()
                         self.game.borrarDatosEnemigos()
 
                         self.crearCajasRompibles()
@@ -386,66 +390,51 @@ class GameEngine():
                             self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
                     
                     
-                    if event.key== 32:
-                        if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
-                            cajaquequieroromper = playerrect.collidelistall(self.game.getLaListaDeRectsCajas())
-                            self.game.romperCaja(cajaquequieroromper[0])
-                            numerorandom = self.game.getListaRandom()
-                            if numerorandom == 0:
-                                self.game.createPowerUpSpeedUp(self.game.getCajaRota())
-                                self.background.reloadSpeedPowerUp()
-                            elif numerorandom == 1:
-                                self.game.createPowerUpBombUp(self.game.getCajaRota())
-                                self.background.reloadBombPowerUp()
-                            elif numerorandom == 2:
-                                self.game.createPowerUpVida(self.game.getCajaRota())
-                                self.background.reloadLifePowerUp()
-                            elif numerorandom > 0:
-                                pass
+
                             
 
+                    
+
+                    
+
+
+                    if self.game.agarroVida():
+                        pass
+                    elif self.game.agarroBomba():
+                        pass
+                    elif self.game.agarroVelocidad():
+                        pass
+
+
+
+
+                    
                     playerrect = self.game.getPlayerRect()
+                    # Traigo los rects para verificar las colisiones
 
+                    # powerBombRects = self.game.getBombUpRect()
+                    # powerSpeedRects = self.game.getLifeUpRect()
+                    # powerLifeRects = self.game.getSpeedUpRect()
                     
 
 
-                    
+                    # if powerSpeedRects is not None and len(powerSpeedRects) > 0:
+                    #     for i in range(0, len(powerSpeedRects)):
+                    #         print("Entro " + str(i))
+                    #         if playerrect.colliderect(powerSpeedRects[i]):
+                    #             self.game.borrarLifeUp(i)
+                    #             self.game.setBombermanSpeed(8)
+                    #             print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
+                    #             break
 
-
-
-                    if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:  # Colision Bomberman//
-                        self.game.setBombermanPosition()
-
-                    
-
-
-                    
-                     
-                    
-
-
-                    listabombup = self.game.getBombUpRect()
-                    listaspeedup = self.game.getLifeUpRect()
-                    listalifeup = self.game.getSpeedUpRect()
-                    
-                    if listabombup is not None and len(listabombup) > 0:
-                        for i in range(0, len(listabombup)):
-                            if len(playerrect.collidelistall(listabombup)) > 0:
-                                self.game.borarBombUp(i)
-
-                    if listaspeedup is not None and len(listaspeedup) > 0:
-                        for i in range(0, len(listaspeedup)):
-                            if len(playerrect.collidelistall(listaspeedup)) > 0:
-                                self.game.borarLifeUp(i)
-                                self.game.setBombermanVidas(1)
-                                print("AMIGO SOS UN PICANTE TE GANASTE UNA VIDA, AHORA TENES " +str(self.game.getBombermanVidas()) + " VIDAS")
-
-                    if listalifeup is not None and len(listalifeup) > 0:
-                        for i in range(0, len(listalifeup)):
-                            if len(playerrect.collidelistall(listalifeup)) > 0:
-                                self.game.borarSpeedUp(i)
-                                self.game.setBombermanSpeed(8)
-                                print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
+                    # if powerLifeRects is not None and len(powerLifeRects) > 0:
+                    #     for i in range(0, len(powerLifeRects)):
+                    #         print("Entro " + str(i))
+                    #         if playerrect.colliderect(powerLifeRects[i]):
+                    #             self.game.borrarLifeUp(i)
+                    #             self.game.setBombermanVidas(1)
+                    #             print("AMIGO SOS UN PICANTE TE GANASTE UNA VIDA, AHORA TENES " +str(self.game.getBombermanVidas()) + " VIDAS")
+                    #             break
 
                 if event.type == pygame.KEYUP:
                     if str(event.key) == '32':            
@@ -463,21 +452,6 @@ class GameEngine():
                                     self.lista_threads[-1].start()
                                     break
                                     
-                        if len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
-                             cajaquequieroromper = playerrect.collidelistall(self.game.getLaListaDeRectsCajas())
-                             self.game.romperCaja(cajaquequieroromper[0])
-                             numerorandom = self.game.getListaRandom()
-                             if numerorandom == 0:
-                                 self.game.createPowerUpSpeedUp(self.game.getCajaRota())
-                                 self.background.reloadSpeedPowerUp()
-                             elif numerorandom == 1:
-                                 self.game.createPowerUpBombUp(self.game.getCajaRota())
-                                 self.background.reloadBombPowerUp()
-                             elif numerorandom == 2:
-                                 self.game.createPowerUpVida(self.game.getCajaRota())
-                                 self.background.reloadLifePowerUp()
-                             elif numerorandom > 0:
-                                 pass
             pygame.display.update()
             clock.tick(30)
                 

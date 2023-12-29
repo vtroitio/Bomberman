@@ -139,23 +139,19 @@ class Background():
     def reloadSpeedPowerUp(self):
         for speed in self.game.getListaDeSpeedPowerUp():
             self.screen.blit(self.speedPowerUp, speed.getPosition())
-            rect = pygame.draw.rect(self.screen, (255, 255, 0), speed.getHitbox(), 1)
-            speed.setRect(rect)
-            self.game.setRectSpeedUp(rect)
+            pygame.draw.rect(self.screen, (0, 255, 0), speed.getHitbox(), 1)
 
     def reloadBombPowerUp(self):
         for bomb in self.game.getListaDeBombPowerUp():
             self.screen.blit(self.bombPowerUp, bomb.getPosition())
-            rect = pygame.draw.rect(self.screen, (255, 255, 0), bomb.getHitbox(), 1)
-            bomb.setRect(rect)
-            self.game.setRectBombUp(rect)
+            pygame.draw.rect(self.screen, (0, 255, 0), bomb.getHitbox(), 1)
+
 
     def reloadLifePowerUp(self):
         for life in self.game.getListaDeLifePowerUp():
             self.screen.blit(self.lifePowerUp, life.getPosition())
-            rect = pygame.draw.rect(self.screen, (255, 255, 0), life.getHitbox(), 1)
-            life.setRect(rect)
-            self.game.setRectLifeUp(rect)
+            pygame.draw.rect(self.screen, (0, 255, 0), life.getHitbox(), 1)
+
 
 # LOADS
 # Design
