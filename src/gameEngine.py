@@ -81,8 +81,8 @@ class GameEngine():
 
         self.lista_threads = []
         self.BOMBAS_USANDO = []
-        self.BOMBAS_DISPONIBLES = [1, 2, 3]
-        self.cantidad_bombas = 0
+        self.BOMBAS_DISPONIBLES = [1]
+        self.bombas = 1
 
 
 
@@ -398,59 +398,47 @@ class GameEngine():
                     
 
 
+                    # Verificacion de colisiones con powerUps
                     if self.game.agarroVida():
-                        pass
+                        self.game.setBombermanVidas(1)
+                        print("AMIGO SOS UN PICANTE TE GANASTE UNA VIDA, AHORA TENES " + str(self.game.getBombermanVidas()) + " VIDAS")
                     elif self.game.agarroBomba():
-                        pass
+                        if self.bombas < 4:
+                            self.bombas = self.bombas + 1
+                            
+                            self.BOMBAS_DISPONIBLES.append(self.bombas)
+                            
+                            print("AMIGO AHORA TENES " + str(self.bombas) + " BOMBAS TOTALES")
+                        else:
+                            print("Maximo de 4 bombas alcanzado")    
                     elif self.game.agarroVelocidad():
-                        pass
+                        self.game.setBombermanSpeed(8)
+                        print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
 
 
 
 
                     
-                    playerrect = self.game.getPlayerRect()
-                    # Traigo los rects para verificar las colisiones
 
-                    # powerBombRects = self.game.getBombUpRect()
-                    # powerSpeedRects = self.game.getLifeUpRect()
-                    # powerLifeRects = self.game.getSpeedUpRect()
-                    
-
-
-                    # if powerSpeedRects is not None and len(powerSpeedRects) > 0:
-                    #     for i in range(0, len(powerSpeedRects)):
-                    #         print("Entro " + str(i))
-                    #         if playerrect.colliderect(powerSpeedRects[i]):
-                    #             self.game.borrarLifeUp(i)
-                    #             self.game.setBombermanSpeed(8)
-                    #             print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
-                    #             break
-
-                    # if powerLifeRects is not None and len(powerLifeRects) > 0:
-                    #     for i in range(0, len(powerLifeRects)):
-                    #         print("Entro " + str(i))
-                    #         if playerrect.colliderect(powerLifeRects[i]):
-                    #             self.game.borrarLifeUp(i)
-                    #             self.game.setBombermanVidas(1)
-                    #             print("AMIGO SOS UN PICANTE TE GANASTE UNA VIDA, AHORA TENES " +str(self.game.getBombermanVidas()) + " VIDAS")
-                    #             break
 
                 if event.type == pygame.KEYUP:
                     if str(event.key) == '32':            
-                        print(threading.active_count())         
-                        if len(self.BOMBAS_USANDO) <= 2:
 
-                            i = 1
-                            for i in range(1, 4):#[1,2,3]
-                               numero_bomba = self.BOMBAS_DISPONIBLES.count(i) #1
-                               if numero_bomba != 0:
-                                    self.BOMBAS_DISPONIBLES.remove(i)
-                                    self.BOMBAS_USANDO.append(i)
-                                    self.game.poner_bomba(i)
-                                    self.lista_threads.append(threadBomba(i))
-                                    self.lista_threads[-1].start()
-                                    break
+                        
+                        if len(self.BOMBAS_USANDO) < self.bombas:
+                            
+
+                            
+                            numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
+                            self.BOMBAS_DISPONIBLES.remove(numero_bomba)
+                            self.BOMBAS_USANDO.append(numero_bomba)
+                            self.game.poner_bomba(numero_bomba)
+                            
+                            self.lista_threads.append(threadBomba(numero_bomba))
+                            
+                            self.lista_threads[-1].start()
+                            
+                            break
                                     
             pygame.display.update()
             clock.tick(30)

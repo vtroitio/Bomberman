@@ -201,8 +201,6 @@ class Game():
         
         pos =  self.obtenerPosicionCentrada(self.getBombermanPosition())
         
-
-        
         self.bombas.append(bomba.Bomb(pos, id_bomba))
 
     def sacar_bomba(self, idbomba):
@@ -214,6 +212,12 @@ class Game():
                     self.bombas.remove(bomba)
 
     def getBombPos(self, id):
+        
+        # print("Quiero obtener la pos de la bomba con id: " + str(id))
+        
+        # for i in range(len(self.bombas)):
+        #     print("Bomba id = " + str(self.bombas[i].getId()))
+        
         for i in range (len(self.bombas)):
             if self.bombas[i].getId() == id:
                 return self.bombas[i].getposicion()
@@ -495,9 +499,8 @@ class Game():
 
 
     def borrarExplosion(self, id):
-        for i in range(0, len(self.explosiones)):
-            if self.explosiones[i][1] == id:
-                self.explosiones.pop(i)
+        if self.explosiones[0][1] == id:
+            self.explosiones.pop(0)
 
     def get_todas_las_bombas(self):
         return self.bombas
@@ -506,25 +509,14 @@ class Game():
         return self.explosiones
     
     def borrarSpeedUp(self, indice):
-        print("Speed Up " + "indice: " + str(indice))
-        print(str(self.lalistadepowerUpsSpeed))
-        
-
         self.lalistadepowerUpsSpeed.pop(indice)
         self.lalistaderectspowerUpsSpeed.pop(indice)
 
     def borrarBombUp(self, indice):
-        print("Bomb Up " + "indice: " + str(indice))
-        print(str(self.lalistadepowerUpsBomba))
-        
         self.lalistadepowerUpsBomba.pop(indice)
         self.lalistaderectspowerUpsBomba.pop(indice)
 
     def borrarLifeUp(self, indice):
-        print("Life Up " + "indice: " + str(indice))
-        print(str(self.lalistadepowerUpsVida))
-        
-
         self.lalistadepowerUpsVida.pop(indice)
         self.lalistaderectspowerUpsVida.pop(indice)
 
@@ -568,53 +560,46 @@ class Game():
         # self.positionAnteriorEnemy.pop(indice)
 
     def agarroVida(self):
+
+        agarroVida = False
         playerRect = self.player.getPlayerRect()
         powerLifeRects = self.lalistaderectspowerUpsVida
-
-        print(str(powerLifeRects))
-        print(str(playerRect))
-
 
         if len(powerLifeRects) > 0:
             if (playerRect.collidelist(powerLifeRects)) > -1:
                 
-                print("Hay colision con algun power up")
-
+                agarroVida = True
                 self.lalistadepowerUpsVida.pop(playerRect.collidelist(powerLifeRects))
                 self.lalistaderectspowerUpsVida.pop(playerRect.collidelist(powerLifeRects))
 
+        return agarroVida
 
     def agarroBomba(self):
         
+        agarroBomba = False
         playerRect = self.player.getPlayerRect()
         powerBombRects = self.lalistaderectspowerUpsBomba
-
-        print(str(powerBombRects))
-        print(str(playerRect))
-
 
         if len(powerBombRects) > 0:
             if (playerRect.collidelist(powerBombRects)) > -1:
                 
-                print("Hay colision con algun power up")
-
+                agarroBomba = True
                 self.lalistadepowerUpsBomba.pop(playerRect.collidelist(powerBombRects))
                 self.lalistaderectspowerUpsBomba.pop(playerRect.collidelist(powerBombRects))
 
-
+        return agarroBomba
 
     def agarroVelocidad(self):
+        
+        agarroVelocidad = False
         playerRect = self.player.getPlayerRect()
         powerSpeedRects = self.lalistaderectspowerUpsSpeed
-
-        print(str(powerSpeedRects))
-        print(str(playerRect))
-
 
         if len(powerSpeedRects) > 0:
             if (playerRect.collidelist(powerSpeedRects)) > -1:
                 
-                print("Hay colision con algun power up")
-
+                agarroVelocidad = True
                 self.lalistadepowerUpsSpeed.pop(playerRect.collidelist(powerSpeedRects))
                 self.lalistaderectspowerUpsSpeed.pop(playerRect.collidelist(powerSpeedRects))
+
+        return agarroVelocidad
