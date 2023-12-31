@@ -342,22 +342,26 @@ class GameEngine():
                     if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
                         self.game.setBombermanVidas(-1)
                         print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN "+str(self.game.getBombermanVidas())+" VIDAS")
+                        
+                        # Este reload lo hago para dar un efecto visual de "reset"
+                        
                         self.background.reloadBackgroundImage()
 
                         self.game.setBombermanPosicionDeInicio()
-                        self.background.reloadBombermanRect()
                         self.game.setBombermanSpeed(5)
 
                         self.game.borrarDatosCajas()
                         self.game.borrarDatosEnemigos()
 
                         self.crearCajasRompibles()
+
+                        # Necesito hacer este reload que ya que asigna los rects a caja cada
+                        
                         self.background.reloadBoxes()
+                        
                         self.game.createBoxesRects()
 
                         self.game.placeEnemies()
-                        self.background.reloadEnemy()
-                        self.background.reloadEnemyRect()
                         self.game.createEnemiesRects()
                         
 
@@ -381,7 +385,8 @@ class GameEngine():
                             contadorAnimacionBomberman = 0
                         
                         
-                        # Manejo de colisiones
+                        # Manejo de colisiones con cajas
+                            
                         if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             # Si hay colision 
                             self.game.setBombermanPosition()
