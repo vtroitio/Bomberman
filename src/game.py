@@ -429,6 +429,11 @@ class Game():
     def getListaDeBombPowerUp(self):
         return self.lalistadepowerUpsBomba
 
+    def borrarPowerUps(self):
+        self.lalistadepowerUpsBomba = []
+        self.lalistadepowerUpsVida = []
+        self.lalistadepowerUpsSpeed = [] 
+        self.bombas = []
 
 # Setters de listas de objetos
 
@@ -536,6 +541,9 @@ class Game():
     def getListaRandom(self):  # Esto lo uso para randomizar la aparicion de determinados PowerUps
         shuffle(self.listarandom)
         return self.listarandom[0]
+    
+    def getBombas(self):
+        return self.bombas
     
 # Auxiliares
 

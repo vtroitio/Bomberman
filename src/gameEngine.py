@@ -26,16 +26,19 @@ class threadExplosion(Thread):
     def run(self):
         time.sleep(0.5)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
-
+        
+        
 
 class threadBomba(Thread):
-    def __init__(self, idbomba):
+    def __init__(self, idbomba, game):
         super().__init__()
-        self.numerito = idbomba
+        self.id = idbomba
+        self.game = game
 
     def run(self):
         time.sleep(3.0)
-        dispatcher.send(message = self.numerito, signal= 'explotoBomba', sender = 'threadBomba')
+        if(self.game.getBombas() != []):
+            dispatcher.send(message = self.id, signal= 'explotoBomba', sender = 'threadBomba')
 
 
 
@@ -347,8 +350,16 @@ class GameEngine():
                         
                         self.background.reloadBackgroundImage()
 
+                        
+                        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
                         self.game.setBombermanPosicionDeInicio()
                         self.game.setBombermanSpeed(5)
+
+                        self.BOMBAS_USANDO = []
+                        self.BOMBAS_DISPONIBLES = [1]
+                        self.bombas = 1
+
+                        self.game.borrarPowerUps()
 
                         self.game.borrarDatosCajas()
                         self.game.borrarDatosEnemigos()
@@ -439,7 +450,7 @@ class GameEngine():
                             self.BOMBAS_USANDO.append(numero_bomba)
                             self.game.poner_bomba(numero_bomba)
                             
-                            self.lista_threads.append(threadBomba(numero_bomba))
+                            self.lista_threads.append(threadBomba(numero_bomba, self.game))
                             
                             self.lista_threads[-1].start()
                             
