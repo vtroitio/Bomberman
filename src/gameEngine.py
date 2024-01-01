@@ -374,6 +374,13 @@ class GameEngine():
 
                         self.game.placeEnemies()
                         self.game.createEnemiesRects()
+
+                        if self.game.getBombermanVidas() == -1:
+                            while True:
+                                self.background.reloadGameOverScreen()
+                                pygame.display.update()
+                                clock.tick(30)
+                                
                         
 
 
@@ -421,7 +428,7 @@ class GameEngine():
                     elif self.game.agarroBomba():
                         if self.bombas < 4:
                             self.bombas = self.bombas + 1
-                            
+
                             self.BOMBAS_DISPONIBLES.append(self.bombas)
                             
                             print("AMIGO AHORA TENES " + str(self.bombas) + " BOMBAS TOTALES")
