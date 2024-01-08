@@ -20,6 +20,8 @@ class Background():
         self.enemigobomberman = None
         self.gameOverScreen = None
         self.explosion = None
+        self.salida = None
+        self.winScreen = None
 
         # Setear tamaño de la pantalla
         self.screen = pygame.display.set_mode(dimensions)
@@ -251,3 +253,21 @@ class Background():
     def loadBombPowerUp(self, path):
         self.bombPowerUp = pygame.image.load(path)
         self.bombPowerUp = pygame.transform.scale(self.bombPowerUp, [36, 36])
+
+# Salida
+        
+
+    def loadSalida(self, path):
+        self.salida = pygame.image.load(path)
+
+    def reloadSalida(self):
+        salida = self.game.getSalida()
+        self.screen.blit(self.salida, salida.getPosition())
+        pygame.draw.rect(self.screen, (0, 255, 0), salida.getHitbox(), 1)
+
+    def loadWinScreen(self, path):
+        self.winScreen = pygame.image.load(path)
+        self.winScreen = pygame.transform.scale(self.winScreen, [925, 555])
+    
+    def reloadWinScreen(self):
+        self.screen.blit(self.winScreen, (0, 0))

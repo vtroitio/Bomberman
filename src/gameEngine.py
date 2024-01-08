@@ -83,6 +83,7 @@ class GameEngine():
         self.menu = True
         
         self.gameOverScreen = False
+        self.winScreen = False
 
         self.lista_threads = []
         self.BOMBAS_USANDO = []
@@ -90,6 +91,7 @@ class GameEngine():
         self.bombas = 1
 
 
+        self.game.crearSalida()
 
         self.mainLoop()
 
@@ -113,6 +115,13 @@ class GameEngine():
             pygame.display.update()
             clock.tick(30)
             
+    def win(self):
+        clock = pygame.time.Clock()
+        while self.winScreen:
+            self.background.reloadWinScreen()
+            pygame.display.update()
+            clock.tick(30)
+
 
     def goMenu():
         pass
@@ -172,12 +181,13 @@ class GameEngine():
         self.background.loadEnemigoBomberman("sprites/EnemigoBombermanAnimado/")
         self.background.loadCaja("sprites/caja.png")
         self.background.loadBomba("sprites/Bomba.png")
-        self.background.loadSpeedPowerUp("sprites/speedPowerUp.png")
+        self.background.loadSpeedPowerUp("sprites/PowerUps/SpeedUp.png")
         self.background.loadGameOverScreen("sprites/GameOver.jpg")
         self.background.loadBombPowerUp("sprites/PowerUps/BombUp.png")
         self.background.loadLifePowerUp("sprites/PowerUps/HealthUp.png")
         self.background.loadExplosion("sprites/Explosion.png")
-
+        self.background.loadSalida("sprites/Salida.png")
+        self.background.loadWinScreen("sprites/victory.jpg")
 
     def borrarExplosion(self, message):
         # A la hora de borrar la explosion tengo que verificar si el rect de la misma
@@ -310,6 +320,8 @@ class GameEngine():
                     if self.gameOverScreen == True :
                         self.gameOver()
 
+                    if self.winScreen == True :
+                        self.win()
                     
                     # Verifico si termino el sleep de alguno de mis threads y ejecuto la funcion que corresponda
                     dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
@@ -328,6 +340,8 @@ class GameEngine():
                     # pero por encima de las cajas rompibles.
                     
                     
+                    self.background.reloadSalida()
+
                     # 1 - Muestro las cajas rompibles
                     self.background.reloadBoxes() 
                     
@@ -356,10 +370,7 @@ class GameEngine():
                         # numero 3
                         
                         self.background.reloadEnemy(enemy.getAnimacion(), math.floor(contadorAnimacionEnemigo), i)
-                        
-
-                        
-                            
+                    
 
                     # Colisiones de los enemigos con cajas
                     
@@ -379,7 +390,7 @@ class GameEngine():
                             
 
                             
-                            
+                       
 
                             
                     
@@ -390,7 +401,6 @@ class GameEngine():
                     self.background.reloadBombPowerUp()
         
 
-                    
 
                    
                     
@@ -458,11 +468,13 @@ class GameEngine():
                         print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
 
 
-
-
+                    # Verifico colision con salida y a su vez que no quede ningun enemigo en el nivel
                     
-
-
+                    if len(self.game.getlalisaderectsenemigos()) == 0:
+                        if self.game.getSalidaRect() != None:
+                            if self.game.getSalidaRect().colliderect(playerrect):
+                                self.winScreen = True
+                                
                 if event.type == pygame.KEYUP:
                     if str(event.key) == '32':            
 

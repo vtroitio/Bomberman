@@ -7,6 +7,7 @@ import enemy
 import copy
 import bomba
 from random import shuffle
+import random
 import speed
 import LifeUp
 import bombUp
@@ -47,8 +48,31 @@ class Game():
         self.explosiones = []
         self.rectsExplosiones = []
 
-        self.listarandom = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9 , 10 , 11]
+        self.listarandom = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9 , 10 , 11, 12, 13, 14, 15]
 
+        self.salida = None
+        self.salidaRect = None
+        self.cajaConSalida = None
+
+
+
+    def crearSalida(self):
+        
+        maxInt = len(self.lalistadecajas) - 1
+        indiceElegido = random.randint(0, maxInt)
+        
+        cajaSeleccionada = self.lalistadecajas[indiceElegido]
+        self.cajaConSalida = cajaSeleccionada
+
+        x, y = cajaSeleccionada.getPosition()
+        
+        self.salida = obstacles.Obstacle(x, y)
+
+    def getSalidaRect(self):
+        return self.salidaRect
+
+    def getSalida(self):
+        return self.salida
 
     def placeEnemies(self):
         self.enemigos.append(enemy.Enemy([39, 259],"vertical"))
@@ -490,7 +514,15 @@ class Game():
 
     def romperCaja(self, numerodecaja):
         caja = self.lalistadecajas[numerodecaja]
+        
+        # Asigno el rect de la salida al momento de romper la caja para evitar un colision
+        # sin que la caja este rota
+
+        if caja == self.cajaConSalida:
+            self.salidaRect = self.lalistaderectscajas[numerodecaja]
+        
         self.posicioncajarota = caja.getPosition()
+        
         self.lalistadecajas.pop(numerodecaja)
         self.lalistaderectscajas.pop(numerodecaja)
 # Bombas
