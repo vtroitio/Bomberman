@@ -81,6 +81,8 @@ class GameEngine():
         self.background.reloadBoxes()
         self.game.createRects()
         self.menu = True
+        
+        self.gameOverScreen = False
 
         self.lista_threads = []
         self.BOMBAS_USANDO = []
@@ -99,9 +101,18 @@ class GameEngine():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: sys.exit()
                 if event.type == pygame.KEYUP:
-                    clock.tick(30)
                     self.menu = False
                     pygame.display.update()
+                    clock.tick(30)
+        
+
+    def gameOver(self):
+        clock = pygame.time.Clock()
+        while self.gameOverScreen:
+            self.background.reloadGameOverScreen()
+            pygame.display.update()
+            clock.tick(30)
+            
 
     def goMenu():
         pass
@@ -111,6 +122,43 @@ class GameEngine():
 
     def exit():
         pass
+
+    def killBomberman(self):
+        self.game.setBombermanVidas(-1)
+        print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN " + str(self.game.getBombermanVidas())+" VIDAS")
+        
+        # Este reload lo hago para dar un efecto visual de "reset"
+        
+        self.background.reloadBackgroundImage()
+
+        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
+        self.game.setBombermanPosicionDeInicio()
+        self.game.setBombermanSpeed(5)
+
+        self.BOMBAS_USANDO = []
+        self.BOMBAS_DISPONIBLES = [1]
+        self.bombas = 1
+
+        self.game.borrarPowerUps()
+
+        self.game.borrarDatosCajas()
+        self.game.borrarDatosEnemigos()
+
+        self.crearCajasRompibles()
+
+        # Necesito hacer este reload que ya que asigna los rects a caja cada
+        
+        self.background.reloadBoxes()
+        
+        self.game.createBoxesRects()
+
+        self.game.placeEnemies()
+        self.game.createEnemiesRects()
+
+        if self.game.getBombermanVidas() == -1:
+            self.gameOverScreen = True
+
+
 
     def cargar_imagen_bomba_controlador(self):
         posicion_bomba = self.game.getBombermanPosition()
@@ -227,6 +275,14 @@ class GameEngine():
             self.game.borrarEnemigo(enemigosABorrar[i])
 
 
+        # Bomberman
+            
+        if self.game.getPlayerRect().collidelistall(rectsExplosion):
+            self.killBomberman()
+
+
+
+
 
         thread = threadExplosion((pos, id_bomba, rects))
         thread.start()
@@ -236,25 +292,24 @@ class GameEngine():
         Size = 37
         for z in range(1, 24):
             for i in range(1, 14):
-                for x in range(
-                     0, len(self.diccionarioposicionesobstaculos[str(z)])
-                    ):
+                for x in range(0, len(self.diccionarioposicionesobstaculos[str(z)])):
                     if self.diccionarioposicionesobstaculos[str(z)][x] == i:
                         self.game.setLaListaDeCajas(Size * z, i * Size)
 
     def mainLoop(self):
         clock = pygame.time.Clock()
-        
         contadorAnimacionBomberman = 0
-        
         contadorAnimacionEnemigo = 0
-        
-        eventomovimientoenemigos = pygame.USEREVENT
         
         while True:
             while self.menu:
                 self.intro()
             if self.menu == False:
+                    
+
+                    if self.gameOverScreen == True :
+                        self.gameOver()
+
                     
                     # Verifico si termino el sleep de alguno de mis threads y ejecuto la funcion que corresponda
                     dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
@@ -343,43 +398,7 @@ class GameEngine():
                     playerrect = self.game.getPlayerRect()
                     
                     if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
-                        self.game.setBombermanVidas(-1)
-                        print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN "+str(self.game.getBombermanVidas())+" VIDAS")
-                        
-                        # Este reload lo hago para dar un efecto visual de "reset"
-                        
-                        self.background.reloadBackgroundImage()
-
-                        
-                        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
-                        self.game.setBombermanPosicionDeInicio()
-                        self.game.setBombermanSpeed(5)
-
-                        self.BOMBAS_USANDO = []
-                        self.BOMBAS_DISPONIBLES = [1]
-                        self.bombas = 1
-
-                        self.game.borrarPowerUps()
-
-                        self.game.borrarDatosCajas()
-                        self.game.borrarDatosEnemigos()
-
-                        self.crearCajasRompibles()
-
-                        # Necesito hacer este reload que ya que asigna los rects a caja cada
-                        
-                        self.background.reloadBoxes()
-                        
-                        self.game.createBoxesRects()
-
-                        self.game.placeEnemies()
-                        self.game.createEnemiesRects()
-
-                        if self.game.getBombermanVidas() == -1:
-                            while True:
-                                self.background.reloadGameOverScreen()
-                                pygame.display.update()
-                                clock.tick(30)
+                        self.killBomberman()
                                 
                         
 
