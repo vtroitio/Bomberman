@@ -46,7 +46,7 @@ class Background():
         for obstaculo in self.game.getListaDeObstaculos():
 
             self.screen.blit(self.obstacle, obstaculo.getPosition())
-            obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), obstaculo.getHitbox(), 1))
+            obstaculo.setObstacleRect(pygame.Rect(obstaculo.getHitbox()))
 
     def reloadBomberman(self, direction, contador):
         self.screen.blit(self.bomberman[direction][contador],
@@ -58,8 +58,7 @@ class Background():
         self.screen.blit(self.background, (0, 0))
 
     def reloadBombermanRect(self):
-        rect = pygame.draw.rect(self.screen, (0, 0, 0),
-                                self.game.getPlayerHitbox(), 2)
+        rect = pygame.Rect(self.game.getPlayerHitbox())
         self.game.setPlayerRect(rect)
 
     def reloadMenu(self):
@@ -73,7 +72,7 @@ class Background():
         
         self.screen.blit(self.enemigobomberman[direction][contador], enemy.getEnemyPosition())
         
-        enemy.setEnemyRect(pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1))
+        enemy.setEnemyRect(pygame.Rect(enemy.getEnemyHitbox()))
 
 # Personajes
 
@@ -83,14 +82,14 @@ class Background():
 # Rects
 
     def reloadBombermanRect(self):
-        rect = pygame.draw.rect(self.screen, (255, 0, 0), self.game.getPlayerHitbox(), 2)
+        rect = pygame.Rect(self.game.getPlayerHitbox())
         self.game.setPlayerRect(rect)
 
     def reloadEnemyRect(self):
         for enemy in self.game.getListaDeEnemigos():
-            cosa = pygame.draw.rect(self.screen, (255, 0, 0), enemy.getEnemyHitbox(), 1)
-            enemy.setEnemyRect(cosa)
-            self.game.setlalistaderectsenemigos(cosa)
+            rect = pygame.Rect(enemy.getEnemyHitbox())
+            enemy.setEnemyRect(rect)
+            self.game.setlalistaderectsenemigos(rect)
 
 # Obstaculos
 
@@ -98,12 +97,12 @@ class Background():
         for obstaculo in self.game.getListaDeObstaculos():
 
             self.screen.blit(self.obstacle, obstaculo.getPosition())
-            obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), obstaculo.getHitbox(), 1))
+            obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0, 0), obstaculo.getHitbox(), 1))
 
     def reloadBoxes(self):
         for cajas in self.game.getListaDeCajas():
             self.screen.blit(self.caja, cajas.getPosition())
-            cajas.setObstacleRect(pygame.draw.rect(self.screen, (255, 0, 0), cajas.getHitbox(), 1))
+            cajas.setObstacleRect(pygame.Rect(cajas.getHitbox()))
 
 # Bomba y explosiones
 
@@ -121,7 +120,8 @@ class Background():
             
 
             for rect in explosiones[0][2]:
-                pygame.draw.rect(self.screen, (0, 0, 255), rect, 1)
+                pass
+                # pygame.draw.rect(self.screen, (0, 0, 255), rect, 1)
 
 
             for explosion in explosiones:
@@ -141,18 +141,18 @@ class Background():
     def reloadSpeedPowerUp(self):
         for speed in self.game.getListaDeSpeedPowerUp():
             self.screen.blit(self.speedPowerUp, speed.getPosition())
-            pygame.draw.rect(self.screen, (0, 255, 0), speed.getHitbox(), 1)
+            # pygame.draw.rect(self.screen, (0, 255, 0), speed.getHitbox(), 1)
 
     def reloadBombPowerUp(self):
         for bomb in self.game.getListaDeBombPowerUp():
             self.screen.blit(self.bombPowerUp, bomb.getPosition())
-            pygame.draw.rect(self.screen, (0, 255, 0), bomb.getHitbox(), 1)
+            # pygame.draw.rect(self.screen, (0, 255, 0), bomb.getHitbox(), 1)
 
 
     def reloadLifePowerUp(self):
         for life in self.game.getListaDeLifePowerUp():
             self.screen.blit(self.lifePowerUp, life.getPosition())
-            pygame.draw.rect(self.screen, (0, 255, 0), life.getHitbox(), 1)
+            # pygame.draw.rect(self.screen, (0, 255, 0), life.getHitbox(), 1)
 
 
 # LOADS
@@ -263,7 +263,7 @@ class Background():
     def reloadSalida(self):
         salida = self.game.getSalida()
         self.screen.blit(self.salida, salida.getPosition())
-        pygame.draw.rect(self.screen, (0, 255, 0), salida.getHitbox(), 1)
+        # pygame.draw.rect(self.screen, (0, 255, 0), salida.getHitbox(), 1)
 
     def loadWinScreen(self, path):
         self.winScreen = pygame.image.load(path)

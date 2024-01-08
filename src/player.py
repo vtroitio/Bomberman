@@ -37,7 +37,7 @@ class Player(DynamicObject):
             self.x = self.position[0]
             self.y = self.position[1]
             self.hitbox = (self.x, self.y, self.width, self.height)
-            pygame.draw.rect(ventana, (255, 0, 0), self.hitbox, 2)
+
             if direccion == [0, -1]:
                 self.direccion = "up"
             elif direccion == [0, 1]:
