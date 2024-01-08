@@ -330,6 +330,14 @@ class GameEngine():
                     # Muestro la imagen de fondo
                     self.background.reloadBackgroundImage()
                     
+                    # Muestro los power-ups y la salida (si alguno esta disponible)
+                    # Se muestran antes que lo demas ya que tanto los enemigos como
+                    # el bomberman deben poder pasarles por encima (visualmente)
+                    self.background.reloadSpeedPowerUp()
+                    self.background.reloadLifePowerUp()
+                    self.background.reloadBombPowerUp()
+                    self.background.reloadSalida()
+
                     # Muestro el sprite del bomberman y su rect
                     self.background.reloadBomberman(self.game.getBombermanDirection(), contadorAnimacionBomberman)
                     self.background.reloadBombermanRect()
@@ -340,8 +348,6 @@ class GameEngine():
                     # pero por encima de las cajas rompibles.
                     
                     
-                    self.background.reloadSalida()
-
                     # 1 - Muestro las cajas rompibles
                     self.background.reloadBoxes() 
                     
@@ -394,12 +400,7 @@ class GameEngine():
 
                             
                     
-                    # Muestro los power-ups que esten disponibles
-    
-                    self.background.reloadSpeedPowerUp()
-                    self.background.reloadLifePowerUp()
-                    self.background.reloadBombPowerUp()
-        
+
 
 
                    
