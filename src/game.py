@@ -546,16 +546,19 @@ class Game():
         return self.explosiones
     
     def borrarSpeedUp(self, indice):
-        self.lalistadepowerUpsSpeed.pop(indice)
-        self.lalistaderectspowerUpsSpeed.pop(indice)
+        if len(self.lalistaderectspowerUpsSpeed) > 0 & len(self.lalistadepowerUpsSpeed) > 0:
+            self.lalistadepowerUpsSpeed.pop(indice)
+            self.lalistaderectspowerUpsSpeed.pop(indice)
 
     def borrarBombUp(self, indice):
-        self.lalistadepowerUpsBomba.pop(indice)
-        self.lalistaderectspowerUpsBomba.pop(indice)
+        if len(self.lalistaderectspowerUpsBomba) > 0 & len(self.lalistadepowerUpsBomba) > 0:
+            self.lalistadepowerUpsBomba.pop(indice)
+            self.lalistaderectspowerUpsBomba.pop(indice)
 
     def borrarLifeUp(self, indice):
-        self.lalistadepowerUpsVida.pop(indice)
-        self.lalistaderectspowerUpsVida.pop(indice)
+        if len(self.lalistaderectspowerUpsVida) > 0 & len(self.lalistadepowerUpsVida) > 0:
+            self.lalistadepowerUpsVida.pop(indice)
+            self.lalistaderectspowerUpsVida.pop(indice)
 
     def borrarDatosCajas(self):
         self.lalistadecajas.clear()

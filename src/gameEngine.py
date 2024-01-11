@@ -18,6 +18,16 @@ CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], 
 
 # Uso los threads principalmente para poder ejecutar eventos luego de un tiempo gracias al sleep
 
+class threadPowerUp(Thread):
+    def __init__(self, tipo):
+        super().__init__()
+        self.tipo = tipo
+
+    def run(self):
+        time.sleep(6)
+        dispatcher.send(message = self.tipo, signal= 'borrarPowerUp', sender = 'threadPowerUp')
+
+
 class threadExplosion(Thread):
     def __init__(self, explosion):
         super().__init__()
@@ -28,7 +38,6 @@ class threadExplosion(Thread):
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
         
         
-
 class threadBomba(Thread):
     def __init__(self, idbomba, game):
         super().__init__()
@@ -133,40 +142,43 @@ class GameEngine():
         pass
 
     def killBomberman(self):
-        self.game.setBombermanVidas(-1)
-        print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN " + str(self.game.getBombermanVidas())+" VIDAS")
-        
-        # Este reload lo hago para dar un efecto visual de "reset"
-        
-        self.background.reloadBackgroundImage()
 
-        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
-        self.game.setBombermanPosicionDeInicio()
-        self.game.setBombermanSpeed(5)
+    
+        if self.game.getBombermanVidas() >= 0:
+            self.game.setBombermanVidas(-1)
+            print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN " + str(self.game.getBombermanVidas())+" VIDAS")
+            
+            # Este reload lo hago para dar un efecto visual de "reset"
+            
+            self.background.reloadBackgroundImage()
 
-        self.BOMBAS_USANDO = []
-        self.BOMBAS_DISPONIBLES = [1]
-        self.bombas = 1
+            # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
+            self.game.setBombermanPosicionDeInicio()
+            self.game.setBombermanSpeed(5)
 
-        self.game.borrarPowerUps()
+            self.BOMBAS_USANDO = []
+            self.BOMBAS_DISPONIBLES = [1]
+            self.bombas = 1
 
-        self.game.borrarDatosCajas()
-        self.game.borrarDatosEnemigos()
+            self.game.borrarPowerUps()
 
-        self.crearCajasRompibles()
+            self.game.borrarDatosCajas()
+            self.game.borrarDatosEnemigos()
 
-        # Necesito hacer este reload que ya que asigna los rects a caja cada
-        
-        self.background.reloadBoxes()
-        
-        self.game.createBoxesRects()
+            self.crearCajasRompibles()
 
-        self.game.placeEnemies()
-        self.game.createEnemiesRects()
+            # Necesito hacer este reload que ya que asigna los rects a caja cada
+            
+            self.background.reloadBoxes()
+            
+            self.game.createBoxesRects()
 
-        if self.game.getBombermanVidas() == -1:
-            self.gameOverScreen = True
+            self.game.placeEnemies()
+            self.game.createEnemiesRects()
 
+        else:
+            print("☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ GAME OVER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠")
+            self.gameOverScreen = True        
 
 
     def cargar_imagen_bomba_controlador(self):
@@ -189,6 +201,19 @@ class GameEngine():
         self.background.loadSalida("sprites/Salida.png")
         self.background.loadWinScreen("sprites/victory.jpg")
 
+    
+    def borrarPowerUp(self, message):
+        
+        # message es tupla = (tipoDePowerUp)
+
+        if message == 'velocidad':
+            self.game.borrarSpeedUp(0)
+        elif message == 'bomba':
+            self.game.borrarBombUp(0)
+        elif message == 'vida':
+            self.game.borrarLifeUp(0)
+    
+    
     def borrarExplosion(self, message):
         # A la hora de borrar la explosion tengo que verificar si el rect de la misma
         # rompio un bloque, mato un enemigo, o nos hiteo a nosotros.
@@ -263,10 +288,16 @@ class GameEngine():
 
                 if numerorandom == 0:
                     self.game.createPowerUpSpeedUp(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))                             
+                    threadVelocidad = threadPowerUp('velocidad')
+                    threadVelocidad.start()
                 elif numerorandom == 1:
                     self.game.createPowerUpBombUp(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))
+                    threadBomba = threadPowerUp('bomba')
+                    threadBomba.start()
                 elif numerorandom == 2:
                     self.game.createPowerUpVida(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))
+                    threadVida = threadPowerUp('vida')
+                    threadVida.start()
                 elif numerorandom > 0:
                     pass
 
@@ -317,19 +348,19 @@ class GameEngine():
             if self.menu == False:
                     
 
-                    if self.gameOverScreen == True :
+                    if self.gameOverScreen :
                         self.gameOver()
 
-                    if self.winScreen == True :
+                    if self.winScreen:
                         self.win()
                     
                     # Verifico si termino el sleep de alguno de mis threads y ejecuto la funcion que corresponda
                     dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
                     dispatcher.connect(self.borrarExplosion, signal = 'borrarExplosion', sender = 'threadExplosion')
+                    dispatcher.connect(self.borrarPowerUp, signal = 'borrarPowerUp', sender= 'threadPowerUp')
                     
                     # Muestro la imagen de fondo
                     self.background.reloadBackgroundImage()
-                    
                     # Muestro los power-ups y la salida (si alguno esta disponible)
                     # Se muestran antes que lo demas ya que tanto los enemigos como
                     # el bomberman deben poder pasarles por encima (visualmente)
