@@ -437,13 +437,9 @@ class GameEngine():
                    
                     
 
-                    playerrect = self.game.getPlayerRect()
-                    
-                    if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
-                        self.killBomberman()
-                                
-                        
 
+                        
+            playerrect = self.game.getPlayerRect()
 
 
                    
@@ -525,6 +521,12 @@ class GameEngine():
                             self.lista_threads[-1].start()
                             
                             break
+                
+                
+                    
+                if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
+                    self.killBomberman()
+                                
                                     
             pygame.display.update()
             clock.tick(30)
