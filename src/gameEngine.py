@@ -8,6 +8,7 @@ from threading import Thread
 import threading
 from pydispatch import dispatcher
 import math
+import random
 
 
 # Son las flechitas, se usan para el movimiento del bomberman
@@ -58,33 +59,37 @@ class GameEngine():
         self.background = background.Background(self.dimensions, self.game)
         self.cargar_imagen_bomba_controlador()
         self.loadImages()
-        self.diccionarioposicionesobstaculos = {'1': [5, 9, 10, 11],
-                                                '2': [3, 5, 7, 9, 11],
-                                                '3': [1, 4, 6, 7, 10, 11, 13],
-                                                '4': [0],
-                                                '5': [4, 6, 8, 10, 12],
-                                                '6': [1, 9],
-                                                '7': [1, 3, 4, 5, 10, 11, 13],
-                                                '8': [0],
-                                                '9': [2, 3, 4, 10],
-                                                '10': [3],
-                                                '11': [2, 5, 10],
-                                                '12': [3, 5, 7, 9, 11],
-                                                '13': [2, 13],
-                                                '14': [1, 3, 5, 7, 9, 11],
-                                                '15': [1, 2, 4],
-                                                '16': [1, 7, 9, 11],
-                                                '17': [1, 2, 4, 6, 7, 13],
-                                                '18': [1, 9, 11],
-                                                '19': [1, 2, 3, 6, 8, 9, 10, 12],
-                                                '20': [1, 3, 9],
-                                                '21': [1, 2, 3, 6, 8, 12],
-                                                '22': [1, 3, 9, 11],
-                                                '23': [1, 2, 3, 7, 13]
-                                                }
+        # self.diccionarioposicionesobstaculos = {'1': [5, 9, 10, 11],
+        #                                         '2': [3, 5, 7, 9, 11],
+        #                                         '3': [1, 4, 6, 7, 10, 11, 13],
+        #                                         '4': [],
+        #                                         '5': [4, 6, 8, 10, 12],
+        #                                         '6': [1, 9],
+        #                                         '7': [1, 3, 4, 5, 10, 11, 13],
+        #                                         '8': [],
+        #                                         '9': [2, 3, 4, 10],
+        #                                         '10': [3],
+        #                                         '11': [2, 5, 10],
+        #                                         '12': [3, 5, 7, 9, 11],
+        #                                         '13': [2, 13],
+        #                                         '14': [1, 3, 5, 7, 9, 11],
+        #                                         '15': [1, 2, 4],
+        #                                         '16': [1, 7, 9, 11],
+        #                                         '17': [1, 2, 4, 6, 7, 13],
+        #                                         '18': [1, 9, 11],
+        #                                         '19': [1, 2, 3, 6, 8, 9, 10, 12],
+        #                                         '20': [1, 3, 9],
+        #                                         '21': [1, 2, 3, 6, 8, 12],
+        #                                         '22': [1, 3, 9, 11],
+        #                                         '23': [1, 2, 3, 7, 13]
+        #                                         }
+        self.diccionarioposicionesobstaculos = self.generateRandomObstacles()
+        # print(self.diccionarioposicionesobstaculos)
         self.game.createObstacles(self.dimensions)   # Creo obstaculos para despues en reload background dibujarlos y alli setear el rect de cada uno
         self.crearCajasRompibles()
-        self.game.placeEnemies()
+        
+        self.game.placeEnemies(self.diccionarioposicionesobstaculos)
+        
         self.background.reloadEnemyRect()
         self.background.reloadBackground(self.dimensions)
         self.background.reloadBoxes()
@@ -116,7 +121,61 @@ class GameEngine():
                     pygame.display.update()
                     clock.tick(30)
         
+    def generateRandomObstacles(self):
+        
+        diccionarioObstaculos = {}
 
+        # 23 Columnas, en las impares no hay ningun bloque
+
+        sizeBloque = 37
+
+        # Ancho x Altura
+
+        ancho = self.dimensions[0]
+        altura = self.dimensions[1]
+
+        # Casteo a int ambos numeros
+        cantColumnas = math.floor(ancho / sizeBloque)
+        cantFilas = math.floor(altura / sizeBloque)
+
+        
+        # Populo el diccionario con la cantidad de columnas como clave
+        # y como significado la lista vacia que luego voy a llenar
+
+        for i in range(0, cantColumnas):
+            diccionarioObstaculos[str(i)] = []
+        
+        # Si es (par, par) hay un bloque rompible,
+        # esto quiere decir que si estoy en (2,2)
+        # (2,4) (4,2) etc ahi no puedo poner un bloque rompible
+        
+        # Es importante prohibir que ponga bloques donde aparece el 
+        # bomberman, estos serian 1: [1,2], 2:[1]
+        
+        posicionesProhibidas = {'1': [1,2],
+                                '2': [1]}
+
+        for i in range(0, cantColumnas):
+            for j in range(1, cantFilas):
+
+                # El rango va desde 1 ya que 0, serian
+                # los bloques no rompibles
+                if str(i) in posicionesProhibidas and j in posicionesProhibidas[str(i)]:
+                    pass
+                elif i % 2 == 0 & j % 2 == 0:
+                    # Caso (par, par)
+                    pass
+                else:
+                    # Caso puedo poner un bloque rompible
+                    # Voy a poner un 60% de probabilidad que haya un bloque
+
+                    numeroSeleccionado = random.randrange(1, 10, 1)
+
+                    if numeroSeleccionado <= 6:
+                        diccionarioObstaculos[str(i)].append(j)
+        
+        return diccionarioObstaculos
+        
     def gameOver(self):
         clock = pygame.time.Clock()
         while self.gameOverScreen:

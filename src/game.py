@@ -74,19 +74,69 @@ class Game():
     def getSalida(self):
         return self.salida
 
-    def placeEnemies(self):
-        self.enemigos.append(enemy.Enemy([39, 259],"vertical"))
-        self.enemigos.append(enemy.Enemy([111, 187],"horizontal"))
-        self.enemigos.append(enemy.Enemy([187, 40],"vertical"))
-        self.enemigos.append(enemy.Enemy([185, 335],"horizontal"))
-        self.enemigos.append(enemy.Enemy([484, 37],"horizontal"))
-        self.enemigos.append(enemy.Enemy([407, 148],"vertical"))
-        self.enemigos.append(enemy.Enemy([484, 400],"vertical"))
-        self.enemigos.append(enemy.Enemy([632, 400],"vertical"))
-        self.enemigos.append(enemy.Enemy([669, 487],"horizontal"))
-        self.enemigos.append(enemy.Enemy([780, 333],"vertical"))
-        self.enemigos.append(enemy.Enemy([777, 260],"horizontal"))
-        self.enemigos.append(enemy.Enemy([851, 400],"vertical"))
+    def placeEnemies(self, diccionarioObstaculos):
+
+        # Recorro el diccionario de obstaculos y pongo los enemigos si esta vacia
+        # de manera aleatoria
+        
+        sizeBloque = 37.3
+        cantFilasMax = 13
+        cantColumnas = 23
+
+        diccionarioDisponibles = {}
+
+        # Inicializo el diccionario de disponibles
+
+        for i in range(1, cantColumnas):
+            diccionarioDisponibles[str(i)] = []
+
+            
+        # Populo el diccionario de disponibles
+
+        for columna in diccionarioObstaculos:
+            
+            posicionesDisponibles = []
+            posicionesOcupadas = diccionarioObstaculos[columna]
+
+            for i in range(1, cantFilasMax):
+                if i in posicionesOcupadas:
+                    pass
+                else:
+                    posicionesDisponibles.append(i)
+            
+            diccionarioDisponibles[str(columna)] = posicionesDisponibles
+
+
+        # Ahora pongo los enemigos en las posiciones disponibles, siempre
+        # y cuando no sea (par, par) y siempre y cuando no sean los bordes del juego
+
+        # Es importante prohibir que pongan enemigos donde aparece el 
+        # bomberman, estos serian 1: [1,2], 2:[1], tambien los bordes de la
+        # pantalla
+        
+        posicionesProhibidas = {'0':[0,1,2,3,4,5,6,7,8,9,10,11,12,13],
+                                '1': [1,2],
+                                '2': [1],
+                                '24': [0,1,2,3,4,5,6,7,8,9,10,11,12,13]}
+
+        for columna in diccionarioDisponibles:
+
+            posicionesDisponibles = diccionarioDisponibles[columna]
+
+
+            for posicion in posicionesDisponibles:
+                
+                if columna in posicionesProhibidas and posicion in posicionesProhibidas[columna]:
+                    pass    
+                elif posicion % 2 == 0 and int(columna) % 2 == 0:
+                    pass
+                else:
+                    numeroSeleccionado = random.randrange(1, 11, 1)
+
+                    if numeroSeleccionado <= 2:
+                        self.enemigos.append(enemy.Enemy([int(columna) * sizeBloque, posicion * sizeBloque], "vertical", "vertical1"))
+
+
 
     def createBackground(self):
         pass
@@ -256,31 +306,31 @@ class Game():
 # al instanciarlos les pasa su posicion y como va a ser su movimiento pre
 # establecido.
 
-    def placeEnemies(self):
-        self.enemigos.append(enemy.Enemy([39, 259],
-                                                  "vertical", "vertical1"))
-        self.enemigos.append(enemy.Enemy([111, 187],
-                                                  "horizontal", "horizontal1"))
-        self.enemigos.append(enemy.Enemy([187, 40],
-                                                  "vertical", "vertical1"))
-        self.enemigos.append(enemy.Enemy([185, 335],
-                                                  "horizontal", "horizontal1"))
-        self.enemigos.append(enemy.Enemy([484, 37],
-                                                  "horizontal", "horizontal1"))
-        self.enemigos.append(enemy.Enemy([407, 148],
-                                                  "vertical", "vertical1"))
-        self.enemigos.append(enemy.Enemy([484, 400],
-                                                  "vertical", "vertical1"))
-        self.enemigos.append(enemy.Enemy([632, 400],
-                                                  "vertical", "vertical1"))
-        self.enemigos.append(enemy.Enemy([669, 487],
-                                                  "horizontal", "horizontal1"))
-        self.enemigos.append(enemy.Enemy([780, 333],
-                                                  "vertical", "vertical1"))
-        self.enemigos.append(enemy.Enemy([777, 260],
-                                                  "horizontal", "horizontal1"))
-        self.enemigos.append(enemy.Enemy([851, 400],
-                                                  "vertical", "vertical1"))
+    # def placeEnemies(self):
+    #     self.enemigos.append(enemy.Enemy([39, 259],
+    #                                               "vertical", "vertical1"))
+    #     self.enemigos.append(enemy.Enemy([111, 187],
+    #                                               "horizontal", "horizontal1"))
+    #     self.enemigos.append(enemy.Enemy([187, 40],
+    #                                               "vertical", "vertical1"))
+    #     self.enemigos.append(enemy.Enemy([185, 335],
+    #                                               "horizontal", "horizontal1"))
+    #     self.enemigos.append(enemy.Enemy([484, 37],
+    #                                               "horizontal", "horizontal1"))
+    #     self.enemigos.append(enemy.Enemy([407, 148],
+    #                                               "vertical", "vertical1"))
+    #     self.enemigos.append(enemy.Enemy([484, 400],
+    #                                               "vertical", "vertical1"))
+    #     self.enemigos.append(enemy.Enemy([632, 400],
+    #                                               "vertical", "vertical1"))
+    #     self.enemigos.append(enemy.Enemy([669, 487],
+    #                                               "horizontal", "horizontal1"))
+    #     self.enemigos.append(enemy.Enemy([780, 333],
+    #                                               "vertical", "vertical1"))
+    #     self.enemigos.append(enemy.Enemy([777, 260],
+    #                                               "horizontal", "horizontal1"))
+    #     self.enemigos.append(enemy.Enemy([851, 400],
+    #                                               "vertical", "vertical1"))
 
 # Cuando se rompa una caja se va a llamar(dependiendo del numero que salga a
 # la creacion de alguno de estos powerups que luego seran bliteados por la 
