@@ -124,17 +124,47 @@ class Game():
             posicionesDisponibles = diccionarioDisponibles[columna]
 
 
-            for posicion in posicionesDisponibles:
+            for fila in posicionesDisponibles:
                 
-                if columna in posicionesProhibidas and posicion in posicionesProhibidas[columna]:
+                if columna in posicionesProhibidas and fila in posicionesProhibidas[columna]:
                     pass    
-                elif posicion % 2 == 0 and int(columna) % 2 == 0:
+                elif fila % 2 == 0 and int(columna) % 2 == 0:
                     pass
                 else:
-                    numeroSeleccionado = random.randrange(1, 11, 1)
+                    numeroSeleccionado = random.randrange(1, 13, 1)
+
+
 
                     if numeroSeleccionado <= 2:
-                        self.enemigos.append(enemy.Enemy([int(columna) * sizeBloque, posicion * sizeBloque], "vertical", "vertical1"))
+                        posicionEnemigo = [int(columna) * sizeBloque, fila * sizeBloque]
+                        tipoDeMovimiento = self.determinarMovimientoEnemigo(int(columna), int(fila), diccionarioDisponibles)
+                        self.enemigos.append(enemy.Enemy(posicionEnemigo, tipoDeMovimiento[0], tipoDeMovimiento[1]))
+
+
+
+
+    def determinarMovimientoEnemigo(self, columna, fila, diccionarioDisponibles):
+        # Tengo que verificar para donde se puede mover el enemigo
+
+        # Verifico si misma columna y fila de arriba esta libre
+       
+        filaArriba = fila - 1
+        filaAbajo = fila + 1
+
+        columnaIzquierda = columna - 1
+        columnaDerecha = columna + 1
+
+        if fila in diccionarioDisponibles[str(columnaDerecha)]:
+            return ("horizontal", "horizontal1")
+        if fila in diccionarioDisponibles[str(columnaIzquierda)]:
+            return ("horizontal", "horizontal1")
+        
+        if filaArriba in diccionarioDisponibles[str(columna)]:
+            return ("vertical", "vertical1")
+        if filaAbajo in diccionarioDisponibles[str(columna)]:
+            return ("vertical", "vertical1")
+
+
 
 
 

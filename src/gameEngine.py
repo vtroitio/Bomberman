@@ -232,7 +232,7 @@ class GameEngine():
             
             self.game.createBoxesRects()
 
-            self.game.placeEnemies()
+            self.game.placeEnemies(self.diccionarioposicionesobstaculos)
             self.game.createEnemiesRects()
 
         else:
