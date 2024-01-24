@@ -485,7 +485,12 @@ class GameEngine():
                             # Cambio su animacion
                             self.game.setAnimacionEnemigo(i)
                             
+                    # Colision de bomberman con enemigos
+                    
+                    playerrect = self.game.getPlayerRect()
 
+                    if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
+                        self.killBomberman()
                             
                        
 
@@ -499,7 +504,7 @@ class GameEngine():
 
 
                         
-            playerrect = self.game.getPlayerRect()
+            
 
 
                    
@@ -584,8 +589,7 @@ class GameEngine():
                 
                 
                     
-                if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
-                    self.killBomberman()
+
                                 
                                     
             pygame.display.update()
