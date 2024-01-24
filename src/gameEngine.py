@@ -265,6 +265,7 @@ class GameEngine():
         
         # message es tupla = (tipoDePowerUp)
 
+        print("Entro a borrar PowerUp Y el message es: " + str(message))
         if message == 'velocidad':
             self.game.borrarSpeedUp(0)
         elif message == 'bomba':
