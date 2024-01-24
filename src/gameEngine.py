@@ -526,8 +526,27 @@ class GameEngine():
                         
                         
                         # Manejo de colisiones con cajas
-                            
-                        if len(playerrect.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
+                        print("El player rect es: " + str(playerrect))
+
+                        playerRectFuturo = playerrect
+
+                        if event.key == 1073741906:
+                            #Arriba
+                            playerRectFuturo[1] = playerRectFuturo[1] - self.game.getBombermanSpeed()
+                        elif event.key == 1073741905:
+                            #Abajo
+                            playerRectFuturo[1] = playerRectFuturo[1] + self.game.getBombermanSpeed()
+                        elif event.key == 1073741904:
+                            #Izquierda
+                            playerRectFuturo[0] = playerRectFuturo[0] - self.game.getBombermanSpeed()
+                        elif event.key == 1073741903:
+                            #Derecha
+                            playerRectFuturo[0] = playerRectFuturo[0] + self.game.getBombermanSpeed()
+
+                        
+                        print("El player rect futuro es: " + str(playerRectFuturo))
+
+                        if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             # Si hay colision 
                             self.game.setBombermanPosition()
                         else:
