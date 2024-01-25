@@ -89,12 +89,13 @@ class Player(DynamicObject):
         # print("La posicion actual es: " + str(self.position))
         # print("La posicion de respaldo es: " + str(self.positionrespaldo))
 
-        self.position[0] = self.positionrespaldo[0]
-        self.position[1] = self.positionrespaldo[1]
+        pass
+        # self.position[0] = self.positionrespaldo[0]
+        # self.position[1] = self.positionrespaldo[1]
 
-        # Hitbox y colisiones
-        self.x = self.position[0]
-        self.y = self.position[1]
+        # # Hitbox y colisiones
+        # self.x = self.position[0]
+        # self.y = self.position[1]
 
         # print("La posicion post colision es: " + str(self.position))
 
