@@ -79,10 +79,12 @@ class Background():
     def reloadBomberman(self, direction, contador):
         self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
 
+
 # Rects
 
     def reloadBombermanRect(self):
         rect = pygame.Rect(self.game.getPlayerHitbox())
+        pygame.draw.rect(self.screen, (255, 0, 0), self.game.getPlayerHitbox(), 1)
         self.game.setPlayerRect(rect)
 
     def reloadEnemyRect(self):

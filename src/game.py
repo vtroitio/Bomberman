@@ -31,6 +31,7 @@ class Game():
         self.lalistaderectscajas = []
 
         self.bombas = []
+        self.rectBombas = []
         
         self.lalistadepowerUpsSpeed = []
         self.lalistadepowerUpsVida = []
@@ -304,16 +305,26 @@ class Game():
 
         
         pos =  self.obtenerPosicionCentrada(self.getBombermanPosition())
+        bomb = bomba.Bomb(pos, id_bomba)
         
-        self.bombas.append(bomba.Bomb(pos, id_bomba))
+        self.bombas.append(bomb)
+
+        return bomb
+
+    def getBombRects(self):
+        return self.rectBombas
+
+    def addBombRect(self, rect):
+        self.rectBombas.append(rect)
 
     def sacar_bomba(self, idbomba):
-        for i in range(len(self.bombas)):
-            for bomba in self.bombas:
 
+        for bomba in self.bombas:
 
-                if bomba.getId() == idbomba:
-                    self.bombas.remove(bomba)
+            if bomba.getId() == idbomba:
+                self.bombas.remove(bomba)
+        
+        self.rectBombas.pop()
 
     def getBombPos(self, id):
         
@@ -452,8 +463,8 @@ class Game():
         return self.player.lifes
 
 # Setters
-    def setBombermanPosition(self):
-        self.player.setBombermanPosition()
+    def setBombermanPosition(self, direccion):
+        self.player.setBombermanPosition(direccion)
 
     def setBombermanPosicionDeInicio(self):
         self.player.setPosition([40, 40])
@@ -668,9 +679,7 @@ class Game():
         return self.bombas
     
 # Auxiliares
-
     def obtenerPosicionCentrada(self, pos):
-
         celda = 37
 
         celdaX = round(pos[0] / celda) 

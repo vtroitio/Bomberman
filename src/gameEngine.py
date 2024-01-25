@@ -103,7 +103,7 @@ class GameEngine():
         self.BOMBAS_USANDO = []
         self.BOMBAS_DISPONIBLES = [1]
         self.bombas = 1
-
+        self.byPassRectBomba = None
 
         self.game.crearSalida()
 
@@ -371,7 +371,8 @@ class GameEngine():
             if enemiesRects[i].collidelistall(rectsExplosion):
                 enemigosABorrar.append(i)
                 
-        
+        print("La cantidad de enemigos a borrar son: " + str(len(enemigosABorrar)))
+
         for i in range(0, len(enemigosABorrar)):
             self.game.borrarEnemigo(enemigosABorrar[i])
 
@@ -473,8 +474,9 @@ class GameEngine():
                     
                     enemiesRects = self.game.getEnemyRect()
 
+
                     for i in range(0, len(enemiesRects)):
-                        if enemiesRects[i].collidelistall(self.game.getListaDeRects()) or enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas()): 
+                        if enemiesRects[i].collidelistall(self.game.getListaDeRects()) or enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas()) or enemiesRects[i].collidelistall(self.game.getBombRects()): 
                          
                             # Cambio la direccion a la que apunta, la direccion vale 1 o -1
                             self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i)
@@ -526,7 +528,6 @@ class GameEngine():
                         
                         
                         # Manejo de colisiones con cajas
-                        print("El player rect es: " + str(playerrect))
 
                         playerRectFuturo = playerrect
 
@@ -544,14 +545,28 @@ class GameEngine():
                             playerRectFuturo[0] = playerRectFuturo[0] + self.game.getBombermanSpeed()
 
                         
-                        print("El player rect futuro es: " + str(playerRectFuturo))
-
-                        if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerrect.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
+                        if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             # Si hay colision 
-                            self.game.setBombermanPosition()
+                            self.game.setBombermanPosition((CONTROLES[str(event.key)]))
                         else:
                             # No hay colision
-                            self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                            rectsBombas = self.game.getBombRects()
+                            
+                            # Si la bomba que acabo de poner esta colisionando
+                            if self.byPassRectBomba != None:
+                                if self.byPassRectBomba.colliderect(playerrect):
+
+                                    # Movelo igual porque sino me quedo bug
+                                    self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                                else: 
+                                    # Si dejo de colisionar borrame el rectActual de bypass
+                                    self.byPassRectBomba = None
+                            else:
+                                if rectsBombas != [] and playerRectFuturo.collidelistall(rectsBombas):
+                                    pass
+                                else:
+                                    self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                                
                     
                     
 
@@ -587,10 +602,15 @@ class GameEngine():
                             if self.game.getSalidaRect().colliderect(playerrect):
                                 self.winScreen = True
                                 
+                
+                # Si presiono el espacio (poner bomba)
+                
+                
                 if event.type == pygame.KEYUP:
                     if str(event.key) == '32':            
 
                         
+                        # Si la cantidad de bombas en uso es menor a las disponibles
                         if len(self.BOMBAS_USANDO) < self.bombas:
                             
 
@@ -598,10 +618,17 @@ class GameEngine():
                             numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
                             self.BOMBAS_DISPONIBLES.remove(numero_bomba)
                             self.BOMBAS_USANDO.append(numero_bomba)
-                            self.game.poner_bomba(numero_bomba)
+                            
+
+                            bomba = self.game.poner_bomba(numero_bomba)
+                            rectBomba = pygame.Rect(bomba.getHitbox())
+                            
+                            bomba.setRect(rectBomba)
+                            self.game.addBombRect(rectBomba)
+                            
+                            self.byPassRectBomba = rectBomba
                             
                             self.lista_threads.append(threadBomba(numero_bomba, self.game))
-                            
                             self.lista_threads[-1].start()
                             
                             break

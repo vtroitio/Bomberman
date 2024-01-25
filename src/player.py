@@ -84,12 +84,19 @@ class Player(DynamicObject):
     def setSpeed(self, speedAmmount):
         self.speed = speedAmmount
 
-    def setBombermanPosition(self):
+    def setBombermanPosition(self, direccion):
         # print("Hubo colision del bomberman, le asigno la posicion de respaldo")
         # print("La posicion actual es: " + str(self.position))
         # print("La posicion de respaldo es: " + str(self.positionrespaldo))
 
-        pass
+        if direccion == [0, -1]:
+            self.direccion = "up"
+        elif direccion == [0, 1]:
+            self.direccion = "down"
+        elif direccion == [1, 0]:
+            self.direccion = "right"
+        elif direccion == [-1, 0]:
+            self.direccion = "left"
         # self.position[0] = self.positionrespaldo[0]
         # self.position[1] = self.positionrespaldo[1]
 
