@@ -530,23 +530,34 @@ class GameEngine():
                         # Manejo de colisiones con cajas
 
                         playerRectFuturo = playerrect
+                        direccion = None
 
                         if event.key == 1073741906:
                             #Arriba
                             playerRectFuturo[1] = playerRectFuturo[1] - self.game.getBombermanSpeed()
+                            direccion = 'arriba'
                         elif event.key == 1073741905:
                             #Abajo
                             playerRectFuturo[1] = playerRectFuturo[1] + self.game.getBombermanSpeed()
+                            direccion = 'abajo'
                         elif event.key == 1073741904:
                             #Izquierda
                             playerRectFuturo[0] = playerRectFuturo[0] - self.game.getBombermanSpeed()
+                            direccion = 'izquierda'
                         elif event.key == 1073741903:
                             #Derecha
                             playerRectFuturo[0] = playerRectFuturo[0] + self.game.getBombermanSpeed()
-
+                            direccion = 'derecha'
                         
                         if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
-                            # Si hay colision 
+                            # Si hay colision
+                            
+                            
+                            # Reviso si la colision es una esquina
+                            self.game.esMovimientoPredictivo(direccion)
+                            
+                            
+                            
                             self.game.setBombermanPosition((CONTROLES[str(event.key)]))
                         else:
                             # No hay colision
@@ -613,30 +624,26 @@ class GameEngine():
                         # Si la cantidad de bombas en uso es menor a las disponibles
                         if len(self.BOMBAS_USANDO) < self.bombas:
                             
-
+                            # Esto significa que saliste de arriba de la bomba que pusiste
+                            # Implica que no se pueden poner dos bombas en el mismo lugar
+                            if self.byPassRectBomba == None:
                             
-                            numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
-                            self.BOMBAS_DISPONIBLES.remove(numero_bomba)
-                            self.BOMBAS_USANDO.append(numero_bomba)
-                            
-
-                            bomba = self.game.poner_bomba(numero_bomba)
-                            rectBomba = pygame.Rect(bomba.getHitbox())
-                            
-                            bomba.setRect(rectBomba)
-                            self.game.addBombRect(rectBomba)
-                            
-                            self.byPassRectBomba = rectBomba
-                            
-                            self.lista_threads.append(threadBomba(numero_bomba, self.game))
-                            self.lista_threads[-1].start()
-                            
-                            break
-                
-                
-                    
-
+                                numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
+                                self.BOMBAS_DISPONIBLES.remove(numero_bomba)
+                                self.BOMBAS_USANDO.append(numero_bomba)
                                 
+
+                                bomba = self.game.poner_bomba(numero_bomba)
+                                rectBomba = pygame.Rect(bomba.getHitbox())
+                                
+                                bomba.setRect(rectBomba)
+                                self.game.addBombRect(rectBomba)
+                                
+                                self.byPassRectBomba = rectBomba
+                                
+                                self.lista_threads.append(threadBomba(numero_bomba, self.game))
+                                self.lista_threads[-1].start()
+                            
                                     
             pygame.display.update()
             clock.tick(30)

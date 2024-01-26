@@ -85,10 +85,22 @@ class Player(DynamicObject):
         self.speed = speedAmmount
 
     def setBombermanPosition(self, direccion):
-        # print("Hubo colision del bomberman, le asigno la posicion de respaldo")
-        # print("La posicion actual es: " + str(self.position))
-        # print("La posicion de respaldo es: " + str(self.positionrespaldo))
+        
+        # Tengo que agregar una especie de movimiento en diagonal para hacer mas fluido
+        # el movimiento
 
+        # Para esto tengo que ver 2 cosas, que la posicion a la cual lo voy a mover en diagonal
+        # este libre y a su vez que la colision se haya producido en la esquina del bloque.
+        
+        
+        
+        
+        
+        
+        
+        
+        # Cambio la direccion para cambiar el sprite
+        
         if direccion == [0, -1]:
             self.direccion = "up"
         elif direccion == [0, 1]:
@@ -97,14 +109,6 @@ class Player(DynamicObject):
             self.direccion = "right"
         elif direccion == [-1, 0]:
             self.direccion = "left"
-        # self.position[0] = self.positionrespaldo[0]
-        # self.position[1] = self.positionrespaldo[1]
-
-        # # Hitbox y colisiones
-        # self.x = self.position[0]
-        # self.y = self.position[1]
-
-        # print("La posicion post colision es: " + str(self.position))
 
 
     def setPlayerRect(self, rect):

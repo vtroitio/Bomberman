@@ -143,6 +143,15 @@ class Game():
 
 
 
+    def esMovimientoPredictivo(self, direccion):
+        # Si la direccion es abajo o arriba el movimiento puede ser der, izq
+
+        
+        pass
+        
+        # Si la direccion es derecha o izquierda el moviemnto puede ser abajo o arriba
+
+
 
     def determinarMovimientoEnemigo(self, columna, fila, diccionarioDisponibles):
         # Tengo que verificar para donde se puede mover el enemigo
