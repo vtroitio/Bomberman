@@ -265,7 +265,7 @@ class GameEngine():
         
         # message es tupla = (tipoDePowerUp)
 
-        print("Entro a borrar PowerUp Y el message es: " + str(message))
+
         if message == 'velocidad':
             self.game.borrarSpeedUp(0)
         elif message == 'bomba':
@@ -371,7 +371,7 @@ class GameEngine():
             if enemiesRects[i].collidelistall(rectsExplosion):
                 enemigosABorrar.append(i)
                 
-        print("La cantidad de enemigos a borrar son: " + str(len(enemigosABorrar)))
+
 
         for i in range(0, len(enemigosABorrar)):
             self.game.borrarEnemigo(enemigosABorrar[i])
@@ -535,30 +535,25 @@ class GameEngine():
                         if event.key == 1073741906:
                             #Arriba
                             playerRectFuturo[1] = playerRectFuturo[1] - self.game.getBombermanSpeed()
-                            direccion = 'arriba'
+                            direccion = 'up'
                         elif event.key == 1073741905:
                             #Abajo
                             playerRectFuturo[1] = playerRectFuturo[1] + self.game.getBombermanSpeed()
-                            direccion = 'abajo'
+                            direccion = 'down'
                         elif event.key == 1073741904:
                             #Izquierda
                             playerRectFuturo[0] = playerRectFuturo[0] - self.game.getBombermanSpeed()
-                            direccion = 'izquierda'
+                            direccion = 'left'
                         elif event.key == 1073741903:
                             #Derecha
                             playerRectFuturo[0] = playerRectFuturo[0] + self.game.getBombermanSpeed()
-                            direccion = 'derecha'
+                            direccion = 'right'
                         
                         if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             # Si hay colision
-                            
-                            
-                            # Reviso si la colision es una esquina
-                            self.game.esMovimientoPredictivo(direccion)
-                            
-                            
-                            
-                            self.game.setBombermanPosition((CONTROLES[str(event.key)]))
+                            print("hay colision")                              
+                            self.game.setBombermanPosition(direccion, (CONTROLES[str(event.key)]))
+                        
                         else:
                             # No hay colision
                             rectsBombas = self.game.getBombRects()
@@ -568,7 +563,7 @@ class GameEngine():
                                 if self.byPassRectBomba.colliderect(playerrect):
 
                                     # Movelo igual porque sino me quedo bug
-                                    self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                                    self.game.givePosition((CONTROLES[str(event.key)]))
                                 else: 
                                     # Si dejo de colisionar borrame el rectActual de bypass
                                     self.byPassRectBomba = None
@@ -576,7 +571,7 @@ class GameEngine():
                                 if rectsBombas != [] and playerRectFuturo.collidelistall(rectsBombas):
                                     pass
                                 else:
-                                    self.game.givePosition((CONTROLES[str(event.key)]), self.background.screen)
+                                    self.game.givePosition((CONTROLES[str(event.key)]))
                                 
                     
                     

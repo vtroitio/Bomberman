@@ -55,6 +55,7 @@ class Game():
         self.salidaRect = None
         self.cajaConSalida = None
 
+        self.direccionDiagonal = None
 
 
     def crearSalida(self):
@@ -143,15 +144,29 @@ class Game():
 
 
 
-    def esMovimientoPredictivo(self, direccion):
-        # Si la direccion es abajo o arriba el movimiento puede ser der, izq
 
+    def bombermanEntrePosiciones(self, rangoDePosiciones, control):
+
+        for i in range(0, len(rangoDePosiciones)):
+            yBomberman = self.getBombermanPosition()[1]
+            
+            if yBomberman >= rangoDePosiciones[i][0] and yBomberman <= rangoDePosiciones[i][1]:
+                print("En esquina")
+                
+                
+                if i % 2 == 0:
+                    #Arriba
+                    control[1] = -1
+                    self.direccionDiagonal = control
+                else:
+                    #Abajo 
+                    control[1] = 1
+                    self.direccionDiagonal = control
+                
+                return True
         
-        pass
-        
-        # Si la direccion es derecha o izquierda el moviemnto puede ser abajo o arriba
-
-
+        print("Devuelvo false")
+        return False
 
     def determinarMovimientoEnemigo(self, columna, fila, diccionarioDisponibles):
         # Tengo que verificar para donde se puede mover el enemigo
@@ -445,8 +460,8 @@ class Game():
 
 # MOVIMIENTO
 
-    def givePosition(self, position, ventana):
-        self.player.move(position, ventana)
+    def givePosition(self, position):
+        self.player.move(position)
 # Geters
 
     def getBombermanPosition(self):
@@ -472,8 +487,24 @@ class Game():
         return self.player.lifes
 
 # Setters
-    def setBombermanPosition(self, direccion):
+    def setBombermanPosition(self, direccion, control):
+        
         self.player.setBombermanPosition(direccion)
+        
+        # Voy a verificar el choque con esquinas a partir de las dimensiones del mapa
+        # Lo cual quiere decir que si se esta movimiendo a la derecha
+        # en una determinada altura (en esa altura siempre va a estar colisionando
+        # con una esquina) voy a hacer que se mueva diagonalmente. Lo ideal seria
+        # que esta altura se calculara automaticamente tomando en cuenta
+        # self.dimensions de gameEngine
+
+        posicionesEsquinas = {"right" : [(47,57, "up"), (97,107,"down")]}
+
+        if direccion == "right" and self.bombermanEntrePosiciones(posicionesEsquinas["right"], control):
+            self.player.move(self.direccionDiagonal)
+        
+        # Si la direccion es derecha o izquierda el moviemnto puede ser abajo o arriba
+        
 
     def setBombermanPosicionDeInicio(self):
         self.player.setPosition([40, 40])
