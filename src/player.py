@@ -28,6 +28,8 @@ class Player(DynamicObject):
     def move(self, direccion):
         self.positionrespaldo = copy.deepcopy(self.position)
 
+        print("La direccion es: " + str(direccion))
+
         for index in range(len(self.position)):
 
             # Movimiento
@@ -37,7 +39,7 @@ class Player(DynamicObject):
             self.y = self.position[1]
             self.hitbox = (self.x, self.y, self.width, self.height)
 
-            print("La posicion del bomberman es: " + str(self.position))
+            
             if direccion == [0, -1]:
                 self.direccion = "up"
             elif direccion == [0, 1]:
@@ -47,6 +49,7 @@ class Player(DynamicObject):
             elif direccion == [-1, 0]:
                 self.direccion = "left"
 
+        print("La posicion del bomberman es: " + str(self.position))
 
 # Getters
 
@@ -85,7 +88,7 @@ class Player(DynamicObject):
     def setSpeed(self, speedAmmount):
         self.speed = speedAmmount
 
-    def setBombermanPosition(self, direccion):
+    def setBombermanDireccion(self, direccion):
         self.direccion = direccion
 
     def setPlayerRect(self, rect):

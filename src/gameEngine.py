@@ -551,9 +551,12 @@ class GameEngine():
                         
                         if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             # Si hay colision
-                            print("hay colision")                              
-                            self.game.setBombermanPosition(direccion, (CONTROLES[str(event.key)]))
-                        
+                            print("hay colision")
+
+                            if len(playerRectFuturo.collidelistall(self.game.getRectsBordes())) > 0:
+                                self.game.setBombermanPosition(direccion, True)
+                            else:
+                                self.game.setBombermanPosition(direccion, False)
                         else:
                             # No hay colision
                             rectsBombas = self.game.getBombRects()
@@ -563,6 +566,8 @@ class GameEngine():
                                 if self.byPassRectBomba.colliderect(playerrect):
 
                                     # Movelo igual porque sino me quedo bug
+                                    print("Ejecuto givePostion")
+                                    
                                     self.game.givePosition((CONTROLES[str(event.key)]))
                                 else: 
                                     # Si dejo de colisionar borrame el rectActual de bypass
@@ -571,6 +576,8 @@ class GameEngine():
                                 if rectsBombas != [] and playerRectFuturo.collidelistall(rectsBombas):
                                     pass
                                 else:
+                                    print("Ejecuto givePostion")
+                                    print(str(CONTROLES[str(event.key)]))
                                     self.game.givePosition((CONTROLES[str(event.key)]))
                                 
                     

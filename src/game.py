@@ -55,7 +55,11 @@ class Game():
         self.salidaRect = None
         self.cajaConSalida = None
 
+        self.posicionesEsquinas = self.inicializarPosicionesEsquinas(6, 11)
         self.direccionDiagonal = None
+        self.bordes = []
+        self.rectBordes = []
+        
 
 
     def crearSalida(self):
@@ -145,27 +149,34 @@ class Game():
 
 
 
-    def bombermanEntrePosiciones(self, rangoDePosiciones, control):
+    def bombermanEntrePosiciones(self, rangoDePosiciones, direccion):
 
         for i in range(0, len(rangoDePosiciones)):
-            yBomberman = self.getBombermanPosition()[1]
             
-            if yBomberman >= rangoDePosiciones[i][0] and yBomberman <= rangoDePosiciones[i][1]:
+            if direccion == [0,1] or direccion == [0,-1]:
+                axisBomberman = self.getBombermanPosition()[0]
+                indice = 0
+            else:
+                axisBomberman = self.getBombermanPosition()[1]
+                indice = 1
+            
+            # Si el bomberman se encuentra en determinada altura
+            if axisBomberman >= rangoDePosiciones[i][0] and axisBomberman <= rangoDePosiciones[i][1]:
                 print("En esquina")
                 
                 
                 if i % 2 == 0:
                     #Arriba
-                    control[1] = -1
-                    self.direccionDiagonal = control
+                    direccion[indice] = -1
+                    self.direccionDiagonal = direccion
                 else:
                     #Abajo 
-                    control[1] = 1
-                    self.direccionDiagonal = control
+                    direccion[indice] = 1
+                    self.direccionDiagonal = direccion
                 
                 return True
         
-        print("Devuelvo false")
+
         return False
 
     def determinarMovimientoEnemigo(self, columna, fila, diccionarioDisponibles):
@@ -424,16 +435,23 @@ class Game():
         WidthHeightObstacle = 37  # Tamaño del bloque utilizado
 
         for i in range(0, int((dimensions[0] / WidthHeightObstacle)) + 1):  # De 0 a 26
-
-            self.LaListaDeObstaculos.append(obstacles.Obstacle(i * WidthHeightObstacle, 0))  # Creo los bloques de la fila de arriba
-
-            self.LaListaDeObstaculos.append(obstacles.Obstacle(i * WidthHeightObstacle, dimensions[1] - WidthHeightObstacle))  # Creo los bloques de la fila de abajo
+            bloqueArriba = obstacles.Obstacle(i * WidthHeightObstacle, 0)
+            self.LaListaDeObstaculos.append(bloqueArriba)  # Creo los bloques de la fila de arriba
+            self.bordes.append(bloqueArriba)
+            
+            bloqueAbajo = obstacles.Obstacle(i * WidthHeightObstacle, dimensions[1] - WidthHeightObstacle)
+            self.LaListaDeObstaculos.append(bloqueAbajo)  # Creo los bloques de la fila de abajo
+            self.bordes.append(bloqueAbajo)
 
         for i in range(0, int((dimensions[1] / WidthHeightObstacle)) + 1):  # De 0 a 16
+            
+            bloqueIzquierda = obstacles.Obstacle(0, i * WidthHeightObstacle)
+            self.LaListaDeObstaculos.append(bloqueIzquierda)  # Creo los bloques de las columnas de la izquierda
+            self.bordes.append(bloqueIzquierda)
 
-            self.LaListaDeObstaculos.append(obstacles.Obstacle(0, i * WidthHeightObstacle))  # Creo los bloques de las columnas de la izquierda
-
-            self.LaListaDeObstaculos.append(obstacles.Obstacle(dimensions[0] - WidthHeightObstacle, i * WidthHeightObstacle))  # Creo los bloques de las columnas de la derecha
+            bloqueDerecha = obstacles.Obstacle(dimensions[0] - WidthHeightObstacle, i * WidthHeightObstacle)
+            self.LaListaDeObstaculos.append(bloqueDerecha)  # Creo los bloques de las columnas de la derecha
+            self.bordes.append(bloqueDerecha)
 
         for x in range(1, int((dimensions[0] / (WidthHeightObstacle * 2))) + 1):  # De 1 a 13
             for y in range(1, int((dimensions[1]) / (WidthHeightObstacle * 2)) + 1):  # De 1 a 8
@@ -449,6 +467,8 @@ class Game():
             self.lalistaderectsenemigos.append(enemy.getEnemyRect())
         for cajas in self.lalistadecajas:
             self.lalistaderectscajas.append(cajas.getObstacleRect())
+        for obstaculo in self.bordes:
+            self.rectBordes.append(obstaculo.getObstacleRect())
 
     def createEnemiesRects(self):
         for enemy in self.enemigos:
@@ -487,9 +507,62 @@ class Game():
         return self.player.lifes
 
 # Setters
-    def setBombermanPosition(self, direccion, control):
+    
+    def inicializarPosicionesEsquinas(self, pilaresPorColumna, pilaresPorFila):
+        posicionesEsquinas = {"right": [], "left": [], "up": [], "down": []}
+
+        startingPosition = 47
+
+
+        for i in range(0, pilaresPorColumna):
+
+            
+            offsetEsquinas = 50
+
+            tuplaRight = (startingPosition, startingPosition + 10, "up")
+            posicionesEsquinas["right"].append(tuplaRight)
+
+            tuplaRight = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "down")
+            posicionesEsquinas["right"].append(tuplaRight)
+
+
+            tuplaLeft = (startingPosition, startingPosition + 10, "up")
+            posicionesEsquinas["left"].append(tuplaLeft)
+
+            tuplaLeft = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "down")
+            posicionesEsquinas["left"].append(tuplaLeft)
+            
+            startingPosition = startingPosition + 75
+
+
+
+        startingPosition = 47
         
-        self.player.setBombermanPosition(direccion)
+        for i in range(0, pilaresPorFila):
+
+            offsetEsquinas = 50
+
+            tuplaUp = (startingPosition, startingPosition + 10, "left")
+            posicionesEsquinas["up"].append(tuplaUp) 
+            
+            tuplaUp = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "right")
+            posicionesEsquinas["up"].append(tuplaUp) 
+
+            tuplaDown = (startingPosition, startingPosition + 10, "left")
+            posicionesEsquinas["down"].append(tuplaDown) 
+
+            tuplaDown = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "right")
+            posicionesEsquinas["down"].append(tuplaDown) 
+
+            startingPosition = startingPosition + 75
+        
+                
+        return posicionesEsquinas
+
+    def setBombermanPosition(self, direccion, esBorde):
+        
+
+        self.player.setBombermanDireccion(direccion)
         
         # Voy a verificar el choque con esquinas a partir de las dimensiones del mapa
         # Lo cual quiere decir que si se esta movimiendo a la derecha
@@ -498,10 +571,19 @@ class Game():
         # que esta altura se calculara automaticamente tomando en cuenta
         # self.dimensions de gameEngine
 
-        posicionesEsquinas = {"right" : [(47,57, "up"), (97,107,"down")]}
+        # posicionesEsquinas = {"right" : [(47,57, "up"), (97,107,"down")]}
 
-        if direccion == "right" and self.bombermanEntrePosiciones(posicionesEsquinas["right"], control):
-            self.player.move(self.direccionDiagonal)
+        # Inicializo el diccionario
+
+        
+        if not esBorde:        
+        
+            if direccion == "right" and self.bombermanEntrePosiciones(self.posicionesEsquinas["right"], [1,0]):
+                self.player.move(self.direccionDiagonal)
+            elif direccion == "left" and self.bombermanEntrePosiciones(self.posicionesEsquinas["right"], [-1,0]):
+                self.player.move(self.direccionDiagonal)
+            elif direccion == "down" and self.bombermanEntrePosiciones(self.posicionesEsquinas["down"], [0,1]):
+                self.player.move(self.direccionDiagonal)
         
         # Si la direccion es derecha o izquierda el moviemnto puede ser abajo o arriba
         
@@ -524,6 +606,12 @@ class Game():
     def setBombermanVidas(self, vida):
         self.player.setLifes(vida)
 
+    def getRectsBordes(self):
+        return self.rectBordes
+
+    def getBordes(self):
+        return self.bordes
+    
 # El movimiento del enemigo funciona de forma que al que lo
 # que hace es revisar el self.movimiento del enemigo para
 # saber si debe moverse vertical o horizontalmente y lo mueve

@@ -42,11 +42,9 @@ class Background():
             
             self.screen.blit(self.bomba, posOffset)
 
-    def reloadBackground(self, dimensions):  # Crea las filas y columnas
-        for obstaculo in self.game.getListaDeObstaculos():
 
-            self.screen.blit(self.obstacle, obstaculo.getPosition())
-            obstaculo.setObstacleRect(pygame.Rect(obstaculo.getHitbox()))
+
+
 
     def reloadBomberman(self, direction, contador):
         self.screen.blit(self.bomberman[direction][contador],
@@ -100,6 +98,9 @@ class Background():
 
             self.screen.blit(self.obstacle, obstaculo.getPosition())
             obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0, 0), obstaculo.getHitbox(), 1))
+        
+        for obstaculo in self.game.getBordes():
+            obstaculo.setObstacleRect(pygame.Rect(obstaculo.getHitbox()))
 
     def reloadBoxes(self):
         for cajas in self.game.getListaDeCajas():
