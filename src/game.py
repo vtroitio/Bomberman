@@ -511,50 +511,52 @@ class Game():
     def inicializarPosicionesEsquinas(self, pilaresPorColumna, pilaresPorFila):
         posicionesEsquinas = {"right": [], "left": [], "up": [], "down": []}
 
-        startingPosition = 47
-
+        tolerancia = 14
+        
+        startingPositionBloque = 46
+        
 
         for i in range(0, pilaresPorColumna):
 
             
-            offsetEsquinas = 50
+            finDeBloque = startingPositionBloque + 64
 
-            tuplaRight = (startingPosition, startingPosition + 10, "up")
+            tuplaRight = (startingPositionBloque, startingPositionBloque + tolerancia, "up")
             posicionesEsquinas["right"].append(tuplaRight)
 
-            tuplaRight = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "down")
+            tuplaRight = (finDeBloque - tolerancia , finDeBloque, "down")
             posicionesEsquinas["right"].append(tuplaRight)
 
 
-            tuplaLeft = (startingPosition, startingPosition + 10, "up")
+            tuplaLeft = (startingPositionBloque, startingPositionBloque + tolerancia, "up")
             posicionesEsquinas["left"].append(tuplaLeft)
 
-            tuplaLeft = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "down")
+            tuplaLeft = (finDeBloque - tolerancia , finDeBloque, "down")
             posicionesEsquinas["left"].append(tuplaLeft)
             
-            startingPosition = startingPosition + 75
+            startingPositionBloque = startingPositionBloque + 74
 
 
 
-        startingPosition = 47
+        startingPositionBloque = 46
         
         for i in range(0, pilaresPorFila):
 
-            offsetEsquinas = 50
+            finDeBloque = startingPositionBloque + 64
 
-            tuplaUp = (startingPosition, startingPosition + 10, "left")
+            tuplaUp = (startingPositionBloque, startingPositionBloque + tolerancia, "left")
             posicionesEsquinas["up"].append(tuplaUp) 
             
-            tuplaUp = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "right")
+            tuplaUp = (finDeBloque - tolerancia , finDeBloque, "right")
             posicionesEsquinas["up"].append(tuplaUp) 
 
-            tuplaDown = (startingPosition, startingPosition + 10, "left")
+            tuplaDown = (startingPositionBloque, startingPositionBloque + tolerancia, "left")
             posicionesEsquinas["down"].append(tuplaDown) 
 
-            tuplaDown = (startingPosition + offsetEsquinas, startingPosition + offsetEsquinas + 10, "right")
+            tuplaDown = (finDeBloque - tolerancia , finDeBloque, "right")
             posicionesEsquinas["down"].append(tuplaDown) 
 
-            startingPosition = startingPosition + 75
+            startingPositionBloque = startingPositionBloque + 74
         
                 
         return posicionesEsquinas
@@ -580,10 +582,13 @@ class Game():
         
             if direccion == "right" and self.bombermanEntrePosiciones(self.posicionesEsquinas["right"], [1,0]):
                 self.player.move(self.direccionDiagonal)
-            elif direccion == "left" and self.bombermanEntrePosiciones(self.posicionesEsquinas["right"], [-1,0]):
+            elif direccion == "left" and self.bombermanEntrePosiciones(self.posicionesEsquinas["left"], [-1,0]):
                 self.player.move(self.direccionDiagonal)
             elif direccion == "down" and self.bombermanEntrePosiciones(self.posicionesEsquinas["down"], [0,1]):
                 self.player.move(self.direccionDiagonal)
+            elif direccion == "up" and self.bombermanEntrePosiciones(self.posicionesEsquinas["up"], [0,-1]):
+                self.player.move(self.direccionDiagonal)
+
         
         # Si la direccion es derecha o izquierda el moviemnto puede ser abajo o arriba
         
