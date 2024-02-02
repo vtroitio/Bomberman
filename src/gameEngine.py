@@ -559,7 +559,7 @@ class GameEngine():
                         if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
                             # Si hay colision
 
-                            if len(playerRectFuturo.collidelistall(self.game.getRectsBordes())) > 0:
+                            if len(playerRectFuturo.collidelistall(self.game.getRectsBordes())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0 :
                                 # Si la colision es con el borde del mapa, no se cheque la colision
                                 # con esquinas para movimiento predictivo
                                 self.game.setBombermanPosition(direccion, True)
