@@ -367,14 +367,21 @@ class GameEngine():
         enemiesRects = self.game.getEnemyRect()
         enemigosABorrar = []
 
+        offsetPostPop = 0
+
         for i in range(0, len(enemiesRects)):
             if enemiesRects[i].collidelistall(rectsExplosion):
-                enemigosABorrar.append(i)
+                # print("El indice del enemigo que colisiono es: " + str(i))
+
+                indice = i - offsetPostPop
+                enemigosABorrar.append(indice)
+                offsetPostPop = offsetPostPop + 1
                 
 
 
-        for i in range(0, len(enemigosABorrar)):
-            self.game.borrarEnemigo(enemigosABorrar[i])
+        
+        for indice in enemigosABorrar:
+            self.game.borrarEnemigo(indice)
 
 
         # Bomberman
@@ -578,7 +585,7 @@ class GameEngine():
                                 if rectsBombas != [] and playerRectFuturo.collidelistall(rectsBombas):
                                     pass
                                 else:
-                                    print(str(CONTROLES[str(event.key)]))
+
                                     self.game.givePosition((CONTROLES[str(event.key)]))
                                 
                     

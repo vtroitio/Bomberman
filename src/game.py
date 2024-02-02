@@ -161,9 +161,7 @@ class Game():
                 indice = 1
             
             # Si el bomberman se encuentra en determinada altura
-            if axisBomberman >= rangoDePosiciones[i][0] and axisBomberman <= rangoDePosiciones[i][1]:
-                print("En esquina")
-                
+            if axisBomberman >= rangoDePosiciones[i][0] and axisBomberman <= rangoDePosiciones[i][1]:       
                 
                 if i % 2 == 0:
                     #Arriba
@@ -511,7 +509,7 @@ class Game():
     def inicializarPosicionesEsquinas(self, pilaresPorColumna, pilaresPorFila):
         posicionesEsquinas = {"right": [], "left": [], "up": [], "down": []}
 
-        tolerancia = 14
+        tolerancia = 16
         
         startingPositionBloque = 46
         
@@ -770,24 +768,24 @@ class Game():
         return self.explosiones
     
     def borrarSpeedUp(self, indice):
-        print(str(self.lalistaderectspowerUpsSpeed) + " y no rects: " + str(self.lalistadepowerUpsSpeed))
+
         
         if len(self.lalistaderectspowerUpsSpeed) > 0 and len(self.lalistadepowerUpsSpeed) > 0:
-            print("Borro el powerUp")
+
             self.lalistadepowerUpsSpeed.pop(indice)
             self.lalistaderectspowerUpsSpeed.pop(indice)
 
     def borrarBombUp(self, indice):
-        print(str(self.lalistaderectspowerUpsBomba) + " y no rects: " + str(self.lalistadepowerUpsBomba))
+
         if len(self.lalistaderectspowerUpsBomba) > 0 and len(self.lalistadepowerUpsBomba) > 0:
-            print("Borro el powerUp")
+
             self.lalistadepowerUpsBomba.pop(indice)
             self.lalistaderectspowerUpsBomba.pop(indice)
 
     def borrarLifeUp(self, indice):
-        print(str(self.lalistaderectspowerUpsVida) + " y no rects: " + str(self.lalistadepowerUpsVida))
+    
         if len(self.lalistaderectspowerUpsVida) > 0 and len(self.lalistadepowerUpsVida) > 0:
-            print("Borro el powerUp")
+     
             self.lalistadepowerUpsVida.pop(indice)
             self.lalistaderectspowerUpsVida.pop(indice)
 

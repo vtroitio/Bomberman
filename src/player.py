@@ -28,7 +28,7 @@ class Player(DynamicObject):
     def move(self, direccion):
         self.positionrespaldo = copy.deepcopy(self.position)
 
-        print("La direccion es: " + str(direccion))
+
 
         for index in range(len(self.position)):
 
@@ -49,7 +49,7 @@ class Player(DynamicObject):
             elif direccion == [-1, 0]:
                 self.direccion = "left"
 
-        print("La posicion del bomberman es: " + str(self.position))
+
 
 # Getters
 
