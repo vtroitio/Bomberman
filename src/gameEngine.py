@@ -50,6 +50,16 @@ class threadBomba(Thread):
         if(self.game.getBombas() != []):
             dispatcher.send(message = self.id, signal= 'explotoBomba', sender = 'threadBomba')
 
+class threadSpeed(Thread):
+    def __init__(self):
+        super().__init__()
+
+
+    def run(self):
+        time.sleep(10)
+        print("Ya no corres rapido :( ")
+        dispatcher.send(message = '', signal= 'resetearSpeed', sender = 'threadSpeed')
+
 
 
 class GameEngine():
@@ -267,7 +277,9 @@ class GameEngine():
         self.background.loadSalida("sprites/Salida.png")
         self.background.loadWinScreen("sprites/victory.jpg")
 
-    
+    def resetearSpeed(self, message):
+        self.game.setBombermanSpeed(5)
+
     def borrarPowerUp(self, message):
         
         # message es tupla = (tipoDePowerUp)
@@ -433,7 +445,8 @@ class GameEngine():
                     dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
                     dispatcher.connect(self.borrarExplosion, signal = 'borrarExplosion', sender = 'threadExplosion')
                     dispatcher.connect(self.borrarPowerUp, signal = 'borrarPowerUp', sender= 'threadPowerUp')
-                    
+                    dispatcher.connect(self.resetearSpeed, signal = 'resetearSpeed', sender = 'threadSpeed')
+
                     # Muestro la imagen de fondo
                     self.background.reloadBackgroundImage()
                     # Muestro los power-ups y la salida (si alguno esta disponible)
@@ -530,7 +543,7 @@ class GameEngine():
                                 if not rectAbajo.collidelistall(self.game.getListaDeRects()) and not rectAbajo.collidelistall(self.game.getLaListaDeRectsCajas()):
                                     posiblesMovimientos.append(("vertical", 1, 1))
 
-                                print(str(posiblesMovimientos))
+                                
 
                                 if posiblesMovimientos != []:
                                     indiceElegido = random.randrange(0, len(posiblesMovimientos))
@@ -661,9 +674,12 @@ class GameEngine():
                         else:
                             print("Maximo de 4 bombas alcanzado")    
                     elif self.game.agarroVelocidad():
+                        
                         self.game.setBombermanSpeed(8)
+                        
                         print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
-
+                        thread = threadSpeed()
+                        thread.start()
 
                     # Verifico colision con salida y a su vez que no quede ningun enemigo en el nivel
                     
