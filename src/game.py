@@ -357,7 +357,7 @@ class Game():
             if bomba.getId() == idbomba:
                 self.bombas.remove(bomba)
         
-        self.rectBombas.pop()
+        self.rectBombas.pop(0)
 
     def getBombPos(self, id):
         
