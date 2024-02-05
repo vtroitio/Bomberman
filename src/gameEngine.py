@@ -123,6 +123,7 @@ class GameEngine():
         
     def generateRandomObstacles(self):
         
+        diccionarioPilares = {}
         diccionarioObstaculos = {}
 
         # 23 Columnas, en las impares no hay ningun bloque
@@ -144,6 +145,9 @@ class GameEngine():
 
         for i in range(0, cantColumnas):
             diccionarioObstaculos[str(i)] = []
+
+        for i in range(0, cantColumnas):
+            diccionarioPilares[str(i)] = []
         
         # Si es (par, par) hay un bloque rompible,
         # esto quiere decir que si estoy en (2,2)
@@ -162,18 +166,21 @@ class GameEngine():
                 # los bloques no rompibles
                 if str(i) in posicionesProhibidas and j in posicionesProhibidas[str(i)]:
                     pass
-                elif i % 2 == 0 & j % 2 == 0:
+                elif i % 2 == 0 and j % 2 == 0:
                     # Caso (par, par)
+                    # diccionarioPilares[str(i)].append(j)
                     pass
                 else:
                     # Caso puedo poner un bloque rompible
                     # Voy a poner un 60% de probabilidad que haya un bloque
 
-                    numeroSeleccionado = random.randrange(1, 10, 1)
+                    numeroSeleccionado = random.randrange(1, 13, 1)
 
                     if numeroSeleccionado <= 6:
                         diccionarioObstaculos[str(i)].append(j)
         
+        # print(str(diccionarioPilares))
+
         return diccionarioObstaculos
         
     def gameOver(self):
@@ -474,17 +481,19 @@ class GameEngine():
                         # Uso math.floor ya que por ej 3.2 necesito rendondearlo para abajo para obtener la animacion
                         # numero 3
                         
+                        
                         self.background.reloadEnemy(enemy.getAnimacion(), math.floor(contadorAnimacionEnemigo), i)
-                    
+
 
                     # Colisiones de los enemigos con cajas
                     
                     enemiesRects = self.game.getEnemyRect()
 
+                    # print(str(self.game.getBombRects()))
 
                     for i in range(0, len(enemiesRects)):
                         if enemiesRects[i].collidelistall(self.game.getListaDeRects()) or enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas()) or enemiesRects[i].collidelistall(self.game.getBombRects()): 
-                         
+                            print(str(self.game.getDireccionEnemigo(i)))
                             # Cambio la direccion a la que apunta, la direccion vale 1 o -1
                             self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i)
                             
@@ -494,6 +503,46 @@ class GameEngine():
                             # Cambio su animacion
                             self.game.setAnimacionEnemigo(i)
                             
+                    # Posible cambio de direccion de los enemigos
+
+                    enemigos = self.game.getListaDeEnemigos()
+
+                    for enemy in enemigos:
+                        # if enemy.getEnemyPosition() == self.game.obtenerPosicionCentrada(enemy.getEnemyPosition()):
+
+                            if random.randrange(0,200) == 1:
+                                
+                                # Toca cambiar de direccion (si es que puede)
+                                posiblesMovimientos = []
+
+                                rectDerecha, rectIzquierda, rectArriba, rectAbajo = self.game.getRectsCercanosEnemy(enemy)
+
+
+                                if not rectDerecha.collidelistall(self.game.getListaDeRects()) or not rectDerecha.collidelistall(self.game.getLaListaDeRectsCajas()):
+                                    posiblesMovimientos.append(("horizontal", 1, 1))
+                                
+                                if not rectIzquierda.collidelistall(self.game.getListaDeRects()):
+                                    posiblesMovimientos.append(("horizontal", 2, -1))
+                                
+                                if not rectArriba.collidelistall(self.game.getListaDeRects()):
+                                    posiblesMovimientos.append(("vertical", 2, -1))
+                                
+                                if not rectAbajo.collidelistall(self.game.getListaDeRects()):
+                                    posiblesMovimientos.append(("vertical", 1, 1))
+
+                                print(str(posiblesMovimientos))
+
+                                if posiblesMovimientos != []:
+                                    indiceElegido = random.randrange(0, len(posiblesMovimientos))
+                                    movimiento = posiblesMovimientos[indiceElegido]
+
+                                    enemy.setEnemyTipoDeMovimiento(movimiento[0])
+                                    enemy.setEnemyAnimacion(movimiento[1])
+                                    enemy.setEnemyDireccion(movimiento[2])
+
+
+
+
                     # Colision de bomberman con enemigos
                     
                     playerrect = self.game.getPlayerRect()

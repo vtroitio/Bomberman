@@ -144,7 +144,9 @@ class Game():
                     if numeroSeleccionado <= 2:
                         posicionEnemigo = [int(columna) * sizeBloque, fila * sizeBloque]
                         tipoDeMovimiento = self.determinarMovimientoEnemigo(int(columna), int(fila), diccionarioDisponibles)
-                        self.enemigos.append(enemy.Enemy(posicionEnemigo, tipoDeMovimiento[0], tipoDeMovimiento[1]))
+                        
+                        if tipoDeMovimiento is not None:
+                            self.enemigos.append(enemy.Enemy(posicionEnemigo, tipoDeMovimiento[0], tipoDeMovimiento[1]))
 
 
 
@@ -622,9 +624,54 @@ class Game():
 # en el controlador cuando este detecte que el enemigo
 # colisiono.
 
+    def getRectsCercanosEnemy(self, enemy):
+        
+
+        velocidadEnemigo  = enemy.getEnemySpeed()
+        offset = velocidadEnemigo * 6
+
+        rectActual = enemy.getEnemyRect()
+
+        rectDerecha = rectActual.move(offset, 0)
+        rectIzquierda = rectActual.move(-offset, 0)
+        rectArriba = rectActual.move(0, -offset)
+        rectAbajo = rectActual.move(0, offset)
+
+        return rectDerecha, rectIzquierda, rectArriba, rectAbajo
+
     def moverEnemigo(self):
         for enemy in self.enemigos:
+
+
+            # Cambio de direccion
+            
+            # Primero que nada voy determinar si voy a cambiar su direccion
+            # Esto sera de manera totalmente aleatoria, con una probabilidad
+            # relativamente baja
+
+            # if random.randrange(1,20) == 1:
+            #     # Toca cambiar direccion
+
+            #     direccionActual = enemy.getEnemyPosition()
+
+            #     # direccionesPosibles es una lista que contiene por ej = ["arriba", "derecha" ...] 
+
+            #     direccionesPosibles = casillasPosibles(direccionActual)
+            
+            #     if direccionesPosibles != []:
+            #         indiceDireccionElegida = random.randrange(0, len(direccionesPosibles) - 1)
+            #         direccionElegida = direccionesPosibles[indiceDireccionElegida]
+                
+            
+
+
+
+
+
+
+
             tipodemovimiento = enemy.getEnemyTipoDeMovimiento()
+            
             if tipodemovimiento == "vertical":
                 enemy.setPosicionAnterior(copy.deepcopy(enemy.getEnemyPosition())) 
                 self.positionAnteriorEnemy = enemy.getEnemyPosicionAnterior()  

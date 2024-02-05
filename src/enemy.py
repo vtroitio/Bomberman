@@ -75,4 +75,7 @@ class Enemy(DynamicObject):
 
     def setAnimacion(self, animacion):
         self.animacion = animacion
+    
+    def setEnemyTipoDeMovimiento(self, tipodemov):
+        self.tipodemovimiento = tipodemov
 
