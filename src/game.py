@@ -628,7 +628,7 @@ class Game():
         
 
         velocidadEnemigo  = enemy.getEnemySpeed()
-        offset = velocidadEnemigo * 6
+        offset = 10
 
         rectActual = enemy.getEnemyRect()
 

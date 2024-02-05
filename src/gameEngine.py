@@ -493,7 +493,7 @@ class GameEngine():
 
                     for i in range(0, len(enemiesRects)):
                         if enemiesRects[i].collidelistall(self.game.getListaDeRects()) or enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas()) or enemiesRects[i].collidelistall(self.game.getBombRects()): 
-                            print(str(self.game.getDireccionEnemigo(i)))
+                            
                             # Cambio la direccion a la que apunta, la direccion vale 1 o -1
                             self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i)
                             
@@ -518,16 +518,16 @@ class GameEngine():
                                 rectDerecha, rectIzquierda, rectArriba, rectAbajo = self.game.getRectsCercanosEnemy(enemy)
 
 
-                                if not rectDerecha.collidelistall(self.game.getListaDeRects()) or not rectDerecha.collidelistall(self.game.getLaListaDeRectsCajas()):
+                                if not rectDerecha.collidelistall(self.game.getListaDeRects()) and not rectDerecha.collidelistall(self.game.getLaListaDeRectsCajas()):
                                     posiblesMovimientos.append(("horizontal", 1, 1))
                                 
-                                if not rectIzquierda.collidelistall(self.game.getListaDeRects()):
+                                if not rectIzquierda.collidelistall(self.game.getListaDeRects()) and not rectIzquierda.collidelistall(self.game.getLaListaDeRectsCajas()):
                                     posiblesMovimientos.append(("horizontal", 2, -1))
                                 
-                                if not rectArriba.collidelistall(self.game.getListaDeRects()):
+                                if not rectArriba.collidelistall(self.game.getListaDeRects()) and not rectArriba.collidelistall(self.game.getLaListaDeRectsCajas()):
                                     posiblesMovimientos.append(("vertical", 2, -1))
                                 
-                                if not rectAbajo.collidelistall(self.game.getListaDeRects()):
+                                if not rectAbajo.collidelistall(self.game.getListaDeRects()) and not rectAbajo.collidelistall(self.game.getLaListaDeRectsCajas()):
                                     posiblesMovimientos.append(("vertical", 1, 1))
 
                                 print(str(posiblesMovimientos))
