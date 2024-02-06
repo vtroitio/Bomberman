@@ -91,6 +91,12 @@ class Background():
             enemy.setEnemyRect(rect)
             self.game.setlalistaderectsenemigos(rect)
 
+    def printearRects(self, rect1, rect2, rect3, rect4):
+        pygame.draw.rect(self.screen, (255, 0, 0), rect1, 1)
+        pygame.draw.rect(self.screen, (255, 0, 0), rect2, 1)
+        pygame.draw.rect(self.screen, (255, 0, 0), rect3, 1)
+        pygame.draw.rect(self.screen, (255, 0, 0), rect4, 1)
+
 # Obstaculos
 
     def reloadBackground(self, dimensions):  # Crea las filas y columnas

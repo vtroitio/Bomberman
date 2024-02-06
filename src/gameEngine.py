@@ -508,6 +508,7 @@ class GameEngine():
                     # Colisiones de los enemigos con cajas
                     
                     enemiesRects = self.game.getEnemyRect()
+                    enemigos = self.game.getListaDeEnemigos()
 
                     # print(str(self.game.getBombRects()))
 
@@ -522,47 +523,70 @@ class GameEngine():
                             
                             # Cambio su animacion
                             self.game.setAnimacionEnemigo(i)
-                            
+
+                            enemigos[i].setCambioDireccion(False)
+
                     # Posible cambio de direccion de los enemigos
 
-                    probabilidaDeDoblar = 100 # Cuanto menor sea mas probabilidad hay de que cambien de direccion
-                    enemigos = self.game.getListaDeEnemigos()
+                    probabilidaDeDoblar = 15 # Cuanto menor sea mas probabilidad hay de doblen
+                    probabilidadCambioDireccion = 500 # Cuanto menor sea mas probabilidad hay de que los enemigos se den vuelta
+                    
 
                     for enemy in enemigos:
                         # if enemy.getEnemyPosition() == self.game.obtenerPosicionCentrada(enemy.getEnemyPosition()):
-
+                        if enemy.getCambioDireccion() != True:   
                             if random.randrange(0, probabilidaDeDoblar) == 1:
-                                
-                                # Toca cambiar de direccion (si es que puede)
-                                posiblesMovimientos = []
+                                    # Toca cambiar de direccion (si es que puede)
+                                    posiblesMovimientos = []
 
-                                rectDerecha, rectIzquierda, rectArriba, rectAbajo = self.game.getRectsCercanosEnemy(enemy)
+                                    rectDerecha, rectIzquierda, rectArriba, rectAbajo = self.game.getRectsCercanosEnemy(enemy)
+                                    # self.background.printearRects(rectDerecha, rectIzquierda, rectArriba, rectAbajo)
 
+                                    animacionActual = enemy.getAnimacion()
 
-                                if not rectDerecha.collidelistall(self.game.getListaDeRects()) and not rectDerecha.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                    posiblesMovimientos.append(("horizontal", 1, 1))
-                                
-                                if not rectIzquierda.collidelistall(self.game.getListaDeRects()) and not rectIzquierda.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                    posiblesMovimientos.append(("horizontal", 2, -1))
-                                
-                                if not rectArriba.collidelistall(self.game.getListaDeRects()) and not rectArriba.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                    posiblesMovimientos.append(("vertical", 2, -1))
-                                
-                                if not rectAbajo.collidelistall(self.game.getListaDeRects()) and not rectAbajo.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                    posiblesMovimientos.append(("vertical", 1, 1))
+                                    if not rectDerecha.collidelistall(self.game.getListaDeRects()) and not rectDerecha.collidelistall(self.game.getLaListaDeRectsCajas()):
+                                        if animacionActual == "horizontal2":
+                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
+                                                posiblesMovimientos.append(("horizontal", 1, 1))
+                                        else:
+                                            if animacionActual != "horizontal1":
+                                                posiblesMovimientos.append(("horizontal", 1, 1))
+                                    
+                                    if not rectIzquierda.collidelistall(self.game.getListaDeRects()) and not rectIzquierda.collidelistall(self.game.getLaListaDeRectsCajas()):
+                                        if animacionActual == "horizontal1":
+                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
+                                                posiblesMovimientos.append(("horizontal", 2, -1))
+                                        else:    
+                                            if animacionActual != "horizontal2":
+                                                posiblesMovimientos.append(("horizontal", 2, -1))
+                                    
+                                    if not rectArriba.collidelistall(self.game.getListaDeRects()) and not rectArriba.collidelistall(self.game.getLaListaDeRectsCajas()):
+                                        if animacionActual == "vertical1":
+                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
+                                                posiblesMovimientos.append(("vertical", 2, -1))
+                                        else:
+                                            if animacionActual != "vertical2":                                        
+                                                posiblesMovimientos.append(("vertical", 2, -1))
+                                    
+                                    if not rectAbajo.collidelistall(self.game.getListaDeRects()) and not rectAbajo.collidelistall(self.game.getLaListaDeRectsCajas()):
+                                        if animacionActual == "vertical2":
+                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
+                                                posiblesMovimientos.append(("vertical", 1, 1))
+                                        else:      
+                                            if animacionActual != "vertical1":                                  
+                                                posiblesMovimientos.append(("vertical", 1, 1))
 
-                                
+                                    
 
-                                if posiblesMovimientos != []:
-                                    indiceElegido = random.randrange(0, len(posiblesMovimientos))
-                                    movimiento = posiblesMovimientos[indiceElegido]
+                                    if posiblesMovimientos != []:
+                                        indiceElegido = random.randrange(0, len(posiblesMovimientos))
+                                        movimiento = posiblesMovimientos[indiceElegido]
 
-                                    enemy.setEnemyTipoDeMovimiento(movimiento[0])
-                                    enemy.setEnemyAnimacion(movimiento[1])
-                                    enemy.setEnemyDireccion(movimiento[2])
-
-
-
+                                        enemy.setEnemyTipoDeMovimiento(movimiento[0])
+                                        enemy.setEnemyAnimacion(movimiento[1])
+                                        enemy.setEnemyDireccion(movimiento[2])
+                                        enemy.setCambioDireccion(True)
+                                        
 
                     # Colision de bomberman con enemigos
                     

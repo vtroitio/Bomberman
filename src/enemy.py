@@ -20,6 +20,7 @@ class Enemy(DynamicObject):
         self.height = 30
         self.hitbox = (self.x , self.y , self.width, self.height)  # Dibujo un cuadrado
         self.rect = None
+        self.cambioDireccion = None
 
     def defineMovement(self):
         pass
@@ -53,6 +54,10 @@ class Enemy(DynamicObject):
 
     def getEnemyTipoDeMovimiento(self):
         return self.tipodemovimiento
+    
+    def getCambioDireccion(self):
+        return self.cambioDireccion
+    
     #Setters
 
     def setEnemySprite(self, sprite):
@@ -78,4 +83,6 @@ class Enemy(DynamicObject):
     
     def setEnemyTipoDeMovimiento(self, tipodemov):
         self.tipodemovimiento = tipodemov
-
+    
+    def setCambioDireccion(self, booleano):
+        self.cambioDireccion = booleano

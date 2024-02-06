@@ -628,7 +628,7 @@ class Game():
         
 
         velocidadEnemigo  = enemy.getEnemySpeed()
-        offset = 10
+        offset = 8
 
         rectActual = enemy.getEnemyRect()
 
@@ -686,6 +686,7 @@ class Game():
 
                 self.nuevaposicion = [(self.positionAnteriorEnemy[0] + (1 * enemy.getEnemySpeed()) * enemy.getEnemyDireccion()), self.positionAnteriorEnemy[1]]
                 enemy.setPosition(self.nuevaposicion)
+
 
                 self.lalistaderectsenemigos.clear()
 
