@@ -492,7 +492,7 @@ class GameEngine():
                     
                     self.background.reloadEnemyRect()
                     
-                    velocidadAnimacionEnemigo = 0.1 # Cuanto menor sea mas lenta y mas se notara la animacion
+                    velocidadAnimacionEnemigo = 0.16 # Cuanto menor sea mas lenta y mas se notara la animacion
                     contadorAnimacionEnemigo = (contadorAnimacionEnemigo + velocidadAnimacionEnemigo) % 4 
                     
                     for i, enemy in enumerate(self.game.getListaDeEnemigos()):
@@ -528,14 +528,14 @@ class GameEngine():
 
                     # Posible cambio de direccion de los enemigos
 
-                    probabilidaDeDoblar = 15 # Cuanto menor sea mas probabilidad hay de doblen
-                    probabilidadCambioDireccion = 500 # Cuanto menor sea mas probabilidad hay de que los enemigos se den vuelta
+                    probabilidadDeDoblar = 15 # Cuanto menor sea mas probabilidad hay de doblen
+                    probabilidadCambioDireccion = 50 # Cuanto menor sea mas probabilidad hay de que los enemigos se den vuelta
                     
 
                     for enemy in enemigos:
                         # if enemy.getEnemyPosition() == self.game.obtenerPosicionCentrada(enemy.getEnemyPosition()):
                         if enemy.getCambioDireccion() != True:   
-                            if random.randrange(0, probabilidaDeDoblar) == 1:
+                            if random.randrange(0, probabilidadDeDoblar) == 1:
                                     # Toca cambiar de direccion (si es que puede)
                                     posiblesMovimientos = []
 
