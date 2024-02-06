@@ -80,7 +80,7 @@ class Game():
     def getSalida(self):
         return self.salida
 
-    def placeEnemies(self, diccionarioObstaculos):
+    def placeEnemies(self, diccionarioObstaculos, probabilidadEnemigos):
 
         # Recorro el diccionario de obstaculos y pongo los enemigos si esta vacia
         # de manera aleatoria
@@ -137,7 +137,7 @@ class Game():
                 elif fila % 2 == 0 and int(columna) % 2 == 0:
                     pass
                 else:
-                    numeroSeleccionado = random.randrange(1, 13, 1)
+                    numeroSeleccionado = random.randrange(1, probabilidadEnemigos, 1)
 
 
 

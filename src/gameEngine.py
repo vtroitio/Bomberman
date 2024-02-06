@@ -93,12 +93,19 @@ class GameEngine():
         #                                         '22': [1, 3, 9, 11],
         #                                         '23': [1, 2, 3, 7, 13]
         #                                         }
-        self.diccionarioposicionesobstaculos = self.generateRandomObstacles()
-        # print(self.diccionarioposicionesobstaculos)
+        
+        # Cuanto mayor sea el numero, menos probabilidad
+        # Si es < 6 en obstaculos pone obstaculo en todos lados
+        # Si es < 2 en enemigos pone enemigos en todos lados
+        self.probabilidadObstaculos = 13 # 13
+        self.probabilidadEnemigos = 13 # 13
+        
+        
+        self.diccionarioposicionesobstaculos = self.generateRandomObstacles(self.probabilidadObstaculos)
         self.game.createObstacles(self.dimensions)   # Creo obstaculos para despues en reload background dibujarlos y alli setear el rect de cada uno
         self.crearCajasRompibles()
-        
-        self.game.placeEnemies(self.diccionarioposicionesobstaculos)
+    
+        self.game.placeEnemies(self.diccionarioposicionesobstaculos, self.probabilidadEnemigos)
         
         self.background.reloadEnemyRect()
         self.background.reloadBackground(self.dimensions)
@@ -131,7 +138,7 @@ class GameEngine():
                     pygame.display.update()
                     clock.tick(30)
         
-    def generateRandomObstacles(self):
+    def generateRandomObstacles(self, probabilidadObstaculos):
         
         diccionarioPilares = {}
         diccionarioObstaculos = {}
@@ -184,7 +191,7 @@ class GameEngine():
                     # Caso puedo poner un bloque rompible
                     # Voy a poner un 60% de probabilidad que haya un bloque
 
-                    numeroSeleccionado = random.randrange(1, 13, 1)
+                    numeroSeleccionado = random.randrange(1, probabilidadObstaculos, 1)
 
                     if numeroSeleccionado <= 6:
                         diccionarioObstaculos[str(i)].append(j)
@@ -249,7 +256,7 @@ class GameEngine():
             
             self.game.createBoxesRects()
 
-            self.game.placeEnemies(self.diccionarioposicionesobstaculos)
+            self.game.placeEnemies(self.diccionarioposicionesobstaculos, self.probabilidadEnemigos)
             self.game.createEnemiesRects()
 
         else:
@@ -518,12 +525,13 @@ class GameEngine():
                             
                     # Posible cambio de direccion de los enemigos
 
+                    probabilidaDeDoblar = 100 # Cuanto menor sea mas probabilidad hay de que cambien de direccion
                     enemigos = self.game.getListaDeEnemigos()
 
                     for enemy in enemigos:
                         # if enemy.getEnemyPosition() == self.game.obtenerPosicionCentrada(enemy.getEnemyPosition()):
 
-                            if random.randrange(0,200) == 1:
+                            if random.randrange(0, probabilidaDeDoblar) == 1:
                                 
                                 # Toca cambiar de direccion (si es que puede)
                                 posiblesMovimientos = []
@@ -682,7 +690,6 @@ class GameEngine():
                         thread.start()
 
                     # Verifico colision con salida y a su vez que no quede ningun enemigo en el nivel
-                    
                     if len(self.game.getlalisaderectsenemigos()) == 0:
                         if self.game.getSalidaRect() != None:
                             if self.game.getSalidaRect().colliderect(playerrect):
