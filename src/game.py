@@ -724,10 +724,20 @@ class Game():
         return self.lalistadepowerUpsBomba
 
     def borrarPowerUps(self):
-        self.lalistadepowerUpsBomba = []
-        self.lalistadepowerUpsVida = []
-        self.lalistadepowerUpsSpeed = [] 
-        self.bombas = []
+        
+        self.rectBombas.clear()
+        self.bombas.clear()
+        
+        self.lalistadepowerUpsBomba.clear()
+        self.lalistaderectspowerUpsBomba.clear()
+        
+        self.lalistadepowerUpsVida.clear()
+        self.lalistaderectspowerUpsVida.clear()
+        
+        self.lalistadepowerUpsSpeed.clear()
+        self.lalistaderectspowerUpsSpeed.clear()
+
+        
 
 # Setters de listas de objetos
 
@@ -803,11 +813,13 @@ class Game():
         
         self.explosiones.append(explosion)
 
-
+    def limpiarExplosiones(self):
+        self.explosiones.clear()
 
     def borrarExplosion(self, id):
-        if self.explosiones[0][1] == id:
-            self.explosiones.pop(0)
+        if self.explosiones != []:
+            if self.explosiones[0][1] == id:
+                self.explosiones.pop(0)
 
     def get_todas_las_bombas(self):
         return self.bombas

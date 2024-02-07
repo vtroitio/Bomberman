@@ -2,10 +2,8 @@ import pygame
 import game
 import background
 import sys
-import bomba
 import time
 from threading import Thread
-import threading
 from pydispatch import dispatcher
 import math
 import random
@@ -14,7 +12,6 @@ import random
 # Son las flechitas, se usan para el movimiento del bomberman
 
 CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], '1073741904': [-1, 0]}
-
 
 
 # Uso los threads principalmente para poder ejecutar eventos luego de un tiempo gracias al sleep
@@ -35,7 +32,8 @@ class threadExplosion(Thread):
         self.explosion = explosion
 
     def run(self):
-        time.sleep(0.5)
+        # Este tiempo determina cuanto tiempo pasa en pantalla el sprite de la explosion
+        time.sleep(0.3)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
         
         
@@ -67,38 +65,16 @@ class GameEngine():
         self.dimensions = [925, 555]
         self.game = game.Game()
         self.background = background.Background(self.dimensions, self.game)
-        self.cargar_imagen_bomba_controlador()
-        self.loadImages()
-        # self.diccionarioposicionesobstaculos = {'1': [5, 9, 10, 11],
-        #                                         '2': [3, 5, 7, 9, 11],
-        #                                         '3': [1, 4, 6, 7, 10, 11, 13],
-        #                                         '4': [],
-        #                                         '5': [4, 6, 8, 10, 12],
-        #                                         '6': [1, 9],
-        #                                         '7': [1, 3, 4, 5, 10, 11, 13],
-        #                                         '8': [],
-        #                                         '9': [2, 3, 4, 10],
-        #                                         '10': [3],
-        #                                         '11': [2, 5, 10],
-        #                                         '12': [3, 5, 7, 9, 11],
-        #                                         '13': [2, 13],
-        #                                         '14': [1, 3, 5, 7, 9, 11],
-        #                                         '15': [1, 2, 4],
-        #                                         '16': [1, 7, 9, 11],
-        #                                         '17': [1, 2, 4, 6, 7, 13],
-        #                                         '18': [1, 9, 11],
-        #                                         '19': [1, 2, 3, 6, 8, 9, 10, 12],
-        #                                         '20': [1, 3, 9],
-        #                                         '21': [1, 2, 3, 6, 8, 12],
-        #                                         '22': [1, 3, 9, 11],
-        #                                         '23': [1, 2, 3, 7, 13]
-        #                                         }
         
+        self.loadImages()
+
         # Cuanto mayor sea el numero, menos probabilidad
         # Si es < 6 en obstaculos pone obstaculo en todos lados
         # Si es < 2 en enemigos pone enemigos en todos lados
-        self.probabilidadObstaculos = 13 # 13
-        self.probabilidadEnemigos = 13 # 13
+        # La probabilidad default es 13 en ambos 
+
+        self.probabilidadObstaculos = 13
+        self.probabilidadEnemigos = 13
         
         
         self.diccionarioposicionesobstaculos = self.generateRandomObstacles(self.probabilidadObstaculos)
@@ -111,8 +87,12 @@ class GameEngine():
         self.background.reloadBackground(self.dimensions)
         self.background.reloadBoxes()
         self.game.createRects()
-        self.menu = True
         
+        self.game.crearSalida()
+
+        # Variables que uso para saber que pantalla mostrar
+
+        self.menu = True
         self.gameOverScreen = False
         self.winScreen = False
 
@@ -121,8 +101,6 @@ class GameEngine():
         self.BOMBAS_DISPONIBLES = [1]
         self.bombas = 1
         self.byPassRectBomba = None
-
-        self.game.crearSalida()
 
         self.mainLoop()
 
@@ -136,7 +114,7 @@ class GameEngine():
                 if event.type == pygame.KEYUP:
                     self.menu = False
                     pygame.display.update()
-                    clock.tick(30)
+                    clock.tick(60)
         
     def generateRandomObstacles(self, probabilidadObstaculos):
         
@@ -205,14 +183,14 @@ class GameEngine():
         while self.gameOverScreen:
             self.background.reloadGameOverScreen()
             pygame.display.update()
-            clock.tick(30)
+            clock.tick(60)
             
     def win(self):
         clock = pygame.time.Clock()
         while self.winScreen:
             self.background.reloadWinScreen()
             pygame.display.update()
-            clock.tick(30)
+            clock.tick(60)
 
 
     def goMenu():
@@ -224,50 +202,48 @@ class GameEngine():
     def exit():
         pass
 
-    def killBomberman(self):
+    def killBomberman(self, death):
 
-    
-        if self.game.getBombermanVidas() >= 0:
+        if death:
             self.game.setBombermanVidas(-1)
-            print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN " + str(self.game.getBombermanVidas())+" VIDAS")
-            
-            # Este reload lo hago para dar un efecto visual de "reset"
-            
-            self.background.reloadBackgroundImage()
+            vidas = self.game.getBombermanVidas()
+            if vidas >= 0:
+                print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN " + str(vidas)+ " VIDAS")
+        
+        # Este reload lo hago para dar un efecto visual de "reset"
+        self.background.reloadBackgroundImage()
 
-            # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
-            self.game.setBombermanPosicionDeInicio()
-            self.game.setBombermanSpeed(5)
+        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
+        self.game.setBombermanPosicionDeInicio()
+        self.game.setBombermanSpeed(5)
 
-            self.BOMBAS_USANDO = []
-            self.BOMBAS_DISPONIBLES = [1]
-            self.bombas = 1
+        self.BOMBAS_USANDO = []
+        self.BOMBAS_DISPONIBLES = [1]
+        self.bombas = 1
 
-            self.game.borrarPowerUps()
+        self.game.borrarPowerUps()
+        self.game.borrarDatosCajas()
+        self.game.borrarDatosEnemigos()
 
-            self.game.borrarDatosCajas()
-            self.game.borrarDatosEnemigos()
+        self.diccionarioposicionesobstaculos = self.generateRandomObstacles(self.probabilidadObstaculos)
+        self.crearCajasRompibles()
 
-            self.crearCajasRompibles()
+        # Necesito hacer este reload que ya que asigna los rects a caja cada
 
-            # Necesito hacer este reload que ya que asigna los rects a caja cada
-            
-            self.background.reloadBoxes()
-            
-            self.game.createBoxesRects()
+        self.background.reloadBoxes()        
+        self.game.createBoxesRects()
 
-            self.game.placeEnemies(self.diccionarioposicionesobstaculos, self.probabilidadEnemigos)
-            self.game.createEnemiesRects()
+        self.game.placeEnemies(self.diccionarioposicionesobstaculos, self.probabilidadEnemigos)
+        self.game.createEnemiesRects()
 
-        else:
+        self.game.crearSalida()
+        self.game.limpiarExplosiones()
+
+        if self.game.getBombermanVidas() == -1:
             print("☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ GAME OVER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠")
             self.gameOverScreen = True        
 
 
-    def cargar_imagen_bomba_controlador(self):
-        posicion_bomba = self.game.getBombermanPosition()
-        self.background.cargar_imagen_bomba('sprites/Bomba.png', posicion_bomba)
-   
     def loadImages(self):
         self.background.loadBombermanImage('sprites/BombermanAnimado/', (37, 37))  # Lo pone al principio del mapa
         self.background.loadObstacle("sprites/pilar.png")
@@ -413,7 +389,7 @@ class GameEngine():
         # Bomberman
             
         if self.game.getPlayerRect().collidelistall(rectsExplosion):
-            self.killBomberman()
+            self.killBomberman(True)
 
 
 
@@ -593,7 +569,7 @@ class GameEngine():
                     playerrect = self.game.getPlayerRect()
 
                     if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
-                        self.killBomberman()
+                        self.killBomberman(True)
                             
                        
 
@@ -752,7 +728,7 @@ class GameEngine():
                             
                                     
             pygame.display.update()
-            clock.tick(30)
+            clock.tick(60)
                 
 if __name__ == "__main__":
     controlador = GameEngine()
