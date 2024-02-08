@@ -91,7 +91,7 @@ class GameEngine():
         self.menu = True
         self.gameOverScreen = False
         self.winScreen = False
-
+        self.nivelActual = 1
 
         # Variables para el uso de bombas (deberia delegarlas a game y mejorar esto)
 
@@ -123,7 +123,27 @@ class GameEngine():
         self.game.createRects()
 
     def limpiarNivelActual(self):
-        pass
+        # Este reload lo hago para dar un efecto visual de "reset"
+        self.background.reloadBackgroundImage()
+
+        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
+        self.game.setBombermanPosicionDeInicio()
+        self.game.setBombermanSpeed(5)
+
+        self.BOMBAS_USANDO = []
+        self.BOMBAS_DISPONIBLES = [1]
+        self.bombas = 1
+
+        self.game.borrarPowerUps()
+        self.game.borrarDatosCajas()
+        self.game.borrarDatosEnemigos()
+    
+    def siguienteNivel(self):
+        pygame.time.wait(1000)
+        self.nivelActual += 1
+        self.limpiarNivelActual()
+        self.crearNivel()
+        print("Pasaste al siguiente nivel :D, estas en el nivel " + str(self.nivelActual))
 
     def intro(self):
         clock = pygame.time.Clock()
@@ -223,39 +243,27 @@ class GameEngine():
     def exit():
         pass
 
-    def killBomberman(self, death):
+    def killBomberman(self):
 
-        if death:
-            self.game.setBombermanVidas(-1)
-            vidas = self.game.getBombermanVidas()
-            if vidas >= 0:
-                print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN " + str(vidas)+ " VIDAS")
+        self.game.setBombermanVidas(-1)
+        vidasRestantes = self.game.getBombermanVidas()
         
-        # Este reload lo hago para dar un efecto visual de "reset"
-        
-
-        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
-        self.game.setBombermanPosicionDeInicio()
-        self.game.setBombermanSpeed(5)
-
-        self.BOMBAS_USANDO = []
-        self.BOMBAS_DISPONIBLES = [1]
-        self.bombas = 1
-
-        self.game.borrarPowerUps()
-        self.game.borrarDatosCajas()
-        self.game.borrarDatosEnemigos()
-
-
-        self.crearNivel()
-
-        self.background.reloadBackgroundImage()
-
-        self.game.limpiarExplosiones()
-
-        if self.game.getBombermanVidas() == -1:
+        if vidasRestantes > 0:
+            if vidasRestantes == 1:
+                print("Todavia tenes " + str(vidasRestantes)+ " vida")
+            else:
+                print("Todavia tenes " + str(vidasRestantes)+ " vidas")
+        elif vidasRestantes == 0:
+            print("Tene cuidado, es tu ultima vida")
+        else:
             print("☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ GAME OVER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠")
             self.gameOverScreen = True        
+
+        self.limpiarNivelActual()
+        self.crearNivel()
+        self.game.limpiarExplosiones()
+
+        
 
 
     def loadImages(self):
@@ -407,7 +415,7 @@ class GameEngine():
         # Bomberman
             
         if self.game.getPlayerRect().collidelistall(rectsExplosion):
-            self.killBomberman(True)
+            self.killBomberman()
 
 
         
@@ -588,7 +596,7 @@ class GameEngine():
 
                     if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
                         # pygame.time.wait(2000)
-                        self.killBomberman(True)
+                        self.killBomberman()
                             
                        
 
@@ -712,7 +720,8 @@ class GameEngine():
                     if len(self.game.getlalisaderectsenemigos()) == 0:
                         if self.game.getSalidaRect() != None:
                             if self.game.getSalidaRect().colliderect(playerrect):
-                                self.winScreen = True
+                                # self.winScreen = True
+                                self.siguienteNivel()
                                 
                 
                 # Si presiono el espacio (poner bomba)
