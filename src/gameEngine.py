@@ -34,7 +34,7 @@ class threadExplosion(Thread):
 
     def run(self):
         # Este thread determina cuanto tiempo pasa en pantalla el sprite de la explosion
-        time.sleep(5)
+        time.sleep(0.3)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
         
         
