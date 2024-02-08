@@ -78,25 +78,22 @@ class GameEngine():
         self.probabilidadObstaculos = 13
         self.probabilidadEnemigos = 13
         
+        self.diccionarioposicionesobstaculo = None
         
-        self.diccionarioposicionesobstaculos = self.generateRandomObstacles(self.probabilidadObstaculos)
-        self.game.createObstacles(self.dimensions)   # Creo obstaculos para despues en reload background dibujarlos y alli setear el rect de cada uno
-        self.crearCajasRompibles()
-    
-        self.game.placeEnemies(self.diccionarioposicionesobstaculos, self.probabilidadEnemigos)
         
-        self.background.reloadEnemyRect()
-        self.background.reloadBackground(self.dimensions)
-        self.background.reloadBoxes()
-        self.game.createRects()
-        
-        self.game.crearSalida()
+        self.game.createObstacles(self.dimensions)   # Creo los pilares y los bordes (solo hace falta crearlos una vez -> no van a estar en crearNivel() )
+        self.background.reloadBackground() # Les asigno su rect a los pilares
 
+        self.crearNivel()
+        
         # Variables que uso para saber que pantalla mostrar
 
         self.menu = True
         self.gameOverScreen = False
         self.winScreen = False
+
+
+        # Variables para el uso de bombas (deberia delegarlas a game y mejorar esto)
 
         self.lista_threads = []
         self.BOMBAS_USANDO = []
@@ -105,6 +102,28 @@ class GameEngine():
         self.byPassRectBomba = None
 
         self.mainLoop()
+
+    def crearNivel(self):
+        # Genero aleatoriamente la posicion de las cajas y lo guardo en un diccionario
+        diccCajas = self.generateRandomObstacles(self.probabilidadObstaculos)
+        
+        # Una vez tengo el diccionario creo las cajas rompibles
+        self.crearCajasRompibles(diccCajas)
+        self.background.reloadBoxes() # Le asigno a cada una su rect
+        
+        # Una vez creadas las cajas puedo empezar a ubicar a los enemigos
+        self.game.placeEnemies(diccCajas, self.probabilidadEnemigos)
+        self.background.reloadEnemyRect() # Le asigno a cada uno su rect
+        
+        # Vuelvo a ubicar la salida
+        self.game.crearSalida()
+
+        # Guardo cada grupo de rects (ya creados en el reload) en su respectiva lista
+        # El rect de la salida se crea recien cuando se rompe la caja que esconde la misma
+        self.game.createRects()
+
+    def limpiarNivelActual(self):
+        pass
 
     def intro(self):
         clock = pygame.time.Clock()
@@ -213,7 +232,7 @@ class GameEngine():
                 print("EU FIERA MAKINON TE CHOCASTE CONTRA UN WACHIN TE RE MORISTE, TE QUEDAN " + str(vidas)+ " VIDAS")
         
         # Este reload lo hago para dar un efecto visual de "reset"
-        self.background.reloadBackgroundImage()
+        
 
         # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
         self.game.setBombermanPosicionDeInicio()
@@ -227,18 +246,11 @@ class GameEngine():
         self.game.borrarDatosCajas()
         self.game.borrarDatosEnemigos()
 
-        self.diccionarioposicionesobstaculos = self.generateRandomObstacles(self.probabilidadObstaculos)
-        self.crearCajasRompibles()
 
-        # Necesito hacer este reload que ya que asigna los rects a caja cada
+        self.crearNivel()
 
-        self.background.reloadBoxes()        
-        self.game.createBoxesRects()
+        self.background.reloadBackgroundImage()
 
-        self.game.placeEnemies(self.diccionarioposicionesobstaculos, self.probabilidadEnemigos)
-        self.game.createEnemiesRects()
-
-        self.game.crearSalida()
         self.game.limpiarExplosiones()
 
         if self.game.getBombermanVidas() == -1:
@@ -395,7 +407,6 @@ class GameEngine():
         # Bomberman
             
         if self.game.getPlayerRect().collidelistall(rectsExplosion):
-            pygame.time.wait(1000)
             self.killBomberman(True)
 
 
@@ -406,12 +417,12 @@ class GameEngine():
         thread.start()
  
         
-    def crearCajasRompibles(self):
+    def crearCajasRompibles(self, diccCajas):
         Size = 37
         for z in range(1, 24):
             for i in range(1, 14):
-                for x in range(0, len(self.diccionarioposicionesobstaculos[str(z)])):
-                    if self.diccionarioposicionesobstaculos[str(z)][x] == i:
+                for x in range(0, len(diccCajas[str(z)])):
+                    if diccCajas[str(z)][x] == i:
                         self.game.setLaListaDeCajas(Size * z, i * Size)
 
     def mainLoop(self):
@@ -464,7 +475,7 @@ class GameEngine():
                     self.background.reloadExplosiones(self.game.getExplosiones())
                     
                     # 3 - Muestro las cajas no rompibles
-                    self.background.reloadBackground(self.dimensions)
+                    self.background.reloadBackground()
                 
                     # 4 - Muestro las bombas activas       
                     self.background.reloadBombas()
@@ -576,6 +587,7 @@ class GameEngine():
                     playerrect = self.game.getPlayerRect()
 
                     if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
+                        # pygame.time.wait(2000)
                         self.killBomberman(True)
                             
                        
