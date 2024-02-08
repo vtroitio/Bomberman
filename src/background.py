@@ -99,14 +99,11 @@ class Background():
 
 # Obstaculos
 
-    def reloadBackground(self, dimensions):  # Crea las filas y columnas
+    def reloadBackground(self):  # Muestra los pilares en pantalla y les asigna su rect
         for obstaculo in self.game.getListaDeObstaculos():
-
             self.screen.blit(self.obstacle, obstaculo.getPosition())
             obstaculo.setObstacleRect(pygame.draw.rect(self.screen, (0, 0, 0, 0), obstaculo.getHitbox(), 1))
         
-        for obstaculo in self.game.getBordes():
-            obstaculo.setObstacleRect(pygame.Rect(obstaculo.getHitbox()))
 
     def reloadBoxes(self):
         for cajas in self.game.getListaDeCajas():
