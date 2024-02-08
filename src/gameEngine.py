@@ -22,6 +22,7 @@ class threadPowerUp(Thread):
         self.tipo = tipo
 
     def run(self):
+        # Este thread determina cuanto tiempo pasa hasta que se borra un powerUP
         time.sleep(6)
         dispatcher.send(message = self.tipo, signal= 'borrarPowerUp', sender = 'threadPowerUp')
 
@@ -32,8 +33,8 @@ class threadExplosion(Thread):
         self.explosion = explosion
 
     def run(self):
-        # Este tiempo determina cuanto tiempo pasa en pantalla el sprite de la explosion
-        time.sleep(0.3)
+        # Este thread determina cuanto tiempo pasa en pantalla el sprite de la explosion
+        time.sleep(5)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
         
         
@@ -44,6 +45,7 @@ class threadBomba(Thread):
         self.game = game
 
     def run(self):
+        # Este thread determina cuanto tiempo pasa hasta que explota la bomba
         time.sleep(3.0)
         if(self.game.getBombas() != []):
             dispatcher.send(message = self.id, signal= 'explotoBomba', sender = 'threadBomba')
@@ -52,8 +54,8 @@ class threadSpeed(Thread):
     def __init__(self):
         super().__init__()
 
-
     def run(self):
+        # Este thread determina cuanto tiempo pasa hasta que te quedas sin velocidad
         time.sleep(10)
         print("Ya no corres rapido :( ")
         dispatcher.send(message = '', signal= 'resetearSpeed', sender = 'threadSpeed')
@@ -293,11 +295,15 @@ class GameEngine():
 
         
         # Logica 
-        self.BOMBAS_USANDO.remove(id_bomba)
-        pos = self.game.getBombPos(id_bomba)
-        
-        self.BOMBAS_DISPONIBLES.append(id_bomba)
-        self.game.sacar_bomba(id_bomba)    
+        if len(self.BOMBAS_USANDO) > 0:
+            self.BOMBAS_USANDO.remove(id_bomba)
+            
+            x,y = self.game.getBombPos(id_bomba)
+            offset = 1
+            pos = [x , y + offset]
+            
+            self.BOMBAS_DISPONIBLES.append(id_bomba)
+            self.game.sacar_bomba(id_bomba)    
 
         
         
@@ -389,10 +395,11 @@ class GameEngine():
         # Bomberman
             
         if self.game.getPlayerRect().collidelistall(rectsExplosion):
+            pygame.time.wait(1000)
             self.killBomberman(True)
 
 
-
+        
 
 
         thread = threadExplosion((pos, id_bomba, rects))
