@@ -45,10 +45,6 @@ class Background():
 
 
 
-
-    def reloadBomberman(self, direction, contador):
-        self.screen.blit(self.bomberman[direction][contador],
-                         self.game.getBombermanPosition())
 # RELOADS
 # Design
 

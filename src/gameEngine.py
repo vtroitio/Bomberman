@@ -139,7 +139,6 @@ class GameEngine():
         self.game.borrarDatosEnemigos()
     
     def siguienteNivel(self):
-        pygame.time.wait(1000)
         self.nivelActual += 1
         self.limpiarNivelActual()
         self.crearNivel()

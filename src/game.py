@@ -250,37 +250,6 @@ class Game():
     def get_todas_las_bombas(self):
         return self.bombas                
 
-
-# Crea a los enemigos que ya tienen una posicion pre establecida en el mapa
-# al instanciarlos les pasa su posicion y como va a ser su movimiento pre
-# establecido.
-
-    # def placeEnemies(self):
-    #     self.enemigos.append(enemy.Enemy([39, 259],
-    #                                               "vertical", "vertical1"))
-    #     self.enemigos.append(enemy.Enemy([111, 187],
-    #                                               "horizontal", "horizontal1"))
-    #     self.enemigos.append(enemy.Enemy([187, 40],
-    #                                               "vertical", "vertical1"))
-    #     self.enemigos.append(enemy.Enemy([185, 335],
-    #                                               "horizontal", "horizontal1"))
-    #     self.enemigos.append(enemy.Enemy([484, 37],
-    #                                               "horizontal", "horizontal1"))
-    #     self.enemigos.append(enemy.Enemy([407, 148],
-    #                                               "vertical", "vertical1"))
-    #     self.enemigos.append(enemy.Enemy([484, 400],
-    #                                               "vertical", "vertical1"))
-    #     self.enemigos.append(enemy.Enemy([632, 400],
-    #                                               "vertical", "vertical1"))
-    #     self.enemigos.append(enemy.Enemy([669, 487],
-    #                                               "horizontal", "horizontal1"))
-    #     self.enemigos.append(enemy.Enemy([780, 333],
-    #                                               "vertical", "vertical1"))
-    #     self.enemigos.append(enemy.Enemy([777, 260],
-    #                                               "horizontal", "horizontal1"))
-    #     self.enemigos.append(enemy.Enemy([851, 400],
-    #                                               "vertical", "vertical1"))
-
 # Cuando se rompa una caja se va a llamar(dependiendo del numero que salga a
 # la creacion de alguno de estos powerups que luego seran bliteados por la 
 # vista.
@@ -306,6 +275,9 @@ class Game():
 
     def createObstacles(self, dimensions):
         WidthHeightObstacle = 37  # Tamaño del bloque utilizado
+
+        # En self.bordes van a estar solamente los pilares grises, esto me va a servir
+        # para que el movimiento diagonal no se active al colisionar con los mismos.
 
         for i in range(0, int((dimensions[0] / WidthHeightObstacle)) + 1):  # De 0 a 26
             bloqueArriba = obstacles.Obstacle(i * WidthHeightObstacle, 0)
@@ -426,8 +398,7 @@ class Game():
                 
         return posicionesEsquinas
 
-    def setBombermanPosition(self, direccion, esBorde):
-        
+    def setBombermanPosition(self, direccion, esPilar):
 
         self.player.setBombermanDireccion(direccion)
         
@@ -443,8 +414,7 @@ class Game():
         # Inicializo el diccionario
 
         
-        if not esBorde:        
-        
+        if not esPilar:        
             if direccion == "right" and self.bombermanEntrePosiciones(self.posicionesEsquinas["right"], [1,0]):
                 self.player.move(self.direccionDiagonal)
             elif direccion == "left" and self.bombermanEntrePosiciones(self.posicionesEsquinas["left"], [-1,0]):
@@ -453,13 +423,10 @@ class Game():
                 self.player.move(self.direccionDiagonal)
             elif direccion == "up" and self.bombermanEntrePosiciones(self.posicionesEsquinas["up"], [0,-1]):
                 self.player.move(self.direccionDiagonal)
-
-        
-        # Si la direccion es derecha o izquierda el moviemnto puede ser abajo o arriba
         
 
     def setBombermanPosicionDeInicio(self):
-        self.player.setPosition([40, 40])
+        self.player.setPosition([37, 37])
 
     def setPositionAnterior(self, enemigodeseado):
         enemy = self.enemigos[enemigodeseado]
@@ -491,8 +458,6 @@ class Game():
 
     def getRectsCercanosEnemy(self, enemy):
         
-
-        velocidadEnemigo  = enemy.getEnemySpeed()
         offset = 8
 
         rectActual = enemy.getEnemyRect()
@@ -506,34 +471,6 @@ class Game():
 
     def moverEnemigo(self):
         for enemy in self.enemigos:
-
-
-            # Cambio de direccion
-            
-            # Primero que nada voy determinar si voy a cambiar su direccion
-            # Esto sera de manera totalmente aleatoria, con una probabilidad
-            # relativamente baja
-
-            # if random.randrange(1,20) == 1:
-            #     # Toca cambiar direccion
-
-            #     direccionActual = enemy.getEnemyPosition()
-
-            #     # direccionesPosibles es una lista que contiene por ej = ["arriba", "derecha" ...] 
-
-            #     direccionesPosibles = casillasPosibles(direccionActual)
-            
-            #     if direccionesPosibles != []:
-            #         indiceDireccionElegida = random.randrange(0, len(direccionesPosibles) - 1)
-            #         direccionElegida = direccionesPosibles[indiceDireccionElegida]
-                
-            
-
-
-
-
-
-
 
             tipodemovimiento = enemy.getEnemyTipoDeMovimiento()
             
@@ -645,15 +582,6 @@ class Game():
 
     def setLalistaDeRectsCajas(self, rect):
         self.lalistaderectscajas.append(rect)
-
-    # def setRectSpeedUp(self, rect):
-    #     self.speed
-
-    # def setRectBombUp(self, rect):
-    #     self.lalistaderectspowerUpsBomba.append(rect)
-
-    # def setRectLifeUp(self, rect):
-    #     self.lalistaderectspowerUpsVida.append(rect)
 
 # Borrar Rects y Sprites
 
