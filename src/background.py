@@ -51,10 +51,6 @@ class Background():
     def reloadBackgroundImage(self):  # Pone la imagen del fondo
         self.screen.blit(self.background, (0, 0))
 
-    def reloadBombermanRect(self):
-        rect = pygame.Rect(self.game.getPlayerHitbox())
-        self.game.setPlayerRect(rect)
-
     def reloadMenu(self):
         self.screen.blit(self.imagenmenu, (0, 0))
 
@@ -108,8 +104,6 @@ class Background():
 
 # Bomba y explosiones
 
-    def reloadBomba(self):
-        self.screen.blit(self.bomba, self.game.getBombermanPosition())
 
     def reloadExplosiones(self, explosiones):
         
@@ -175,23 +169,28 @@ class Background():
 # Personajes
 
     def loadBombermanImage(self, path, pos):
+        
+
+        size = [30,30]
+
         self.bomberman = {
-            "up": [pygame.image.load(path + "b1.png"),
-                   pygame.image.load(path + "b2.png"),
-                   pygame.image.load(path + "b1.png"),
-                   pygame.image.load(path + "b3.png")],
-            "down": [pygame.image.load(path + "f1.png"),
-                     pygame.image.load(path + "f2.png"),
-                     pygame.image.load(path + "f1.png"),
-                     pygame.image.load(path + "f3.png")],
-            "left": [pygame.image.load(path + "l1.png"),
-                     pygame.image.load(path + "l2.png"),
-                     pygame.image.load(path + "l1.png"),
-                     pygame.image.load(path + "l3.png")],
-            "right": [pygame.image.load(path + "r1.png"),
-                      pygame.image.load(path + "r2.png"),
-                      pygame.image.load(path + "r1.png"),
-                      pygame.image.load(path + "r3.png")]
+
+            "up": [pygame.transform.scale(pygame.image.load(path + "b1.png"), size),
+                   pygame.transform.scale(pygame.image.load(path + "b2.png"), size),
+                #    pygame.transform.scale(pygame.image.load(path + "b1.png"), size),
+                   pygame.transform.scale(pygame.image.load(path + "b3.png"), size)],
+            "down": [pygame.transform.scale(pygame.image.load(path + "f1.png"), size),
+                     pygame.transform.scale(pygame.image.load(path + "f2.png"), size),
+                    #  pygame.transform.scale(pygame.image.load(path + "f1.png"), size),
+                     pygame.transform.scale(pygame.image.load(path + "f3.png"), size)],
+            "left": [pygame.transform.scale(pygame.image.load(path + "l1.png"), size),
+                     pygame.transform.scale(pygame.image.load(path + "l2.png"), size),
+                    #  pygame.transform.scale(pygame.image.load(path + "l1.png"), size),
+                     pygame.transform.scale(pygame.image.load(path + "l3.png"), size)],
+            "right": [pygame.transform.scale(pygame.image.load(path + "r1.png"), size),
+                      pygame.transform.scale(pygame.image.load(path + "r2.png"), size),
+                    #   pygame.transform.scale(pygame.image.load(path + "r1.png"), size),
+                      pygame.transform.scale(pygame.image.load(path + "r3.png"), size)]
         }
         self.screen.blit(self.bomberman["down"][0], pos)
 

@@ -46,7 +46,7 @@ class threadBomba(Thread):
 
     def run(self):
         # Este thread determina cuanto tiempo pasa hasta que explota la bomba
-        time.sleep(3.0)
+        time.sleep(2.0)
         if(self.game.getBombas() != []):
             dispatcher.send(message = self.id, signal= 'explotoBomba', sender = 'threadBomba')
 
@@ -626,7 +626,7 @@ class GameEngine():
                             contadorAnimacionBomberman += 1
                         
                         
-                        if contadorAnimacionBomberman > 3:
+                        if contadorAnimacionBomberman > 2:
                             contadorAnimacionBomberman = 0
                         
                         
