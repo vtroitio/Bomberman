@@ -266,11 +266,11 @@ class GameEngine():
 
 
     def loadImages(self):
-        self.background.loadBombermanImage('sprites/BombermanAnimado/', (37, 37))  # Lo pone al principio del mapa
+        self.background.loadBombermanImage('sprites/BombermanAnimado.png', (37, 37))  # Lo pone al principio del mapa
         self.background.loadObstacle("sprites/pilar.png")
         self.background.loadImagenMenu("sprites/MenuBomberman.png")
         self.background.loadBackgroundImage("sprites/pasto.png")
-        self.background.loadEnemigoBomberman("sprites/EnemigoBombermanAnimado/")
+        self.background.loadEnemigoBomberman("sprites/EnemigoBombermanAnimado.png")
         self.background.loadCaja("sprites/caja.png")
         self.background.loadBomba("sprites/Bomba.png")
         self.background.loadSpeedPowerUp("sprites/PowerUps/SpeedUp.png")
@@ -492,9 +492,9 @@ class GameEngine():
                     self.game.moverEnemigo()
                     
                     self.background.reloadEnemyRect()
-                    
+
                     velocidadAnimacionEnemigo = 0.16 # Cuanto menor sea mas lenta y mas se notara la animacion
-                    contadorAnimacionEnemigo = (contadorAnimacionEnemigo + velocidadAnimacionEnemigo) % 4 
+                    contadorAnimacionEnemigo = (contadorAnimacionEnemigo + velocidadAnimacionEnemigo) % 3
                     
                     for i, enemy in enumerate(self.game.getListaDeEnemigos()):
                         # Enumerate me permite obtener tanto el indice del objeto en la lista como el objeto
