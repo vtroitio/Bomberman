@@ -262,7 +262,7 @@ class GameEngine():
 
 
     def loadImages(self):
-        self.background.loadBombermanImage('sprites/BombermanAnimado.png', (37, 37))  # Lo pone al principio del mapa
+        self.background.loadBombermanImage('sprites/BombermanMusulmanAnimado.png', (37, 37))  # Lo pone al principio del mapa
         self.background.loadObstacle("sprites/pilar.png")
         self.background.loadImagenMenu("sprites/MenuBomberman.png")
         self.background.loadBackgroundImage("sprites/pasto.png")
@@ -430,8 +430,6 @@ class GameEngine():
 
     def mainLoop(self):
         clock = pygame.time.Clock()
-        contadorAnimacionBomberman = 0
-        contadorAnimacionEnemigo = 0
 
         while self.gameRunning:
             clock.tick(60)

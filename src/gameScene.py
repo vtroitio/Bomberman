@@ -5,6 +5,8 @@ import time
 from pydispatch import dispatcher
 from threading import Thread
 
+EXPLOSION = pygame.USEREVENT + 1
+
 class GameScene():
     def __init__(self):
         self.contadorAnimacionBomberman = 0
@@ -167,8 +169,12 @@ class GameScene():
         #     self.killBomberman()
 
     def handleEvents(self, events, game):
-        pygame.event.clear(pygame.KEYDOWN)
         for event in events:
+            # if event.type == EXPLOSION:
+            
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                    self.contadorAnimacionBomberman = 0
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT: # Si se presionaron las flechitas
                     
@@ -199,7 +205,8 @@ class GameScene():
                         #Derecha
                         playerRectFuturo[0] = playerRectFuturo[0] + game.getBombermanSpeed()
                         direccion = 'right'
-                    
+
+
                     if len(playerRectFuturo.collidelistall(game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(game.getLaListaDeRectsCajas())) > 0:
                         # Si hay colision
 
@@ -230,9 +237,8 @@ class GameScene():
                                 pass
                             else:
 
-                                game.givePosition((self.CONTROLES[str(event.key)]))
-
-            if event.type == pygame.KEYUP:            
+                                game.givePosition((self.CONTROLES[str(event.key)]))    
+                
                 # Si presiono el espacio (poner bomba)
                 if event.key == pygame.K_SPACE:
                     
@@ -255,3 +261,4 @@ class GameScene():
                             game.addBombRect(rectBomba)
                             
                             self.byPassRectBomba = rectBomba
+        
