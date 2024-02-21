@@ -13,7 +13,7 @@ class SpriteSheet():
         self.sprite_height_count = self.height // self.sprite_height
         self.sprite_scale = sprite_scale
 
-    def get_sprites(self):
+    def getSprites(self):
         sprites = ([],[],[]) if self.sprite_height_count > 1 else []
         for y in range(self.sprite_height_count):
             for x in range(self.sprite_width_count):

@@ -1,6 +1,7 @@
 import pygame
 import game
 import background
+import sceneManager
 import sys
 import time
 from threading import Thread
@@ -11,7 +12,7 @@ import random
 
 # Son las flechitas, se usan para el movimiento del bomberman
 
-CONTROLES = {'1073741906': [0, -1], '1073741905': [0, 1], '1073741903': [1, 0], '1073741904': [-1, 0]}
+CONTROLES = {str(pygame.K_UP): [0, -1], str(pygame.K_DOWN): [0, 1], str(pygame.K_RIGHT): [1, 0], str(pygame.K_LEFT): [-1, 0]}
 
 
 # Uso los threads principalmente para poder ejecutar eventos luego de un tiempo gracias al sleep
@@ -61,11 +62,11 @@ class threadSpeed(Thread):
         dispatcher.send(message = '', signal= 'resetearSpeed', sender = 'threadSpeed')
 
 
-
 class GameEngine():
     def __init__(self):
         self.dimensions = [925, 555]
         self.game = game.Game()
+        self.gameRunning = True
         self.background = background.Background(self.dimensions, self.game)
         
         self.loadImages()
@@ -88,6 +89,7 @@ class GameEngine():
         
         # Variables que uso para saber que pantalla mostrar
 
+        self.manager = sceneManager.SceneMananger()
         self.menu = True
         self.gameOverScreen = False
         self.winScreen = False
@@ -101,7 +103,7 @@ class GameEngine():
         self.bombas = 1
         self.byPassRectBomba = None
 
-        self.mainLoop()
+        # self.mainLoop()
 
     def crearNivel(self):
         # Genero aleatoriamente la posicion de las cajas y lo guardo en un diccionario
@@ -145,16 +147,9 @@ class GameEngine():
         print("Pasaste al siguiente nivel :D, estas en el nivel " + str(self.nivelActual))
 
     def intro(self):
-        clock = pygame.time.Clock()
-        while self.menu:
-            self.background.reloadMenu()
-            pygame.display.update()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT: sys.exit()
-                if event.type == pygame.KEYUP:
-                    self.menu = False
-                    pygame.display.update()
-                    clock.tick(60)
+        keyPressed = pygame.key.get_pressed()
+        self.background.reloadMenu()
+        if keyPressed: self.menu = False
         
     def generateRandomObstacles(self, probabilidadObstaculos):
         
@@ -218,19 +213,20 @@ class GameEngine():
 
         return diccionarioObstaculos
         
-    def gameOver(self):
-        clock = pygame.time.Clock()
-        while self.gameOverScreen:
-            self.background.reloadGameOverScreen()
-            pygame.display.update()
-            clock.tick(60)
+    # def gameOver(self):
+    #     clock = pygame.time.Clock()
+    #     while self.gameOverScreen:
+    #         self.background.reloadGameOverScreen()
+    #         pygame.display.update()
+    #         clock.tick(60)
+
             
-    def win(self):
-        clock = pygame.time.Clock()
-        while self.winScreen:
-            self.background.reloadWinScreen()
-            pygame.display.update()
-            clock.tick(60)
+    # def win(self):
+    #     clock = pygame.time.Clock()
+    #     while self.winScreen:
+    #         self.background.reloadWinScreen()
+    #         pygame.display.update()
+    #         clock.tick(60)
 
 
     def goMenu():
@@ -436,326 +432,342 @@ class GameEngine():
         clock = pygame.time.Clock()
         contadorAnimacionBomberman = 0
         contadorAnimacionEnemigo = 0
+
+        while self.gameRunning:
+            clock.tick(60)
+            if pygame.event.get(pygame.QUIT):
+                self.gameRunning = False
+                return
+
+            # Verifico si termino el sleep de alguno de mis threads y ejecuto la funcion que corresponda
+            dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
+            dispatcher.connect(self.borrarExplosion, signal = 'borrarExplosion', sender = 'threadExplosion')
+            dispatcher.connect(self.borrarPowerUp, signal = 'borrarPowerUp', sender= 'threadPowerUp')
+            dispatcher.connect(self.resetearSpeed, signal = 'resetearSpeed', sender = 'threadSpeed')
+
+            self.manager.scene.handleEvents(pygame.event.get(), self.game)
+            self.manager.scene.render(self.background)
+            self.manager.scene.update(self.background, self.game)
+
+
+            pygame.display.flip()
+    
+        pygame.quit()
+
+            # if self.menu:
+            #     self.intro()
+            # else:                  
+
+            # if self.gameOverScreen :
+            #     self.gameOver()
+
+            # if self.winScreen:
+            #     self.win()
+            
+            # Verifico si termino el sleep de alguno de mis threads y ejecuto la funcion que corresponda
+            # dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
+            # dispatcher.connect(self.borrarExplosion, signal = 'borrarExplosion', sender = 'threadExplosion')
+            # dispatcher.connect(self.borrarPowerUp, signal = 'borrarPowerUp', sender= 'threadPowerUp')
+            # dispatcher.connect(self.resetearSpeed, signal = 'resetearSpeed', sender = 'threadSpeed')
+
+            # Muestro la imagen de fondo
+            # self.background.reloadBackgroundImage()
+            # Muestro los power-ups y la salida (si alguno esta disponible)
+            # Se muestran antes que lo demas ya que tanto los enemigos como
+            # el bomberman deben poder pasarles por encima (visualmente)
+            # self.background.reloadSpeedPowerUp()
+            # self.background.reloadLifePowerUp()
+            # self.background.reloadBombPowerUp()
+            # self.background.reloadSalida()
+
+            # Muestro el sprite del bomberman y su rect
+            # self.background.reloadBomberman(self.game.getBombermanDirection(), contadorAnimacionBomberman)
+            # self.background.reloadBombermanRect()
+            
+            # Bombas explosiones y obstaculos
+            # Este orden es importante para que se muestre
+            # el sprite de la explosion por debajo de los pilares grises
+            # pero por encima de las cajas rompibles.
+            
+            
+            # 1 - Muestro las cajas rompibles
+            # self.background.reloadBoxes() 
+            
+            # 2 - Muestro las explosiones que hayan
+            # self.background.reloadExplosiones(self.game.getExplosiones())
+            
+            # 3 - Muestro las cajas no rompibles
+        #     self.background.reloadBackground()
         
-        while True:
-            while self.menu:
-                self.intro()
-            if self.menu == False:
-                    
+        #     # 4 - Muestro las bombas activas       
+        #     self.background.reloadBombas()
+            
+        #     # Movimiento y muestreo de los enemigos                    
+            
+        #     self.game.moverEnemigo()
+            
+        #     self.background.reloadEnemyRect()
 
-                    if self.gameOverScreen :
-                        self.gameOver()
-
-                    if self.winScreen:
-                        self.win()
-                    
-                    # Verifico si termino el sleep de alguno de mis threads y ejecuto la funcion que corresponda
-                    dispatcher.connect(self.exploto, signal= 'explotoBomba', sender = 'threadBomba')
-                    dispatcher.connect(self.borrarExplosion, signal = 'borrarExplosion', sender = 'threadExplosion')
-                    dispatcher.connect(self.borrarPowerUp, signal = 'borrarPowerUp', sender= 'threadPowerUp')
-                    dispatcher.connect(self.resetearSpeed, signal = 'resetearSpeed', sender = 'threadSpeed')
-
-                    # Muestro la imagen de fondo
-                    self.background.reloadBackgroundImage()
-                    # Muestro los power-ups y la salida (si alguno esta disponible)
-                    # Se muestran antes que lo demas ya que tanto los enemigos como
-                    # el bomberman deben poder pasarles por encima (visualmente)
-                    self.background.reloadSpeedPowerUp()
-                    self.background.reloadLifePowerUp()
-                    self.background.reloadBombPowerUp()
-                    self.background.reloadSalida()
-
-                    # Muestro el sprite del bomberman y su rect
-                    self.background.reloadBomberman(self.game.getBombermanDirection(), contadorAnimacionBomberman)
-                    self.background.reloadBombermanRect()
-                    
-                    # Bombas explosiones y obstaculos
-                    # Este orden es importante para que se muestre
-                    # el sprite de la explosion por debajo de los pilares grises
-                    # pero por encima de las cajas rompibles.
-                    
-                    
-                    # 1 - Muestro las cajas rompibles
-                    self.background.reloadBoxes() 
-                    
-                    # 2 - Muestro las explosiones que hayan
-                    self.background.reloadExplosiones(self.game.getExplosiones())
-                    
-                    # 3 - Muestro las cajas no rompibles
-                    self.background.reloadBackground()
+        #     velocidadAnimacionEnemigo = 0.16 # Cuanto menor sea mas lenta y mas se notara la animacion
+        #     contadorAnimacionEnemigo = (contadorAnimacionEnemigo + velocidadAnimacionEnemigo) % 3
+            
+        #     for i, enemy in enumerate(self.game.getListaDeEnemigos()):
+        #         # Enumerate me permite obtener tanto el indice del objeto en la lista como el objeto
                 
-                    # 4 - Muestro las bombas activas       
-                    self.background.reloadBombas()
-                    
-                    # Movimiento y muestreo de los enemigos                    
-                    
-                    self.game.moverEnemigo()
-                    
-                    self.background.reloadEnemyRect()
-
-                    velocidadAnimacionEnemigo = 0.16 # Cuanto menor sea mas lenta y mas se notara la animacion
-                    contadorAnimacionEnemigo = (contadorAnimacionEnemigo + velocidadAnimacionEnemigo) % 3
-                    
-                    for i, enemy in enumerate(self.game.getListaDeEnemigos()):
-                        # Enumerate me permite obtener tanto el indice del objeto en la lista como el objeto
-                        
-                        # Uso math.floor ya que por ej 3.2 necesito rendondearlo para abajo para obtener la animacion
-                        # numero 3
-                        
-                        
-                        self.background.reloadEnemy(enemy.getAnimacion(), math.floor(contadorAnimacionEnemigo), i)
+        #         # Uso math.floor ya que por ej 3.2 necesito rendondearlo para abajo para obtener la animacion
+        #         # numero 3
+                
+                
+        #         self.background.reloadEnemy(enemy.getAnimacion(), math.floor(contadorAnimacionEnemigo), i)
 
 
-                    # Colisiones de los enemigos con cajas
+        #     # Colisiones de los enemigos con cajas
+            
+        #     enemiesRects = self.game.getEnemyRect()
+        #     enemigos = self.game.getListaDeEnemigos()
+
+        #     # print(str(self.game.getBombRects()))
+
+        #     for i in range(0, len(enemiesRects)):
+        #         if enemiesRects[i].collidelistall(self.game.getListaDeRects()) or enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas()) or enemiesRects[i].collidelistall(self.game.getBombRects()): 
                     
-                    enemiesRects = self.game.getEnemyRect()
-                    enemigos = self.game.getListaDeEnemigos()
+        #             # Cambio la direccion a la que apunta, la direccion vale 1 o -1
+        #             self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i)
+                    
+        #             # Cambio su posicion para que no se choque
+        #             self.game.setPositionAnterior(i)
+                    
+        #             # Cambio su animacion
+        #             self.game.setAnimacionEnemigo(i)
 
-                    # print(str(self.game.getBombRects()))
+        #             enemigos[i].setCambioDireccion(False)
 
-                    for i in range(0, len(enemiesRects)):
-                        if enemiesRects[i].collidelistall(self.game.getListaDeRects()) or enemiesRects[i].collidelistall(self.game.getLaListaDeRectsCajas()) or enemiesRects[i].collidelistall(self.game.getBombRects()): 
+        #     # Posible cambio de direccion de los enemigos
+
+        #     probabilidadDeDoblar = 15 # Cuanto menor sea mas probabilidad hay de doblen
+        #     probabilidadCambioDireccion = 50 # Cuanto menor sea mas probabilidad hay de que los enemigos se den vuelta
+            
+
+            # for enemy in enemigos:
+            #     # if enemy.getEnemyPosition() == self.game.obtenerPosicionCentrada(enemy.getEnemyPosition()):
+            #     if enemy.getCambioDireccion() != True:   
+            #         if random.randrange(0, probabilidadDeDoblar) == 1:
+            #                 # Toca cambiar de direccion (si es que puede)
+            #                 posiblesMovimientos = []
+
+        #                     rectDerecha, rectIzquierda, rectArriba, rectAbajo = self.game.getRectsCercanosEnemy(enemy)
+        #                     # self.background.printearRects(rectDerecha, rectIzquierda, rectArriba, rectAbajo)
+
+        #                     animacionActual = enemy.getAnimacion()
+
+        #                     if not rectDerecha.collidelistall(self.game.getListaDeRects()) and not rectDerecha.collidelistall(self.game.getLaListaDeRectsCajas()):
+        #                         if animacionActual == "horizontal2":
+        #                             if random.randrange(0, probabilidadCambioDireccion) == 1:
+        #                                 posiblesMovimientos.append(("horizontal", 1, 1))
+        #                         else:
+        #                             if animacionActual != "horizontal1":
+        #                                 posiblesMovimientos.append(("horizontal", 1, 1))
                             
-                            # Cambio la direccion a la que apunta, la direccion vale 1 o -1
-                            self.game.setDireccionEnemigo(self.game.getDireccionEnemigo(i) * -1, i)
+        #                     if not rectIzquierda.collidelistall(self.game.getListaDeRects()) and not rectIzquierda.collidelistall(self.game.getLaListaDeRectsCajas()):
+        #                         if animacionActual == "horizontal1":
+        #                             if random.randrange(0, probabilidadCambioDireccion) == 1:
+        #                                 posiblesMovimientos.append(("horizontal", 2, -1))
+        #                         else:    
+        #                             if animacionActual != "horizontal2":
+        #                                 posiblesMovimientos.append(("horizontal", 2, -1))
                             
-                            # Cambio su posicion para que no se choque
-                            self.game.setPositionAnterior(i)
+        #                     if not rectArriba.collidelistall(self.game.getListaDeRects()) and not rectArriba.collidelistall(self.game.getLaListaDeRectsCajas()):
+        #                         if animacionActual == "vertical1":
+        #                             if random.randrange(0, probabilidadCambioDireccion) == 1:
+        #                                 posiblesMovimientos.append(("vertical", 2, -1))
+        #                         else:
+        #                             if animacionActual != "vertical2":                                        
+        #                                 posiblesMovimientos.append(("vertical", 2, -1))
                             
-                            # Cambio su animacion
-                            self.game.setAnimacionEnemigo(i)
-
-                            enemigos[i].setCambioDireccion(False)
-
-                    # Posible cambio de direccion de los enemigos
-
-                    probabilidadDeDoblar = 15 # Cuanto menor sea mas probabilidad hay de doblen
-                    probabilidadCambioDireccion = 50 # Cuanto menor sea mas probabilidad hay de que los enemigos se den vuelta
-                    
-
-                    for enemy in enemigos:
-                        # if enemy.getEnemyPosition() == self.game.obtenerPosicionCentrada(enemy.getEnemyPosition()):
-                        if enemy.getCambioDireccion() != True:   
-                            if random.randrange(0, probabilidadDeDoblar) == 1:
-                                    # Toca cambiar de direccion (si es que puede)
-                                    posiblesMovimientos = []
-
-                                    rectDerecha, rectIzquierda, rectArriba, rectAbajo = self.game.getRectsCercanosEnemy(enemy)
-                                    # self.background.printearRects(rectDerecha, rectIzquierda, rectArriba, rectAbajo)
-
-                                    animacionActual = enemy.getAnimacion()
-
-                                    if not rectDerecha.collidelistall(self.game.getListaDeRects()) and not rectDerecha.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                        if animacionActual == "horizontal2":
-                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
-                                                posiblesMovimientos.append(("horizontal", 1, 1))
-                                        else:
-                                            if animacionActual != "horizontal1":
-                                                posiblesMovimientos.append(("horizontal", 1, 1))
-                                    
-                                    if not rectIzquierda.collidelistall(self.game.getListaDeRects()) and not rectIzquierda.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                        if animacionActual == "horizontal1":
-                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
-                                                posiblesMovimientos.append(("horizontal", 2, -1))
-                                        else:    
-                                            if animacionActual != "horizontal2":
-                                                posiblesMovimientos.append(("horizontal", 2, -1))
-                                    
-                                    if not rectArriba.collidelistall(self.game.getListaDeRects()) and not rectArriba.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                        if animacionActual == "vertical1":
-                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
-                                                posiblesMovimientos.append(("vertical", 2, -1))
-                                        else:
-                                            if animacionActual != "vertical2":                                        
-                                                posiblesMovimientos.append(("vertical", 2, -1))
-                                    
-                                    if not rectAbajo.collidelistall(self.game.getListaDeRects()) and not rectAbajo.collidelistall(self.game.getLaListaDeRectsCajas()):
-                                        if animacionActual == "vertical2":
-                                            if random.randrange(0, probabilidadCambioDireccion) == 1:
-                                                posiblesMovimientos.append(("vertical", 1, 1))
-                                        else:      
-                                            if animacionActual != "vertical1":                                  
-                                                posiblesMovimientos.append(("vertical", 1, 1))
-
-                                    
-
-                                    if posiblesMovimientos != []:
-                                        indiceElegido = random.randrange(0, len(posiblesMovimientos))
-                                        movimiento = posiblesMovimientos[indiceElegido]
-
-                                        enemy.setEnemyTipoDeMovimiento(movimiento[0])
-                                        enemy.setEnemyAnimacion(movimiento[1])
-                                        enemy.setEnemyDireccion(movimiento[2])
-                                        enemy.setCambioDireccion(True)
-                                        
-
-                    # Colision de bomberman con enemigos
-                    
-                    playerrect = self.game.getPlayerRect()
-
-                    if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
-                        # pygame.time.wait(2000)
-                        self.killBomberman()
-                            
-                       
+        #                     if not rectAbajo.collidelistall(self.game.getListaDeRects()) and not rectAbajo.collidelistall(self.game.getLaListaDeRectsCajas()):
+        #                         if animacionActual == "vertical2":
+        #                             if random.randrange(0, probabilidadCambioDireccion) == 1:
+        #                                 posiblesMovimientos.append(("vertical", 1, 1))
+        #                         else:      
+        #                             if animacionActual != "vertical1":                                  
+        #                                 posiblesMovimientos.append(("vertical", 1, 1))
 
                             
+
+        #                     if posiblesMovimientos != []:
+        #                         indiceElegido = random.randrange(0, len(posiblesMovimientos))
+        #                         movimiento = posiblesMovimientos[indiceElegido]
+
+        #                         enemy.setEnemyTipoDeMovimiento(movimiento[0])
+        #                         enemy.setEnemyAnimacion(movimiento[1])
+        #                         enemy.setEnemyDireccion(movimiento[2])
+        #                         enemy.setCambioDireccion(True)
+                                
+
+        #     # Colision de bomberman con enemigos
+            
+            # playerrect = self.game.getPlayerRect()
+
+        #     if len(playerrect.collidelistall(self.game.getlalisaderectsenemigos())) > 0:
+        #         # pygame.time.wait(2000)
+        #         self.killBomberman()
                     
+                
 
-
-
-                   
                     
-
-
-                        
             
 
 
-                   
-                                
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT: sys.exit()
-                if event.type == pygame.KEYDOWN: # Cuando se presiona una tecla
+            
+            
 
-                    if event.key== 1073741906 or event.key== 1073741905 or event.key== 1073741903 or event.key== 1073741904: # Si se presionaron las flechitas
+
+                
+    
+
+
+            
                         
-                        # contadorAnimacionBomberman es usado para saber que sprite del bomberman mostrar
-                        if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
-                            contadorAnimacionBomberman += 1
-                        
-                        
-                        if contadorAnimacionBomberman > 2:
-                            contadorAnimacionBomberman = 0
-                        
-                        
-                        # Manejo de colisiones con cajas
 
-                        playerRectFuturo = playerrect
-                        direccion = None
+        # for event in pygame.event.get():
+        #     if event.type == pygame.QUIT: sys.exit()
+        #     if event.type == pygame.KEYDOWN: # Cuando se presiona una tecla
 
-                        if event.key == 1073741906:
-                            #Arriba
-                            playerRectFuturo[1] = playerRectFuturo[1] - self.game.getBombermanSpeed()
-                            direccion = 'up'
-                        elif event.key == 1073741905:
-                            #Abajo
-                            playerRectFuturo[1] = playerRectFuturo[1] + self.game.getBombermanSpeed()
-                            direccion = 'down'
-                        elif event.key == 1073741904:
-                            #Izquierda
-                            playerRectFuturo[0] = playerRectFuturo[0] - self.game.getBombermanSpeed()
-                            direccion = 'left'
-                        elif event.key == 1073741903:
-                            #Derecha
-                            playerRectFuturo[0] = playerRectFuturo[0] + self.game.getBombermanSpeed()
-                            direccion = 'right'
-                        
-                        if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
-                            # Si hay colision
-
-                            if len(playerRectFuturo.collidelistall(self.game.getRectsBordes())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0 :
-                                # Si la colision es con el borde del mapa, no se cheque la colision
-                                # con esquinas para movimiento predictivo
-                                self.game.setBombermanPosition(direccion, True)
-                            else:
-                                # Si la colision es con los bloques del medio si se chequea si es con una
-                                # esquina
-                                self.game.setBombermanPosition(direccion, False)
-                        else:
-                            # No hay colision
-                            rectsBombas = self.game.getBombRects()
-                            
-                            # Si la bomba que acabo de poner esta colisionando
-                            if self.byPassRectBomba != None:
-                                if self.byPassRectBomba.colliderect(playerrect):
-
-                                    # Movelo igual porque sino me quedo bug
-                                    
-                                    self.game.givePosition((CONTROLES[str(event.key)]))
-                                else: 
-                                    # Si dejo de colisionar borrame el rectActual de bypass
-                                    self.byPassRectBomba = None
-                            else:
-                                if rectsBombas != [] and playerRectFuturo.collidelistall(rectsBombas):
-                                    pass
-                                else:
-
-                                    self.game.givePosition((CONTROLES[str(event.key)]))
-                                
+        #         if event.key== 1073741906 or event.key== 1073741905 or event.key== 1073741903 or event.key== 1073741904: # Si se presionaron las flechitas
+                    
+        #             # contadorAnimacionBomberman es usado para saber que sprite del bomberman mostrar
+        #             if self.game.getBombermanPositionAnterior() != self.game.getBombermanPosition():
+        #                 contadorAnimacionBomberman += 1
                     
                     
+        #             if contadorAnimacionBomberman > 2:
+        #                 contadorAnimacionBomberman = 0
+                    
+                    
+        #             # Manejo de colisiones con cajas
 
+                    # playerRectFuturo = playerrect
+                    # direccion = None
+
+                    # if event.key == 1073741906:
+                    #     #Arriba
+                    #     playerRectFuturo[1] = playerRectFuturo[1] - self.game.getBombermanSpeed()
+                    #     direccion = 'up'
+        #             elif event.key == 1073741905:
+        #                 #Abajo
+        #                 playerRectFuturo[1] = playerRectFuturo[1] + self.game.getBombermanSpeed()
+        #                 direccion = 'down'
+        #             elif event.key == 1073741904:
+        #                 #Izquierda
+        #                 playerRectFuturo[0] = playerRectFuturo[0] - self.game.getBombermanSpeed()
+        #                 direccion = 'left'
+        #             elif event.key == 1073741903:
+        #                 #Derecha
+        #                 playerRectFuturo[0] = playerRectFuturo[0] + self.game.getBombermanSpeed()
+        #                 direccion = 'right'
+                    
+        #             if len(playerRectFuturo.collidelistall(self.game.getListaDeRects())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0:
+        #                 # Si hay colision
+
+        #                 if len(playerRectFuturo.collidelistall(self.game.getRectsBordes())) > 0 or len(playerRectFuturo.collidelistall(self.game.getLaListaDeRectsCajas())) > 0 :
+        #                     # Si la colision es con el borde del mapa, no se cheque la colision
+        #                     # con esquinas para movimiento predictivo
+        #                     self.game.setBombermanPosition(direccion, True)
+        #                 else:
+        #                     # Si la colision es con los bloques del medio si se chequea si es con una
+        #                     # esquina
+        #                     self.game.setBombermanPosition(direccion, False)
+        #             else:
+        #                 # No hay colision
+        #                 rectsBombas = self.game.getBombRects()
+                        
+        #                 # Si la bomba que acabo de poner esta colisionando
+        #                 if self.byPassRectBomba != None:
+        #                     if self.byPassRectBomba.colliderect(playerrect):
+
+        #                         # Movelo igual porque sino me quedo bug
+                                
+        #                         self.game.givePosition((CONTROLES[str(event.key)]))
+        #                     else: 
+        #                         # Si dejo de colisionar borrame el rectActual de bypass
+        #                         self.byPassRectBomba = None
+        #                 else:
+        #                     if rectsBombas != [] and playerRectFuturo.collidelistall(rectsBombas):
+        #                         pass
+        #                     else:
+
+        #                         self.game.givePosition((CONTROLES[str(event.key)]))
                             
+                
+                
+
+                        
+
+                
+
+                
+
+
+        #         # Verificacion de colisiones con powerUps
+        #         if self.game.agarroVida():
+        #             self.game.setBombermanVidas(1)
+        #             print("AMIGO SOS UN PICANTE TE GANASTE UNA VIDA, AHORA TENES " + str(self.game.getBombermanVidas()) + " VIDAS")
+        #         elif self.game.agarroBomba():
+        #             if self.bombas < 4:
+        #                 self.bombas = self.bombas + 1
+
+        #                 self.BOMBAS_DISPONIBLES.append(self.bombas)
+                        
+        #                 print("AMIGO AHORA TENES " + str(self.bombas) + " BOMBAS TOTALES")
+        #             else:
+        #                 print("Maximo de 4 bombas alcanzado")    
+        #         elif self.game.agarroVelocidad():
+                    
+        #             self.game.setBombermanSpeed(8)
+                    
+        #             print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
+        #             thread = threadSpeed()
+        #             thread.start()
+
+        #         # Verifico colision con salida y a su vez que no quede ningun enemigo en el nivel
+        #         if len(self.game.getlalisaderectsenemigos()) == 0:
+        #             if self.game.getSalidaRect() != None:
+        #                 if self.game.getSalidaRect().colliderect(playerrect):
+        #                     # self.winScreen = True
+        #                     self.siguienteNivel()
+                            
+            
+            # Si presiono el espacio (poner bomba)
+            
+            
+            # if event.type == pygame.KEYUP:
+            #     if str(event.key) == '32':            
 
                     
-
-                    
-
-
-                    # Verificacion de colisiones con powerUps
-                    if self.game.agarroVida():
-                        self.game.setBombermanVidas(1)
-                        print("AMIGO SOS UN PICANTE TE GANASTE UNA VIDA, AHORA TENES " + str(self.game.getBombermanVidas()) + " VIDAS")
-                    elif self.game.agarroBomba():
-                        if self.bombas < 4:
-                            self.bombas = self.bombas + 1
-
-                            self.BOMBAS_DISPONIBLES.append(self.bombas)
-                            
-                            print("AMIGO AHORA TENES " + str(self.bombas) + " BOMBAS TOTALES")
-                        else:
-                            print("Maximo de 4 bombas alcanzado")    
-                    elif self.game.agarroVelocidad():
+            #         # Si la cantidad de bombas en uso es menor a las disponibles
+            #         if len(self.BOMBAS_USANDO) < self.bombas:
                         
-                        self.game.setBombermanSpeed(8)
+            #             # Esto significa que saliste de arriba de la bomba que pusiste
+            #             # Implica que no se pueden poner dos bombas en el mismo lugar
+            #             if self.byPassRectBomba == None:
                         
-                        print("AMIGO SOS UN PICANTE AHORA CORRES MAS ")
-                        thread = threadSpeed()
-                        thread.start()
-
-                    # Verifico colision con salida y a su vez que no quede ningun enemigo en el nivel
-                    if len(self.game.getlalisaderectsenemigos()) == 0:
-                        if self.game.getSalidaRect() != None:
-                            if self.game.getSalidaRect().colliderect(playerrect):
-                                # self.winScreen = True
-                                self.siguienteNivel()
-                                
-                
-                # Si presiono el espacio (poner bomba)
-                
-                
-                if event.type == pygame.KEYUP:
-                    if str(event.key) == '32':            
-
-                        
-                        # Si la cantidad de bombas en uso es menor a las disponibles
-                        if len(self.BOMBAS_USANDO) < self.bombas:
+            #                 numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
+            #                 self.BOMBAS_DISPONIBLES.remove(numero_bomba)
+            #                 self.BOMBAS_USANDO.append(numero_bomba)
                             
-                            # Esto significa que saliste de arriba de la bomba que pusiste
-                            # Implica que no se pueden poner dos bombas en el mismo lugar
-                            if self.byPassRectBomba == None:
-                            
-                                numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
-                                self.BOMBAS_DISPONIBLES.remove(numero_bomba)
-                                self.BOMBAS_USANDO.append(numero_bomba)
-                                
 
-                                bomba = self.game.poner_bomba(numero_bomba)
-                                rectBomba = pygame.Rect(bomba.getHitbox())
-                                
-                                bomba.setRect(rectBomba)
-                                self.game.addBombRect(rectBomba)
-                                
-                                self.byPassRectBomba = rectBomba
-                                
-                                self.lista_threads.append(threadBomba(numero_bomba, self.game))
-                                self.lista_threads[-1].start()
+            #                 bomba = self.game.poner_bomba(numero_bomba)
+            #                 rectBomba = pygame.Rect(bomba.getHitbox())
                             
-                                    
-            pygame.display.update()
-            clock.tick(60)
-                
+            #                 bomba.setRect(rectBomba)
+            #                 self.game.addBombRect(rectBomba)
+                            
+            #                 self.byPassRectBomba = rectBomba
+                            
+            #                 self.lista_threads.append(threadBomba(numero_bomba, self.game))
+            #                 self.lista_threads[-1].start()
+
 if __name__ == "__main__":
     controlador = GameEngine()
+    controlador.mainLoop()

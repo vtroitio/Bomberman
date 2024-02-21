@@ -128,11 +128,6 @@ class Background():
                 posOffset = [xOffset, yOffset]
                 self.screen.blit(self.explosion, posOffset)
 
-
-                
-                       
-        
-
 # Power Ups
 
     def reloadSpeedPowerUp(self):
@@ -174,7 +169,7 @@ class Background():
         size = (90, 90)
 
         bombermanImage = pygame.transform.scale(pygame.image.load(path).convert_alpha(), size)
-        bombermanSprites = spritesheet.SpriteSheet(bombermanImage, 30, 30).get_sprites()
+        bombermanSprites = spritesheet.SpriteSheet(bombermanImage, 30, 30).getSprites()
 
         self.bomberman = {
             "up": bombermanSprites[0],
@@ -184,34 +179,11 @@ class Background():
         }
 
         self.screen.blit(self.bomberman["down"][0], pos)
-        
-        # size = [30,30]
-
-        # self.bomberman = {
-
-        #     "up": [pygame.transform.scale(pygame.image.load(path + "b1.png"), size),
-        #            pygame.transform.scale(pygame.image.load(path + "b2.png"), size),
-        #         #    pygame.transform.scale(pygame.image.load(path + "b1.png"), size),
-        #            pygame.transform.scale(pygame.image.load(path + "b3.png"), size)],
-        #     "down": [pygame.transform.scale(pygame.image.load(path + "f1.png"), size),
-        #              pygame.transform.scale(pygame.image.load(path + "f2.png"), size),
-        #             #  pygame.transform.scale(pygame.image.load(path + "f1.png"), size),
-        #              pygame.transform.scale(pygame.image.load(path + "f3.png"), size)],
-        #     "left": [pygame.transform.scale(pygame.image.load(path + "l1.png"), size),
-        #              pygame.transform.scale(pygame.image.load(path + "l2.png"), size),
-        #             #  pygame.transform.scale(pygame.image.load(path + "l1.png"), size),
-        #              pygame.transform.scale(pygame.image.load(path + "l3.png"), size)],
-        #     "right": [pygame.transform.scale(pygame.image.load(path + "r1.png"), size),
-        #               pygame.transform.scale(pygame.image.load(path + "r2.png"), size),
-        #             #   pygame.transform.scale(pygame.image.load(path + "r1.png"), size),
-        #               pygame.transform.scale(pygame.image.load(path + "r3.png"), size)]
-        # }
-        # self.screen.blit(self.bomberman["down"][0], pos)
 
     def loadEnemigoBomberman(self, path):
         
         enemigoImage = pygame.image.load(path).convert_alpha()
-        enemigoSprites = spritesheet.SpriteSheet(enemigoImage, 30, 30).get_sprites()
+        enemigoSprites = spritesheet.SpriteSheet(enemigoImage, 30, 30).getSprites()
         
         self.enemigobomberman = {
             "vertical2": enemigoSprites[0],
@@ -219,26 +191,6 @@ class Background():
             "horizontal2": [pygame.transform.flip(leftSprites, 1, 0) for leftSprites in enemigoSprites[2]],
             "horizontal1": enemigoSprites[2]
         }
-
-        # self.enemigobomberman = {
-        #     "vertical2": [pygame.image.load(path + "b1.png"),
-        #                 pygame.image.load(path + "b2.png"),
-        #                 pygame.image.load(path + "b1.png"),
-        #                 pygame.image.load(path + "b3.png")],
-        #     "vertical1": [pygame.image.load(path + "f1.png"),
-        #                 pygame.image.load(path + "f2.png"),
-        #                 pygame.image.load(path + "f1.png"),
-        #                 pygame.image.load(path + "f3.png")],
-        #     "horizontal2": [pygame.image.load(path + "l1.png"),
-        #                     pygame.image.load(path + "l2.png"),
-        #                     pygame.image.load(path + "l1.png"),
-        #                     pygame.image.load(path + "l3.png")],
-        #     "horizontal1": [pygame.image.load(path + "r1.png"),
-        #                     pygame.image.load(path + "r2.png"),
-        #                     pygame.image.load(path + "r1.png"),
-        #                     pygame.image.load(path + "r3.png")]
-        # }
-
 
 # Obstaculos
 
@@ -298,3 +250,5 @@ class Background():
     def reloadWinScreen(self):
         self.screen.blit(self.winScreen, (0, 0))
 
+    def getScreen(self):
+        return self.screen
