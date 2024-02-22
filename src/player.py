@@ -6,7 +6,7 @@ import copy as copy
 class Player(DynamicObject):
     def __init__(self):
         super().__init__()
-        self.lifes = 3
+        self.lifes = 2
         self.speed = 5
         self.positionanterior = []
         # Colisiones

@@ -12,7 +12,7 @@ class DynamicObject():
         self.frameWidth = 1
         self.frameHeith = 1
         self.x = self.position[0]
-        self.y = self.position[1]
+        self.y = self.position[1]   
 
     def die(self):
         pass

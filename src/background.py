@@ -168,13 +168,13 @@ class Background():
 
         size = (90, 90)
 
-        # bombermanImage = pygame.transform.scale(pygame.image.load(path), size).convert_alpha()
-        bombermanImage = pygame.image.load(path).convert_alpha()
+        bombermanImage = pygame.transform.scale(pygame.image.load(path), size).convert_alpha()
+        # bombermanImage = pygame.image.load(path).convert_alpha()
         bombermanSprites = spritesheet.SpriteSheet(bombermanImage, 30, 30).getSprites()
 
         self.bomberman = {
-            "up": bombermanSprites[1],
-            "down": bombermanSprites[0],
+            "up": bombermanSprites[0],
+            "down": bombermanSprites[1],
             "left": [pygame.transform.flip(leftSprites, 1, 0) for leftSprites in bombermanSprites[2]],
             "right": bombermanSprites[2]
         }

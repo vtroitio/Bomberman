@@ -1,29 +1,169 @@
 import pygame
 import math
 import random
-import time
-from pydispatch import dispatcher
-from threading import Thread
+import gameOverScene
 
-EXPLOSION = pygame.USEREVENT + 1
+# Eventos en la partida
+BOMBA = pygame.USEREVENT + 1
+EXPLOSION = pygame.USEREVENT + 2
+POWER_UP = pygame.USEREVENT + 3
+SPEED = pygame.USEREVENT + 4
+GAME_OVER = pygame.USEREVENT + 5
 
 class GameScene():
     def __init__(self):
+        self.dimensions = (925, 555)
+        self.background = None
+        self.game = None
         self.contadorAnimacionBomberman = 0
         self.contadorAnimacionEnemigo = 0
         self.playerrect = pygame.Rect(0,0,0,0)
-        self.CONTROLES = {str(pygame.K_UP): [0, -1], 
-                          str(pygame.K_DOWN): [0, 1],
-                          str(pygame.K_RIGHT): [1, 0],
-                          str(pygame.K_LEFT): [-1, 0]}
         
-        self.lista_threads = []
+        self.CONTROLES = {
+            str(pygame.K_UP): [0, -1], 
+            str(pygame.K_DOWN): [0, 1],
+            str(pygame.K_RIGHT): [1, 0],
+            str(pygame.K_LEFT): [-1, 0]
+        }
+
+        self.probabilidadObstaculos = 13
+        self.probabilidadEnemigos = 13
+
         self.BOMBAS_USANDO = []
         self.BOMBAS_DISPONIBLES = [1]
+        self.numero_bomba = 0
         self.bombas = 1
         self.byPassRectBomba = None
 
+    def crearCajasRompibles(self, diccCajas):
+        Size = 37
+        for z in range(1, 24):
+            for i in range(1, 14):
+                for x in range(0, len(diccCajas[str(z)])):
+                    if diccCajas[str(z)][x] == i:
+                        self.game.setLaListaDeCajas(Size * z, i * Size)
+    
+    
+    def generateRandomObstacles(self, probabilidadObstaculos):
+        
+        diccionarioPilares = {}
+        diccionarioObstaculos = {}
+
+        # 23 Columnas, en las impares no hay ningun bloque
+
+        sizeBloque = 37
+
+        # Ancho x Altura
+
+        ancho = self.dimensions[0]
+        altura = self.dimensions[1]
+
+        # Casteo a int ambos numeros
+        cantColumnas = math.floor(ancho / sizeBloque)
+        cantFilas = math.floor(altura / sizeBloque)
+
+        
+        # Populo el diccionario con la cantidad de columnas como clave
+        # y como significado la lista vacia que luego voy a llenar
+
+        for i in range(0, cantColumnas):
+            diccionarioObstaculos[str(i)] = []
+
+        for i in range(0, cantColumnas):
+            diccionarioPilares[str(i)] = []
+        
+        # Si es (par, par) hay un bloque rompible,
+        # esto quiere decir que si estoy en (2,2)
+        # (2,4) (4,2) etc ahi no puedo poner un bloque rompible
+        
+        # Es importante prohibir que ponga bloques donde aparece el 
+        # bomberman, estos serian 1: [1,2], 2:[1]
+        
+        posicionesProhibidas = {'1': [1,2],
+                                '2': [1]}
+
+        for i in range(0, cantColumnas):
+            for j in range(1, cantFilas):
+
+                # El rango va desde 1 ya que 0, serian
+                # los bloques no rompibles
+                if str(i) in posicionesProhibidas and j in posicionesProhibidas[str(i)]:
+                    pass
+                elif i % 2 == 0 and j % 2 == 0:
+                    # Caso (par, par)
+                    # diccionarioPilares[str(i)].append(j)
+                    pass
+                else:
+                    # Caso puedo poner un bloque rompible
+                    # Voy a poner un 60% de probabilidad que haya un bloque
+
+                    numeroSeleccionado = random.randrange(1, probabilidadObstaculos, 1)
+
+                    if numeroSeleccionado <= 6:
+                        diccionarioObstaculos[str(i)].append(j)
+        
+        # print(str(diccionarioPilares))
+
+        return diccionarioObstaculos
+    
+    
+    def limpiarNivelActual(self):       
+        # Este reload lo hago para dar un efecto visual de "reset"
+        self.background.reloadBackgroundImage()
+
+        # Muevo al bomberman al comienzo del mapa y reestablezco los power-ups
+        self.game.setBombermanPosicionDeInicio()
+        self.game.setBombermanSpeed(5)
+
+        self.BOMBAS_USANDO = []
+        self.BOMBAS_DISPONIBLES = [1]
+        self.bombas = 1
+
+        self.game.borrarPowerUps()
+        self.game.borrarDatosCajas()
+        self.game.borrarDatosEnemigos()
+
+    def crearNivel(self):
+        # Genero aleatoriamente la posicion de las cajas y lo guardo en un diccionario
+        diccCajas = self.generateRandomObstacles(self.probabilidadObstaculos)
+        
+        # Una vez tengo el diccionario creo las cajas rompibles
+        self.crearCajasRompibles(diccCajas)
+        self.background.reloadBoxes() # Le asigno a cada una su rect
+        
+        # Una vez creadas las cajas puedo empezar a ubicar a los enemigos
+        self.game.placeEnemies(diccCajas, self.probabilidadEnemigos)
+        self.background.reloadEnemyRect() # Le asigno a cada uno su rect
+        
+        # Vuelvo a ubicar la salida
+        self.game.crearSalida()
+
+        # Guardo cada grupo de rects (ya creados en el reload) en su respectiva lista
+        # El rect de la salida se crea recien cuando se rompe la caja que esconde la misma
+        self.game.createRects()
+    
+    def killBomberman(self):
+        self.game.setBombermanVidas(-1)
+        vidasRestantes = self.game.getBombermanVidas()
+        
+        if vidasRestantes > 0:
+            if vidasRestantes == 1:
+                print("Todavia tenes " + str(vidasRestantes)+ " vida")
+            else:
+                print("Todavia tenes " + str(vidasRestantes)+ " vidas")
+        elif vidasRestantes == 0:
+            print("Tene cuidado, es tu ultima vida")
+        else:
+            print("☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ GAME OVER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠")
+            pygame.event.post(pygame.event.Event(GAME_OVER)) 
+        
+        self.limpiarNivelActual()
+        self.crearNivel()
+        self.game.limpiarExplosiones()
+
+    
     def render(self, background):       
+        self.background = background
         # Muestro la imagen de fondo
         background.reloadBackgroundImage()
 
@@ -31,7 +171,7 @@ class GameScene():
         background.reloadBackground()
 
     def update(self, background, game):
-
+        self.game = game
         # Muestro los power-ups y la salida (si alguno esta disponible)
         # Se muestran antes que lo demas ya que tanto los enemigos como
         # el bomberman deben poder pasarles por encima (visualmente)
@@ -159,7 +299,7 @@ class GameScene():
                         enemy.setEnemyAnimacion(movimiento[1])
                         enemy.setEnemyDireccion(movimiento[2])
                         enemy.setCambioDireccion(True)
-        
+
         # Colision de bomberman con enemigos
         
         # self.playerrect = game.getPlayerRect()
@@ -170,8 +310,105 @@ class GameScene():
 
     def handleEvents(self, events, game):
         for event in events:
-            # if event.type == EXPLOSION:
-            
+            if event.type == GAME_OVER:
+                self.manager.goTo(gameOverScene.GameOverScene())
+            if event.type == BOMBA:
+                id_bomba = self.numero_bomba
+
+                # Logica 
+                if len(self.BOMBAS_USANDO) > 0:
+                    self.BOMBAS_USANDO.remove(id_bomba)
+                    
+                    x,y = game.getBombPos(id_bomba)
+                    offset = 1
+                    pos = [x , y + offset]
+                    
+                    self.BOMBAS_DISPONIBLES.append(id_bomba)
+                    game.sacar_bomba(id_bomba)    
+
+                # Creo el rect para las colisiones
+                ancho = 35
+                alto = 35
+
+                rects = []
+
+                # 3 verticales
+                for i in range(-1, 2):
+                    rects.append((pos[0] + (37 * i), pos[1], ancho, alto))
+        
+                # 3 Horizontales
+                for i in range(-1, 2):
+                    rects.append((pos[0] , pos[1] + (37* i), ancho, alto))
+                
+                # Creo la explosion, el offset es para que quede centrado el png
+                
+                offset = 40
+                pos[0] = pos[0] - offset
+                pos[1] = pos[1] - offset
+                
+                game.addExplosion((pos, id_bomba, rects))
+
+                rectsExplosion = []
+
+                for rect in rects:
+                    rectsExplosion.append(pygame.Rect(rect[0], rect[1], rect[2], rect[3]))
+
+                # Tengo que verificar las colisiones que tuvo la explosion
+                # Ya sea con el bomberman, enemigos o bloques rompibles
+                
+
+                # Reviso colision de explosion con cajas rompibles
+                    
+                for rect in rectsExplosion:
+                    
+                    if rect.collidelistall(game.getLaListaDeRectsCajas()):
+                    
+                        caja = rect.collidelistall(game.getLaListaDeRectsCajas())
+                        game.romperCaja(caja[0])
+                        
+                        # numerorandom = game.getListaRandom()
+                        
+                        # posCajaRota = game.getCajaRota()
+
+                        # if numerorandom == 0:
+                        #     game.createPowerUpSpeedUp(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))                             
+                        #     threadVelocidad = threadPowerUp('velocidad')
+                        #     threadVelocidad.start()
+                        # elif numerorandom == 1:
+                        #     game.createPowerUpBombUp(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))
+                        #     threadBomba = threadPowerUp('bomba')
+                        #     threadBomba.start()
+                        # elif numerorandom == 2:
+                        #     game.createPowerUpVida(posCajaRota, pygame.Rect(posCajaRota[0], posCajaRota[1], ancho, alto))
+                        #     threadVida = threadPowerUp('vida')
+                        #     threadVida.start()
+                        # elif numerorandom > 0:
+                        #     pass
+
+                # Enemigos
+                        
+                enemiesRects = game.getEnemyRect()
+                enemigosABorrar = []
+
+                offsetPostPop = 0
+
+                for i in range(0, len(enemiesRects)):
+                    if enemiesRects[i].collidelistall(rectsExplosion):
+                        # print("El indice del enemigo que colisiono es: " + str(i))
+
+                        indice = i - offsetPostPop
+                        enemigosABorrar.append(indice)
+                        offsetPostPop = offsetPostPop + 1
+                
+                for indice in enemigosABorrar:
+                    game.borrarEnemigo(indice)
+
+                # Bomberman
+                if game.getPlayerRect().collidelistall(rectsExplosion):
+                    self.killBomberman()
+                pygame.time.set_timer(EXPLOSION, 300, 1)
+            if event.type == EXPLOSION:
+                game.borrarExplosion(self.numero_bomba)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     self.contadorAnimacionBomberman = 0
@@ -249,16 +486,18 @@ class GameScene():
                         # Implica que no se pueden poner dos bombas en el mismo lugar
                         if self.byPassRectBomba == None:
                         
-                            numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
-                            self.BOMBAS_DISPONIBLES.remove(numero_bomba)
-                            self.BOMBAS_USANDO.append(numero_bomba)
-                            
+                            self.numero_bomba = self.BOMBAS_DISPONIBLES[0] #1
+                            self.BOMBAS_DISPONIBLES.remove(self.numero_bomba)
+                            self.BOMBAS_USANDO.append(self.numero_bomba)
+ 
 
-                            bomba = game.poner_bomba(numero_bomba)
+                            bomba = game.poner_bomba(self.numero_bomba)
                             rectBomba = pygame.Rect(bomba.getHitbox())
-                            
+
                             bomba.setRect(rectBomba)
                             game.addBombRect(rectBomba)
-                            
+
                             self.byPassRectBomba = rectBomba
-        
+                            
+                            pygame.time.set_timer(BOMBA, 2000, 1)
+                            

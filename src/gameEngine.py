@@ -37,8 +37,8 @@ class threadExplosion(Thread):
         # Este thread determina cuanto tiempo pasa en pantalla el sprite de la explosion
         time.sleep(0.3)
         dispatcher.send(message = self.explosion, signal= 'borrarExplosion', sender = 'threadExplosion')
-        
-        
+
+
 class threadBomba(Thread):
     def __init__(self, idbomba, game):
         super().__init__()
@@ -60,7 +60,6 @@ class threadSpeed(Thread):
         time.sleep(10)
         print("Ya no corres rapido :( ")
         dispatcher.send(message = '', signal= 'resetearSpeed', sender = 'threadSpeed')
-
 
 class GameEngine():
     def __init__(self):
@@ -262,7 +261,7 @@ class GameEngine():
 
 
     def loadImages(self):
-        self.background.loadBombermanImage('sprites/BombermanMusulmanAnimado.png', (37, 37))  # Lo pone al principio del mapa
+        self.background.loadBombermanImage('sprites/BombermanAnimado.png', (37, 37))  # Lo pone al principio del mapa
         self.background.loadObstacle("sprites/pilar.png")
         self.background.loadImagenMenu("sprites/MenuBomberman.png")
         self.background.loadBackgroundImage("sprites/pasto.png")
