@@ -392,9 +392,9 @@ class GameScene():
         
         self.playerrect = self.game.getPlayerRect()
         
-        # if len(self.playerrect.collidelistall(game.getlalisaderectsenemigos())) > 0:
-        #     # pygame.time.wait(2000)
-        #     self.killBomberman()
+        if len(self.playerrect.collidelistall(game.getlalisaderectsenemigos())) > 0:
+            # pygame.time.wait(2000)
+            self.killBomberman()
 
         # Verificacion de colisiones con powerUps
         if self.game.agarroVida():
@@ -444,7 +444,7 @@ class GameScene():
             if event.type == WIN:
                 pass
             if event.type == GAME_OVER:
-                self.manager.goTo(gameOverScene.GameOverScene(), background, game)
+                self.manager.goTo(gameOverScene.GameOverScene())
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     self.contadorAnimacionBomberman = 0

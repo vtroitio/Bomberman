@@ -11,7 +11,7 @@ class GameOverScene(object):
     def update(self, background, game):
         pass
 
-    def handleEvents(self, events, game):
+    def handleEvents(self, events, background, game):
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_INSERT:
                 self.manager.goTo(gameScene.GameScene())

@@ -1,3 +1,4 @@
+import asyncio
 import pygame
 import game
 import background
@@ -14,8 +15,6 @@ class Init():
     
         self.game.createObstacles(self.DIMENSIONS)   # Creo los pilares y los bordes (solo hace falta crearlos una vez -> no van a estar en crearNivel() )
         self.background.reloadBackground() # Les asigno su rect a los pilares
-        
-        self.gameLoop()
 
     def loadImages(self):
         self.background.loadBombermanImage('sprites/BombermanAnimado.png', (37, 37))  # Lo pone al principio del mapa
@@ -33,7 +32,7 @@ class Init():
         self.background.loadSalida("sprites/Salida.png")
         self.background.loadWinScreen("sprites/victory.jpg")
 
-    def gameLoop(self):
+    async def gameLoop(self):
         clock = pygame.time.Clock()
 
         running = True
@@ -50,7 +49,10 @@ class Init():
 
             pygame.display.flip()
 
+            await asyncio.sleep(0)
+
         pygame.quit()
 
 if __name__ == "__main__":
-    Init()
+    init = Init()
+    asyncio.run(init.gameLoop())
