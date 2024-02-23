@@ -18,7 +18,12 @@ class Player(DynamicObject):
         self.playerRect = None
         self.positionrespaldo = None
         self.direccion = "down"
+        self.pickupTime = 0
 
+    def update(self):
+        pass
+    
+    
     def createPlayer(self, lifes, speed):
         self.lifes = lifes
         self.speed = speed

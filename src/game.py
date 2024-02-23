@@ -1,3 +1,4 @@
+import pygame
 import wall
 import box
 import player
@@ -6,6 +7,7 @@ import player
 import enemy
 import copy
 import bomba
+from explosion import Explosion
 from random import shuffle
 import random
 import speed
@@ -32,18 +34,14 @@ class Game():
 
         self.bombas = []
         self.rectBombas = []
-        
-        self.lalistadepowerUpsSpeed = []
-        self.lalistadepowerUpsVida = []
-        self.lalistadepowerUpsBomba = []
 
-        self.lalistadepowerUpsSpeed = []
+        self.lalistadepowerUpsSpeed = pygame.sprite.Group()
         self.lalistaderectspowerUpsSpeed = []
 
-        self.lalistadepowerUpsBomba = []
+        self.lalistadepowerUpsBomba = pygame.sprite.Group()
         self.lalistaderectspowerUpsBomba = []
 
-        self.lalistadepowerUpsVida = []
+        self.lalistadepowerUpsVida = pygame.sprite.Group()
         self.lalistaderectspowerUpsVida = []
 
         self.explosiones = []
@@ -254,16 +252,16 @@ class Game():
 # la creacion de alguno de estos powerups que luego seran bliteados por la 
 # vista.
 
-    def createPowerUpSpeedUp(self, posicion, rect):
-        self.lalistadepowerUpsSpeed.append(speed.Speed(posicion))
+    def createPowerUpSpeedUp(self, powerUp, rect):
+        self.lalistadepowerUpsSpeed.add(powerUp)
         self.lalistaderectspowerUpsSpeed.append(rect)
 
-    def createPowerUpVida(self, posicion, rect):
-        self.lalistadepowerUpsVida.append(LifeUp.LifeUp(posicion))
+    def createPowerUpVida(self, powerUp, rect):
+        self.lalistadepowerUpsVida.add(powerUp)
         self.lalistaderectspowerUpsVida.append(rect)
 
-    def createPowerUpBombUp(self, posicion, rect):
-        self.lalistadepowerUpsBomba.append(bombUp.BombUp(posicion))
+    def createPowerUpBombUp(self, powerUp, rect):
+        self.lalistadepowerUpsBomba.add(powerUp)
         self.lalistaderectspowerUpsBomba.append(rect)
 
 
@@ -530,13 +528,13 @@ class Game():
         self.rectBombas.clear()
         self.bombas.clear()
         
-        self.lalistadepowerUpsBomba.clear()
+        self.lalistadepowerUpsBomba.empty()
         self.lalistaderectspowerUpsBomba.clear()
         
-        self.lalistadepowerUpsVida.clear()
+        self.lalistadepowerUpsVida.empty()
         self.lalistaderectspowerUpsVida.clear()
         
-        self.lalistadepowerUpsSpeed.clear()
+        self.lalistadepowerUpsSpeed.empty()
         self.lalistaderectspowerUpsSpeed.clear()
 
         
@@ -600,9 +598,9 @@ class Game():
         self.lalistaderectscajas.pop(numerodecaja)
 # Bombas
    
-    def addExplosion(self, explosion):
+    def addExplosion(self, pos, id_bomba, rects):
         # Explosiones es pos, id bomba
-
+        explosion = Explosion(pos, id_bomba, rects)
         
         self.explosiones.append(explosion)
 
@@ -610,9 +608,13 @@ class Game():
         self.explosiones.clear()
 
     def borrarExplosion(self, id):
-        if self.explosiones != []:
-            if self.explosiones[0][1] == id:
+        for explosion in self.explosiones:
+            if explosion.getId() == id:
                 self.explosiones.pop(0)
+        
+        # if self.explosiones != []:
+        #     if self.explosiones[0][1] == id:
+        #         self.explosiones.pop(0)
 
     def get_todas_las_bombas(self):
         return self.bombas
@@ -683,46 +685,34 @@ class Game():
         # self.positionAnteriorEnemy.pop(indice)
 
     def agarroVida(self):
-
-        agarroVida = False
         playerRect = self.player.getPlayerRect()
-        powerLifeRects = self.lalistaderectspowerUpsVida
 
-        if len(powerLifeRects) > 0:
-            if (playerRect.collidelist(powerLifeRects)) > -1:
-                
-                agarroVida = True
-                self.lalistadepowerUpsVida.pop(playerRect.collidelist(powerLifeRects))
-                self.lalistaderectspowerUpsVida.pop(playerRect.collidelist(powerLifeRects))
+        for life in self.lalistadepowerUpsVida:
+            lifeRect = life.getWorldRect()
+            if lifeRect.colliderect(playerRect):
+                life.kill()
+                return True
 
-        return agarroVida
+        return False
 
     def agarroBomba(self):
-        
-        agarroBomba = False
         playerRect = self.player.getPlayerRect()
-        powerBombRects = self.lalistaderectspowerUpsBomba
 
-        if len(powerBombRects) > 0:
-            if (playerRect.collidelist(powerBombRects)) > -1:
-                
-                agarroBomba = True
-                self.lalistadepowerUpsBomba.pop(playerRect.collidelist(powerBombRects))
-                self.lalistaderectspowerUpsBomba.pop(playerRect.collidelist(powerBombRects))
+        for bomb in self.lalistadepowerUpsBomba:
+            bombRect = bomb.getWorldRect()
+            if bombRect.colliderect(playerRect):
+                bomb.kill()
+                return True
 
-        return agarroBomba
+        return False
 
     def agarroVelocidad(self):
-        
-        agarroVelocidad = False
         playerRect = self.player.getPlayerRect()
-        powerSpeedRects = self.lalistaderectspowerUpsSpeed
 
-        if len(powerSpeedRects) > 0:
-            if (playerRect.collidelist(powerSpeedRects)) > -1:
-                
-                agarroVelocidad = True
-                self.lalistadepowerUpsSpeed.pop(playerRect.collidelist(powerSpeedRects))
-                self.lalistaderectspowerUpsSpeed.pop(playerRect.collidelist(powerSpeedRects))
+        for velocity in self.lalistadepowerUpsSpeed:
+            velocityRect = velocity.getWorldRect()
+            if velocityRect.colliderect(playerRect):
+                velocity.kill()
+                return True
 
-        return agarroVelocidad
+        return False

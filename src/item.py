@@ -1,5 +1,6 @@
-class Item():
+import pygame
 
+class Item(pygame.sprite.Sprite):
     def __init__(self):
-        self.sprite = None
-        self.position = []
+        pygame.sprite.Sprite.__init__(self)
+        self.position = ()

@@ -75,16 +75,16 @@ class GameEngine():
         # Si es < 2 en enemigos pone enemigos en todos lados
         # La probabilidad default es 13 en ambos 
 
-        self.probabilidadObstaculos = 13
-        self.probabilidadEnemigos = 13
+        # self.probabilidadObstaculos = 13
+        # self.probabilidadEnemigos = 13
         
-        self.diccionarioposicionesobstaculo = None
+        # self.diccionarioposicionesobstaculo = None
         
         
-        self.game.createObstacles(self.dimensions)   # Creo los pilares y los bordes (solo hace falta crearlos una vez -> no van a estar en crearNivel() )
-        self.background.reloadBackground() # Les asigno su rect a los pilares
+        # self.game.createObstacles(self.dimensions)   # Creo los pilares y los bordes (solo hace falta crearlos una vez -> no van a estar en crearNivel() )
+        # self.background.reloadBackground() # Les asigno su rect a los pilares
 
-        self.crearNivel()
+        # self.crearNivel()
         
         # Variables que uso para saber que pantalla mostrar
 
@@ -442,7 +442,7 @@ class GameEngine():
             dispatcher.connect(self.borrarPowerUp, signal = 'borrarPowerUp', sender= 'threadPowerUp')
             dispatcher.connect(self.resetearSpeed, signal = 'resetearSpeed', sender = 'threadSpeed')
 
-            self.manager.scene.handleEvents(pygame.event.get(), self.game)
+            self.manager.scene.handleEvents(pygame.event.get(), self.background, self.game)
             self.manager.scene.render(self.background)
             self.manager.scene.update(self.background, self.game)
 

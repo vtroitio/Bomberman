@@ -1,7 +1,7 @@
 import pygame
 import game
 import obstacles
-import spritesheet
+from spritesheet import SpriteSheet
 
 
 class Background():
@@ -32,16 +32,19 @@ class Background():
         self.game = game        # self.game = game.Game()
         self.blue = (0, 0, 255)
         self.contadordepasos = 0
+
 # Reload
     def reloadBombas(self):
         for bomba in self.game.get_todas_las_bombas():
+            bomba.setImage(self.bomba)
             
             # Lo corro visualmente para que el png se vea centrado
             x, y = bomba.getposicion()
             xOffset, yOffset = x + 8, y + 8
             posOffset = [xOffset, yOffset]
             
-            self.screen.blit(self.bomba, posOffset)
+            self.screen.blit(bomba.image, posOffset)
+            bomba.update()
 
 
 
@@ -108,43 +111,33 @@ class Background():
 
     def reloadExplosiones(self, explosiones):
         
-        
-        
         # Explosiones es una tupla que contiene (pos, id)
-        if len(explosiones) == 0:
-            pass
-        else:
-            
-
-            for rect in explosiones[0][2]:
-                pass
-                # pygame.draw.rect(self.screen, (0, 0, 255), rect, 1)
-
-
+        if len(explosiones) != 0:
             for explosion in explosiones:
                 # Offset para que visualmente se vea bien la explosion
-                x, y = explosion[0]
+                x, y = explosion.getPosition()
                 xOffset, yOffset = x + 3, y + 2
                 posOffset = [xOffset, yOffset]
                 self.screen.blit(self.explosion, posOffset)
+                explosion.update()
 
 # Power Ups
 
     def reloadSpeedPowerUp(self):
         for speed in self.game.getListaDeSpeedPowerUp():
-            self.screen.blit(self.speedPowerUp, speed.getPosition())
-            # pygame.draw.rect(self.screen, (0, 255, 0), speed.getHitbox(), 1)
+            self.screen.blit(speed.image, speed.getPosition())
+            speed.update()
 
     def reloadBombPowerUp(self):
         for bomb in self.game.getListaDeBombPowerUp():
             self.screen.blit(self.bombPowerUp, bomb.getPosition())
-            # pygame.draw.rect(self.screen, (0, 255, 0), bomb.getHitbox(), 1)
+            bomb.update()
 
 
     def reloadLifePowerUp(self):
         for life in self.game.getListaDeLifePowerUp():
             self.screen.blit(self.lifePowerUp, life.getPosition())
-            # pygame.draw.rect(self.screen, (0, 255, 0), life.getHitbox(), 1)
+            life.update()
 
 
 # LOADS
@@ -170,7 +163,7 @@ class Background():
 
         bombermanImage = pygame.transform.scale(pygame.image.load(path), size).convert_alpha()
         # bombermanImage = pygame.image.load(path).convert_alpha()
-        bombermanSprites = spritesheet.SpriteSheet(bombermanImage, 30, 30).getSprites()
+        bombermanSprites = SpriteSheet(bombermanImage, 30, 30).getSprites()
 
         self.bomberman = {
             "up": bombermanSprites[0],
@@ -179,12 +172,12 @@ class Background():
             "right": bombermanSprites[2]
         }
 
-        self.screen.blit(self.bomberman["down"][0], pos)
+        # self.screen.blit(self.bomberman["down"][0], pos)
 
     def loadEnemigoBomberman(self, path):
         
         enemigoImage = pygame.image.load(path).convert_alpha()
-        enemigoSprites = spritesheet.SpriteSheet(enemigoImage, 30, 30).getSprites()
+        enemigoSprites = SpriteSheet(enemigoImage, 30, 30).getSprites()
         
         self.enemigobomberman = {
             "vertical2": enemigoSprites[0],
@@ -253,3 +246,14 @@ class Background():
 
     def getScreen(self):
         return self.screen
+
+# Getters
+
+    def getSpeedUpImage(self):
+        return self.speedPowerUp
+
+    def getBombUpImage(self):
+        return self.bombPowerUp
+
+    def getLifeUpImage(self):
+        return self.lifePowerUp
