@@ -18,6 +18,7 @@ import bombUp
 class Game():
 
     def __init__(self):
+        self.paused = False
         self.wall = wall.Wall()
         self.box = box.Box()
         self.player = player.Player()
@@ -335,8 +336,8 @@ class Game():
         enemigodeseado = self.enemigos[enemigo]
         return enemigodeseado.getEnemyDireccion()
 
-    def getPlayerHitbox(self):
-        return self.player.getPlayerHitbox()
+    def bombermanIsDead(self):
+        return self.player.isDead()
 
     def getBombermanVidas(self):
         return self.player.lifes
@@ -396,8 +397,10 @@ class Game():
                 
         return posicionesEsquinas
 
-    def setBombermanPosition(self, direccion, esPilar):
+    def setBombermanPosition(self, position, direccion, esPilar):
 
+        
+        self.player.setPosition(position)
         self.player.setBombermanDireccion(direccion)
         
         # Voy a verificar el choque con esquinas a partir de las dimensiones del mapa
@@ -426,6 +429,9 @@ class Game():
     def setBombermanPosicionDeInicio(self):
         self.player.setPosition([37, 37])
 
+    def setBombermanState(self):
+        self.player.setState()
+    
     def setPositionAnterior(self, enemigodeseado):
         enemy = self.enemigos[enemigodeseado]
         enemy.setPosition(enemy.getEnemyPosicionAnterior())
@@ -560,6 +566,9 @@ class Game():
 
     def getPlayerRect(self):
         return self.player.getPlayerRect()
+    
+    def getPlayerHitbox(self):
+        return self.player.getPlayerHitbox()
 
     def getSpeedUpRect(self):
         return self.lalistaderectspowerUpsSpeed
@@ -574,6 +583,9 @@ class Game():
 
     def setPlayerRect(self, rect):
         self.player.setPlayerRect(rect)
+
+    def setPlayerHitbox(self, rect):
+        self.player.setHitbox(rect)
 
     def setlalistaderectsenemigos(self, cosa):
         self.lalistaderectsenemigos.append(cosa)
@@ -623,22 +635,18 @@ class Game():
         return self.explosiones
     
     def borrarSpeedUp(self, indice):
-
-        
         if len(self.lalistaderectspowerUpsSpeed) > 0 and len(self.lalistadepowerUpsSpeed) > 0:
 
             self.lalistadepowerUpsSpeed.pop(indice)
             self.lalistaderectspowerUpsSpeed.pop(indice)
 
     def borrarBombUp(self, indice):
-
         if len(self.lalistaderectspowerUpsBomba) > 0 and len(self.lalistadepowerUpsBomba) > 0:
 
             self.lalistadepowerUpsBomba.pop(indice)
             self.lalistaderectspowerUpsBomba.pop(indice)
 
     def borrarLifeUp(self, indice):
-    
         if len(self.lalistaderectspowerUpsVida) > 0 and len(self.lalistadepowerUpsVida) > 0:
      
             self.lalistadepowerUpsVida.pop(indice)
@@ -716,3 +724,9 @@ class Game():
                 return True
 
         return False
+    
+    def pause(self):
+        self.paused = not self.paused
+    
+    def isPaused(self):
+        return self.paused

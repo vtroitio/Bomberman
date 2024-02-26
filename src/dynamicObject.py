@@ -8,6 +8,7 @@ class DynamicObject():
         self.speed = 10
         self.sheet = None
         self.rect = None
+        self.dead = False
         self.currentFrame = 0
         self.frames = 8
         self.frameWidth = 1

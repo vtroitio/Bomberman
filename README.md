@@ -68,5 +68,5 @@ pip install -r requirements.txt
 Una vez completados los pasos anteriores, podes ejecutar el juego:
 
 ```
-python3 ./gameEngine.py
+python3 ./src/init.py
 ```

@@ -5,5 +5,7 @@ class SceneMananger(object):
         self.goTo(menuScene.MenuScene())
 
     def goTo(self, scene):
+        if hasattr(self, "scene"):
+            del self.scene
         self.scene = scene
         self.scene.manager = self

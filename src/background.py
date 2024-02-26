@@ -14,6 +14,8 @@ class Background():
         self.background = None
         self.imagenmenu = None
         self.bomberman = None
+        self.bombermanDeath = None
+        self.actualDeathSprite = 0
         self.obstacle = None
         self.startmenu = None
         self.caja = None
@@ -36,14 +38,18 @@ class Background():
 # Reload
     def reloadBombas(self):
         for bomba in self.game.get_todas_las_bombas():
-            bomba.setImage(self.bomba)
+            
+            bombaSprites = SpriteSheet(self.bomba, 16, 16, 2).getSprites()
+            bomba.setImage(bombaSprites)
             
             # Lo corro visualmente para que el png se vea centrado
             x, y = bomba.getposicion()
-            xOffset, yOffset = x + 8, y + 8
+            xOffset, yOffset = x + 2.5, y + 2.5
             posOffset = [xOffset, yOffset]
             
             self.screen.blit(bomba.image, posOffset)
+            rect = pygame.Rect(bomba.getHitbox())
+            # pygame.draw.rect(self.screen, "Red", rect, 1)
             bomba.update()
 
 
@@ -66,21 +72,38 @@ class Background():
 
         self.screen.blit(self.enemigobomberman[direction][contador], enemy.getEnemyPosition())
         
-        enemy.setEnemyRect(pygame.Rect(enemy.getEnemyHitbox()))
+        
+        enemyRect = pygame.Rect(enemy.getEnemyRect())
+        # _, _, w, h = enemy.getEnemyHitbox()
+        # w -= 16
+        # h -= 16
+        # enemyHitbox = pygame.Rect(0, 0, w, h)
+        # enemyHitbox.center = enemyRect.center
+        # pygame.draw.rect(self.screen, "Red", enemyRect, 1)
+        enemy.setEnemyRect(enemyRect)
 
 # Personajes
 
     def reloadBomberman(self, direction, contador):
-        self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
+        if not self.game.bombermanIsDead():
+            self.actualDeathSprite = 0
+            self.screen.blit(self.bomberman[direction][contador], self.game.getBombermanPosition())
+        else:
+            self.actualDeathSprite += 0.1
+            if self.actualDeathSprite > len(self.bombermanDeath): self.actualDeathSprite = 0
+            bombermanDeath = self.bombermanDeath[int(self.actualDeathSprite)]
+            self.screen.blit(bombermanDeath, self.game.getBombermanPosition())
 
 
 # Rects
 
-    def reloadBombermanRect(self):
-        rect = pygame.Rect(self.game.getPlayerHitbox())
-        # pygame.draw.rect(self.screen, (255, 0, 0), self.game.getPlayerHitbox(), 1)
-        self.game.setPlayerRect(rect)
+    def debugBombermanRect(self):
+        pygame.draw.rect(self.screen, "Green", self.game.getPlayerRect(), 1)
 
+    
+    def debugBombermanHitbox(self):
+        pygame.draw.rect(self.screen, "Red", self.game.getPlayerHitbox(), 1)
+    
     def reloadEnemyRect(self):
         for enemy in self.game.getListaDeEnemigos():
             rect = pygame.Rect(enemy.getEnemyHitbox())
@@ -159,10 +182,10 @@ class Background():
 
     def loadBombermanImage(self, path, pos):
 
-        size = (90, 90)
+        # size = (, )
 
-        bombermanImage = pygame.transform.scale(pygame.image.load(path), size).convert_alpha()
-        # bombermanImage = pygame.image.load(path).convert_alpha()
+        # bombermanImage = pygame.transform.scale(pygame.image.load(path), size).convert_alpha()
+        bombermanImage = pygame.image.load(path).convert_alpha()
         bombermanSprites = SpriteSheet(bombermanImage, 30, 30).getSprites()
 
         self.bomberman = {
@@ -173,6 +196,11 @@ class Background():
         }
 
         # self.screen.blit(self.bomberman["down"][0], pos)
+
+    def loadBombermanDeathImage(self, path):
+        bombermanDeathImage = pygame.image.load(path).convert_alpha()
+        bombermanDeathSprites = SpriteSheet(bombermanDeathImage, 30,30).getSprites()
+        self.bombermanDeath = bombermanDeathSprites
 
     def loadEnemigoBomberman(self, path):
         
@@ -213,18 +241,18 @@ class Background():
 
     def loadSpeedPowerUp(self, path):
         self.speedPowerUp = pygame.image.load(path)
-        self.speedPowerUp = pygame.transform.scale(self.speedPowerUp, [36, 36])
+        self.speedPowerUp = pygame.transform.scale(self.speedPowerUp, [37, 37])
 
     def loadLifePowerUp(self, path):
         self.lifePowerUp = pygame.image.load(path)
-        self.lifePowerUp = pygame.transform.scale(self.lifePowerUp, [36, 36])
+        self.lifePowerUp = pygame.transform.scale(self.lifePowerUp, [37, 37])
 
     def loadGameOverScreen(self, path):
         self.gameOverScreen = pygame.image.load(path)
 
     def loadBombPowerUp(self, path):
         self.bombPowerUp = pygame.image.load(path)
-        self.bombPowerUp = pygame.transform.scale(self.bombPowerUp, [36, 36])
+        self.bombPowerUp = pygame.transform.scale(self.bombPowerUp, [37, 37])
 
 # Salida
         
