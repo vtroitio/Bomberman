@@ -529,6 +529,9 @@ class Game():
     def getListaDeBombPowerUp(self):
         return self.lalistadepowerUpsBomba
 
+    def borrarPlayerHitbox(self):
+        self.player.borrarHitbox()
+    
     def borrarPowerUps(self):
         
         self.rectBombas.clear()
@@ -584,8 +587,8 @@ class Game():
     def setPlayerRect(self, rect):
         self.player.setPlayerRect(rect)
 
-    def setPlayerHitbox(self, rect):
-        self.player.setHitbox(rect)
+    def setPlayerHitbox(self):
+        self.player.setHitbox()
 
     def setlalistaderectsenemigos(self, cosa):
         self.lalistaderectsenemigos.append(cosa)

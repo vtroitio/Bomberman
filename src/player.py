@@ -26,6 +26,9 @@ class Player(DynamicObject):
         self.lifes = lifes
         self.speed = speed
 
+    def borrarHitbox(self):
+        self.hitbox = pygame.Rect(0, 0, 0, 0)
+
 # Movimiento
 
     def move(self, direccion):
@@ -98,8 +101,10 @@ class Player(DynamicObject):
     def setPlayerRect(self, rect):
         self.playerRect = rect
 
-    def setPlayerHitbox(self, rect):
-        self.hitbox = rect
+    def setHitbox(self):
+        self.hitbox = pygame.Rect(0, 0, self.hitboxW, self.hitboxH)
+        self.playerRect.topleft = self.x, self.y
+        self.hitbox.center = self.playerRect.center
 
     def isDead(self):
         return self.dead

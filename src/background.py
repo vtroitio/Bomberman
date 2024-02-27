@@ -171,12 +171,8 @@ class Background():
 
 # Loads
     def loadImagenMenu(self, path):
-        self.imagenmenu = pygame.image.load(path)
+        self.imagenmenu = pygame.image.load(path).convert()
         self.imagenmenu = pygame.transform.scale(self.imagenmenu, [925, 555])
-
-    def loadBackgroundImage(self, path):
-        self.background = pygame.image.load(path)
-
 
 # Personajes
 
@@ -217,25 +213,22 @@ class Background():
 # Obstaculos
 
     def loadCaja(self, path):
-        self.caja = pygame.image.load(path)
+        self.caja = pygame.image.load(path).convert()
 
 
     def loadObstacle(self, path):
-        self.obstacle = pygame.image.load(path)
+        self.obstacle = pygame.image.load(path).convert()
 
 # Bomba y explosiones
 
     def loadBackgroundImage(self, path):
-        self.background = pygame.image.load(path)
-    
-    def cargar_imagen_bomba(self, sprite, pos):
-        self.bomba = pygame.image.load(sprite)
+        self.background = pygame.image.load(path).convert()
     
     def loadBomba(self, path):
-        self.bomba = pygame.image.load(path)
+        self.bomba = pygame.image.load(path).convert_alpha()
 
     def loadExplosion(self, path):
-        self.explosion = pygame.image.load(path)
+        self.explosion = pygame.image.load(path).convert_alpha()
 
 # Power Ups
 
@@ -258,7 +251,7 @@ class Background():
         
 
     def loadSalida(self, path):
-        self.salida = pygame.image.load(path)
+        self.salida = pygame.image.load(path).convert()
 
     def reloadSalida(self):
         salida = self.game.getSalida()
@@ -266,7 +259,7 @@ class Background():
         # pygame.draw.rect(self.screen, (0, 255, 0), salida.getHitbox(), 1)
 
     def loadWinScreen(self, path):
-        self.winScreen = pygame.image.load(path)
+        self.winScreen = pygame.image.load(path).convert()
         self.winScreen = pygame.transform.scale(self.winScreen, [925, 555])
     
     def reloadWinScreen(self):

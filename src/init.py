@@ -37,17 +37,17 @@ class Init():
     def gameLoop(self):
         clock = pygame.time.Clock()
 
-        running = True
+        
+        running = 1
         while running:
             clock.tick(60)
             if pygame.event.get(pygame.QUIT):
-                running = False
+                running = 0
                 return
 
             self.manager.scene.handleEvents(pygame.event.get(), self.background, self.game)
             self.manager.scene.render(self.background)
             self.manager.scene.update(self.background, self.game)
-
 
             pygame.display.flip()
 

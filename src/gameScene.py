@@ -134,6 +134,9 @@ class GameScene():
         self.game.borrarDatosCajas()
         self.game.borrarDatosEnemigos()
 
+        self.byPassRectBomba = None
+        self.game.limpiarExplosiones()
+
     def siguienteNivel(self):
         self.nivelActual += 1
         self.limpiarNivelActual()
@@ -248,18 +251,10 @@ class GameScene():
     
     def killBomberman(self):
         self.game.setBombermanVidas(-1)
-        vidasRestantes = self.game.getBombermanVidas()
+        self.game.borrarPlayerHitbox()
         self.game.setBombermanState()
         
-        if vidasRestantes > 0:
-            print("Vidas: " + str(vidasRestantes))
-            self.limpiarNivelActual()
-            self.crearNivel()
-            self.game.limpiarExplosiones()
-            self.game.setBombermanState()
-        elif vidasRestantes == 0:
-            print("☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ GAME OVER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠")
-            pygame.time.set_timer(GAME_OVER, 1060, 1)
+        pygame.time.set_timer(GAME_OVER, 1000, 1)
 
     def render(self, background):       
         pass
@@ -450,14 +445,21 @@ class GameScene():
             if explosion.conclude(): self.game.borrarExplosion(id_explosion)
 
     def handleEvents(self, events, background, game):
+        pygame.event.set_allowed([pygame.KEYDOWN, pygame.KEYUP])
         for event in events:
             if event.type == WIN:
                 pass
             if event.type == GAME_OVER:
-                self.manager.goTo(gameOverScene.GameOverScene())
-                self.limpiarNivelActual()
-                self.game.limpiarExplosiones()
+                vidasRestantes = self.game.getBombermanVidas()
                 self.game.setBombermanState()
+                self.game.setPlayerHitbox()
+                self.limpiarNivelActual()
+                if vidasRestantes > 0:
+                    print("Vidas: " + str(vidasRestantes))
+                    self.crearNivel()
+                elif vidasRestantes == 0:
+                    print("☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠ GAME OVER ☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠")
+                    self.manager.goTo(gameOverScene.GameOverScene())
     
             if event.type == pygame.KEYUP:
                 if not self.game.bombermanIsDead() and event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
