@@ -1,6 +1,5 @@
 import pygame
 import menuScene
-import init
 
 class GameOverScene(object):
     def __init__(self):
