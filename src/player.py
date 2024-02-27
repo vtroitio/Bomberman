@@ -2,59 +2,49 @@ from dynamicObject import DynamicObject
 import pygame
 import copy as copy
 
-
 class Player(DynamicObject):
     def __init__(self):
         super().__init__()
-        self.lifes = 2
+        self.lifes = 3
         self.speed = 5
         self.positionanterior = []
         # Colisiones
         self.x = self.position[0]
         self.y = self.position[1]
-        self.width = 29
-        self.height = 29
-        self.hitbox = (self.x + 20, self.y, self.width, self.height)  # Dibujo un cuadrado
-        self.playerRect = None
+        self.width = 30
+        self.height = 30
+        self.playerRect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.hitboxW = 4
+        self.hitboxH = 8
+        self.hitbox = pygame.Rect(0, 0, self.hitboxW, self.hitboxH) # Dibujo un cuadrad
+        self.setPosition(self.position)
         self.positionrespaldo = None
         self.direccion = "down"
         self.pickupTime = 0
 
-    def update(self):
-        pass
-    
-    
     def createPlayer(self, lifes, speed):
         self.lifes = lifes
         self.speed = speed
+
+    def borrarHitbox(self):
+        self.hitbox = pygame.Rect(0, 0, 0, 0)
 
 # Movimiento
 
     def move(self, direccion):
         self.positionrespaldo = copy.deepcopy(self.position)
 
+        newPosition = [self.x + direccion[0] * self.speed, self.y + direccion[1] * self.speed]
+        self.setPosition(newPosition)
 
-
-        for index in range(len(self.position)):
-
-            # Movimiento
-            self.position[index] = (self.position[index] + direccion[index] * (self.speed))
-            # Hitbox y colisiones
-            self.x = self.position[0]
-            self.y = self.position[1]
-            self.hitbox = (self.x, self.y, self.width, self.height)
-
-            
-            if direccion == [0, -1]:
-                self.direccion = "up"
-            elif direccion == [0, 1]:
-                self.direccion = "down"
-            elif direccion == [1, 0]:
-                self.direccion = "right"
-            elif direccion == [-1, 0]:
-                self.direccion = "left"
-
-
+        if direccion == [0, -1]:
+            self.direccion = "up"
+        elif direccion == [0, 1]:
+            self.direccion = "down"
+        elif direccion == [1, 0]:
+            self.direccion = "right"
+        elif direccion == [-1, 0]:
+            self.direccion = "left"
 
 # Getters
 
@@ -74,18 +64,30 @@ class Player(DynamicObject):
         return self.playerRect
 
     def getPlayerHitbox(self):
+        return self.hitbox
+    
+    def getWorldPosition(self):
         self.x = self.position[0]
         self.y = self.position[1]
-        self.hitbox = (self.x, self.y, self.width, self.height)
-        return self.hitbox
+        self.worldPos = (self.x, self.y, self.width, self.height)
+        return self.worldPos
 
 # Setters
+
+    def setState(self):
+        self.dead = not self.dead
+    
+    def setDeathSprites(self, image):
+        self.deathSprites = image
 
     def setLifes(self, life):
         self.lifes = self.lifes + life
 
     def setPosition(self, position):
         self.position = position
+        self.x, self.y = self.position
+        self.playerRect.topleft = self.x, self.y
+        self.hitbox.center = self.playerRect.center
 
     def setSize(self, a_size):
         self.size = a_size
@@ -98,3 +100,11 @@ class Player(DynamicObject):
 
     def setPlayerRect(self, rect):
         self.playerRect = rect
+
+    def setHitbox(self):
+        self.hitbox = pygame.Rect(0, 0, self.hitboxW, self.hitboxH)
+        self.playerRect.topleft = self.x, self.y
+        self.hitbox.center = self.playerRect.center
+
+    def isDead(self):
+        return self.dead

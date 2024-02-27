@@ -36,5 +36,5 @@ class Obstacle():
     def getObstacleRect(self):
         return self.obstacleRect
     
-    def getObstacleRompible():
+    def getObstacleRompible(self):
         return self.rompible

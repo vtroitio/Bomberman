@@ -1,9 +1,6 @@
-from item import *
-import time
+from item import Item
 import copy
 import pygame
-import threading
-from explosion import Explosion
 
 class Bomb(Item):
     def __init__(self, pos, bombaid):
@@ -11,20 +8,30 @@ class Bomb(Item):
         self.posicion_actual = copy.deepcopy(pos)
         self.x, self.y = pos
         self.id = copy.deepcopy(bombaid)
-        self.width = 21
-        self.height = 18
-        self.offset = 8
-        self.hitbox = self.posicion_actual[0] + self.offset, self.posicion_actual[1] + self.offset, self.width, self.height
+        self.width = 37
+        self.height = 37
+        self.hitbox = self.posicion_actual[0], self.posicion_actual[1], self.width, self.height
         self.exlpoded = False
         self.lifeSpan = 2000
+        self.actualSprite = 0
         self.birthTime = pygame.time.get_ticks()
+        self.frameChange = pygame.time.get_ticks()
 
     def update(self):
         if pygame.time.get_ticks() - self.birthTime >= self.lifeSpan:
             self.exlpoded = True
+        
+        if pygame.time.get_ticks() - self.frameChange >= 250:
+            self.actualSprite += 1
+            if self.actualSprite > len(self.sprites) - 1: self.actualSprite = 0
+            self.image = self.sprites[self.actualSprite]
+            self.frameChange = pygame.time.get_ticks()
+
     
     def setImage(self, image):
-        self.image = image
+        self.sprites = image
+        self.sprites.append(self.sprites[1]) 
+        self.image = self.sprites[self.actualSprite]
         self.rect = self.image.get_rect()
     
     def getposicion(self):

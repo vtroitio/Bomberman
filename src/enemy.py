@@ -18,7 +18,7 @@ class Enemy(DynamicObject):
         self.y = self.position[1]
         self.width = 30
         self.height = 30
-        self.hitbox = (self.x , self.y , self.width, self.height)  # Dibujo un cuadrado
+        self.hitbox = (self.x, self.y, self.width, self.height)  # Dibujo un cuadrado
         self.rect = None
         self.cambioDireccion = None
 

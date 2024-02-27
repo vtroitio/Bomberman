@@ -1,5 +1,6 @@
 import pygame
-import gameScene
+import menuScene
+import init
 
 class GameOverScene(object):
     def __init__(self):
@@ -13,5 +14,6 @@ class GameOverScene(object):
 
     def handleEvents(self, events, background, game):
         for event in events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_INSERT:
-                self.manager.goTo(gameScene.GameScene())
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                game.setBombermanVidas(3)
+                self.manager.goTo(menuScene.MenuScene())

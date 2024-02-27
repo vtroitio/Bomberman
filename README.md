@@ -68,5 +68,9 @@ pip install -r requirements.txt
 Una vez completados los pasos anteriores, podes ejecutar el juego:
 
 ```
+<<<<<<< HEAD
 pygbag .\src\main.py  
+=======
+python3 ./src/init.py
+>>>>>>> valik-tests
 ```
