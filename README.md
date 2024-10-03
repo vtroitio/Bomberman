@@ -1,3 +1,15 @@
+# Índice
+
+1. [Descripción del Juego](#bomberman)
+2. [Ejecución del Juego](#ejecución-del-juego)
+3. [Controles](#controles)
+4. [Requisitos del Sistema](#requisitos-del-sistema)
+5. [Configuración](#configuración)
+   - [Clonar el Repositorio](#clonar-el-repositorio)
+   - [Configurar el Entorno Virtual](#configurar-el-entorno-virtual)
+   - [Instalar Dependencias](#instalar-dependencias)
+6. [Ejecutar el Juego](#ejecutar-el-juego)
+
 # Bomberman
 
 
@@ -18,6 +30,14 @@ Recreación del famoso videojuego bomberman en python. Con features como:
 - Enemigos con deteccion de posibles rutas 
 
 Los controles son las flechas de dirección para moverse y la barra espaciadora para poner las bombas
+
+## Ejecución del Juego
+
+Para iniciar el juego, sigue estos pasos:
+
+1. Navega a la carpeta `src`.
+2. Localiza el archivo ejecutable llamado `Bomberman.exe`.
+3. Haz doble clic en el archivo para ejecutarlo.
 
 ## Controles
 
