@@ -31,7 +31,7 @@ Recreación del famoso videojuego bomberman en python. Con features como:
 
 Los controles son las flechas de dirección para moverse y la barra espaciadora para poner las bombas
 
-## Ejecución del Juego
+## Ejecución del Juego (.EXE)
 
 Para iniciar el juego, sigue estos pasos:
 
@@ -81,7 +81,7 @@ source venv/bin/activate
 
 ```
 python -m venv .venv
-venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
 ### Instalar dependencias
@@ -93,7 +93,7 @@ pip install -r requirements.txt
 ```
 
 
-## Ejecutar el juego
+## Ejecución del Juego (Desarrollo)
 
 Una vez completados los pasos anteriores, podes ejecutar el juego:
 
