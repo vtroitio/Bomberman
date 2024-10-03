@@ -1,5 +1,6 @@
 src/__pycache__/
 src/build
+src/dist
 src/*.pyc
 src/.*
 env
