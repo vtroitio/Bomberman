@@ -19,6 +19,16 @@ Recreación del famoso videojuego bomberman en python. Con features como:
 
 Los controles son las flechas de dirección para moverse y la barra espaciadora para poner las bombas
 
+## Controles
+
+- **↑**: Mover hacia arriba
+- **←**: Mover hacia la izquierda
+- **↓**: Mover hacia abajo
+- **→**: Mover hacia la derecha
+- **Espacio**: Poner bomba
+- **Enter**: Inicia el juego
+- **R**: Salir de Game Over
+
 ## Requisitos del sistema
 
 - Python 3.10.12
