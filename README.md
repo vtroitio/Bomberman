@@ -8,7 +8,7 @@
    - [Clonar el Repositorio](#clonar-el-repositorio)
    - [Configurar el Entorno Virtual](#configurar-el-entorno-virtual)
    - [Instalar Dependencias](#instalar-dependencias)
-6. [Ejecutar el Juego](#ejecutar-el-juego)
+6. [Ejecutar el Juego](#ejecución-del-juego-(desarrollo))
 
 # Bomberman
 
