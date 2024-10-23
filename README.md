@@ -1,14 +1,14 @@
 # Índice
 
 1. [Descripción del Juego](#bomberman)
-2. [Ejecución del Juego](#ejecución-del-juego)
+2. [Ejecución del Juego](#ejecución-del-juego-exe)
 3. [Controles](#controles)
 4. [Requisitos del Sistema](#requisitos-del-sistema)
 5. [Configuración](#configuración)
    - [Clonar el Repositorio](#clonar-el-repositorio)
-   - [Configurar el Entorno Virtual](#configurar-el-entorno-virtual)
+   - [Configurar el Entorno Virtual](#configurar-el-entorno-virtual-opcional-pero-recomendado)
    - [Instalar Dependencias](#instalar-dependencias)
-6. [Ejecutar el Juego](#ejecución-del-juego-(desarrollo))
+6. [Ejecutar el Juego (Desarrollo)](#ejecución-del-juego-desarrollo)
 
 # Bomberman
 
